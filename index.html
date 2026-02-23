@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yencode Technologies</title>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <!-- Three.js + Vanta Birds -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/logo.png">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* � OCEANIC GRADIENT BACKGROUND */
+    body {
+      background: linear-gradient(160deg, #003d4d 0%, #005f73 30%, #0a7499 60%, #e0fbfc 100%);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Vanta full-screen bg */
+    #vanta-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    /* ocean mist overlay — very light white shimmer */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(to bottom,
+          rgba(0, 61, 77, 0.60) 0%,
+          rgba(255, 255, 255, 0.08) 70%,
+          rgba(224, 251, 252, 0.18) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    header {
+      position: fixed;
+      width: 100%;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 61, 77, 0.45);
+      backdrop-filter: blur(14px);
+      z-index: 10;
+      transition: 0.3s
+    }
+
+    header.scrolled {
+      background: rgba(0, 61, 77, 0.90)
+    }
+
+    nav {
+      display: flex;
+      align-items: center
+    }
+
+    nav a {
+      color: #fff;
+      margin-left: 20px;
+      text-decoration: none;
+      opacity: 0.8
+    }
+
+    /* mobile menu */
+    .menu-toggle {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    @media(max-width:768px) {
+      nav {
+        position: absolute;
+        top: 70px;
+        right: 20px;
+        background: rgba(0, 61, 77, 0.96);
+        backdrop-filter: blur(12px);
+        flex-direction: column;
+        padding: 20px;
+        border-radius: 12px;
+        display: none;
+      }
+
+      nav.active {
+        display: flex
+      }
+
+      nav a {
+        margin: 10px 0
+      }
+
+      .menu-toggle {
+        display: block
+      }
+    }
+
+    nav a:hover {
+      opacity: 1
+    }
+
+    section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 20px
+    }
+
+    .container {
+      max-width: 1100px;
+      z-index: 2
+    }
+
+    .hero h2 {
+      font-size: 60px;
+      letter-spacing: 1px
+    }
+
+    .hero p {
+      opacity: 0.7;
+      margin-top: 10px
+    }
+
+    .services,
+    .portfolio {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-top: 40px
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 25px;
+      border-radius: 18px;
+      backdrop-filter: blur(16px);
+      transition: 0.4s
+    }
+
+    .card:hover {
+      transform: translateY(-8px) scale(1.02);
+      background: rgba(255, 255, 255, 0.1)
+    }
+
+    /* cinematic matrix canvas */
+    #matrix {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      opacity: 0.25;
+      filter: blur(1px);
+      pointer-events: none;
+    }
+
+
+
+    /* 📱 WhatsApp Floating Button */
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #25D366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: #fff;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      z-index: 20;
+      transition: 0.3s;
+    }
+
+    .whatsapp-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 15px 35px rgba(37, 211, 102, 0.6);
+    }
+  </style>
+</head>
+
+<body>
+
+  <header id="navbar">
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="images/main-logo.png" alt="Yencode Logo" style="width:40px;height:40px;object-fit:contain;">
+      <h2>Yencode</h2>
+    </div>
+    <div class="menu-toggle" id="menuBtn">☰</div>
+    <nav id="navMenu">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section id="home" class="hero">
+    <div class="container">
+      <img src="images/main-logo.png" alt="Yencode Logo" style="width:120px;margin-bottom:20px;object-fit:contain;">
+      <h2 class="reveal">Future-Ready IT Solutions</h2>
+      <p class="reveal">We design and build powerful digital products for startups and businesses.</p>
+
+      <!-- CTA Buttons -->
+      <div class="reveal" style="margin-top:25px; display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+        <a href="#contact"
+          style="padding:12px 25px; border-radius:30px; background:#38bdf8; color:#000; text-decoration:none; font-weight:bold;">Get
+          Started</a>
+        <a href="#portfolio"
+          style="padding:12px 25px; border-radius:30px; border:1px solid rgba(255,255,255,0.3); color:#fff; text-decoration:none;">View
+          Work</a>
+      </div>
+
+      <!-- Highlights -->
+      <div class="reveal"
+        style="margin-top:50px; display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:20px;">
+        <div class="card">
+          <h3>100+</h3>
+          <p>Projects Delivered</p>
+        </div>
+        <div class="card">
+          <h3>80+</h3>
+          <p>Happy Clients</p>
+        </div>
+        <div class="card">
+          <h3>15+</h3>
+          <p>Years Experience</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <h2 class="reveal">About Yencode Technologies</h2>
+
+      <p class="reveal" style="max-width:800px;margin:20px auto;opacity:0.8;line-height:1.7;">
+        Yencode Technologies is a forward-thinking IT company focused on delivering high-performance digital solutions
+        for modern businesses. We specialize in building scalable applications, sleek web platforms, and result-driven
+        digital marketing strategies that help brands grow in a competitive digital landscape.
+      </p>
+
+      <p class="reveal" style="max-width:800px;margin:10px auto;opacity:0.7;line-height:1.7;">
+        Our team combines technical expertise with creative innovation to transform ideas into impactful digital
+        products. Whether it's a startup looking to launch or an enterprise aiming to scale, we provide reliable,
+        future-ready solutions tailored to business needs.
+      </p>
+
+      <!-- Professional highlights -->
+      <div class="services" style="margin-top:40px;">
+        <div class="card reveal">
+          <h3>🚀 Our Mission</h3>
+          <p style="opacity:0.7;margin-top:10px;">To empower businesses with innovative and scalable technology
+            solutions.</p>
+        </div>
+
+        <div class="card reveal">
+          <h3>🎯 Our Vision</h3>
+          <p style="opacity:0.7;margin-top:10px;">To become a trusted global technology partner for digital
+            transformation.</p>
+        </div>
+
+        <div class="card reveal">
+          <h3>💡 Our Approach</h3>
+          <p style="opacity:0.7;margin-top:10px;">Client-focused, performance-driven, and built with modern
+            technologies.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="container">
+      <h2 class="reveal">Services</h2>
+      <div class="services">
+        <a href="#app-dev" class="card reveal" style="text-decoration:none;color:#fff;">App Development</a>
+        <a href="#web-dev" class="card reveal" style="text-decoration:none;color:#fff;">Web Development</a>
+        <a href="#digital-marketing" class="card reveal" style="text-decoration:none;color:#fff;">Digital Marketing</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- APP DEVELOPMENT PAGE -->
+  <section id="app-dev">
+    <div class="container">
+      <h2 class="reveal">App Development</h2>
+      <p class="reveal" style="max-width:800px;margin:20px auto;opacity:0.8;line-height:1.7;">
+        We build high-performance mobile applications tailored to your business needs. Our development process focuses
+        on scalability, user experience, and modern technologies to ensure your app stands out in a competitive market.
+      </p>
+      <div class="services">
+        <div class="card reveal">iOS & Android Development</div>
+        <div class="card reveal">Cross-Platform Solutions</div>
+        <div class="card reveal">UI/UX Focused Design</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WEB DEVELOPMENT PAGE -->
+  <section id="web-dev">
+    <div class="container">
+      <h2 class="reveal">Web Development</h2>
+      <p class="reveal" style="max-width:800px;margin:20px auto;opacity:0.8;line-height:1.7;">
+        Our web development services deliver responsive, fast, and visually engaging websites. We create platforms that
+        not only look great but also perform exceptionally across all devices.
+      </p>
+      <div class="services">
+        <div class="card reveal">Responsive Website Design</div>
+        <div class="card reveal">E-commerce Development</div>
+        <div class="card reveal">Custom Web Applications</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIGITAL MARKETING PAGE -->
+  <section id="digital-marketing">
+    <div class="container">
+      <h2 class="reveal">Digital Marketing</h2>
+      <p class="reveal" style="max-width:800px;margin:20px auto;opacity:0.8;line-height:1.7;">
+        We help businesses grow their online presence through strategic digital marketing. From SEO to social media
+        campaigns, our solutions are designed to drive traffic, engagement, and conversions.
+      </p>
+      <div class="services">
+        <div class="card reveal">Search Engine Optimization (SEO)</div>
+        <div class="card reveal">Social Media Marketing</div>
+        <div class="card reveal">Social Media Management</div>
+        <div class="card reveal">Performance Marketing</div>
+        <div class="card reveal">Google Ads</div>
+
+
+      </div>
+    </div>
+  </section>
+
+  <!-- GOOGLE ADS PAGE -->
+  <!-- <section id="google-ads">
+    <div class="container">
+      <h2 class="reveal">Google Ads</h2>
+      <p class="reveal" style="max-width:800px;margin:20px auto;opacity:0.8;line-height:1.7;">
+        Maximize your ROI with targeted Google Ads campaigns. We help you reach the right audience at the right time,
+        driving quality traffic and increasing conversions through data-driven advertising strategies.
+      </p>
+      <div class="services">
+        <div class="card reveal">Search Ads (PPC)</div>
+        <div class="card reveal">Display Advertising</div>
+        <div class="card reveal">Remarketing Campaigns</div>
+        <div class="card reveal">Shopping Ads</div>
+      </div>
+    </div>
+  </section> -->
+
+  <section id="portfolio">
+    <div class="container">
+      <h2 class="reveal">Portfolio</h2>
+      <div class="portfolio">
+
+        <div class="card reveal">
+          <img src="images/maccess.png" alt="M Access App"
+            style="width:100%;height:180px;object-fit:contain;border-radius:12px;margin-bottom:15px;padding:15px;background:rgba(255,255,255,0.06);">
+          <h3>M Access</h3>
+          <p style="opacity:0.7;margin-top:10px;">A modern mobile application designed for seamless access management
+            and user-friendly experience. Built with a focus on performance, security, and intuitive design.</p>
+        </div>
+
+        <div class="card reveal">
+          <img src="images/common.jpeg" alt="Common Group"
+            style="width:100%;height:180px;object-fit:contain;border-radius:12px;margin-bottom:15px;padding:15px;background:rgba(255,255,255,0.06);">
+          <h3>Common Group</h3>
+          <p style="opacity:0.7;margin-top:10px;">A collaborative platform designed to connect users and streamline
+            communication within groups. Focused on usability, scalability, and seamless interaction.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonials">
+    <div class="container">
+      <h2 class="reveal">What Our Clients Say</h2>
+
+      <div class="services" style="margin-top:40px;">
+
+        <div class="card reveal">
+          <p style="opacity:0.8;">“Yencode Technologies transformed our idea into a fully functional app. Their team is
+            highly professional and delivers on time.”</p>
+          <h4 style="margin-top:15px;">— Rahul Sharma</h4>
+          <p style="opacity:0.6; font-size:14px;">Startup Founder</p>
+        </div>
+
+        <div class="card reveal">
+          <p style="opacity:0.8;">“Amazing web development service! Our website looks modern and performs perfectly
+            across all devices.”</p>
+          <h4 style="margin-top:15px;">— Priya Mehta</h4>
+          <p style="opacity:0.6; font-size:14px;">Business Owner</p>
+        </div>
+
+        <div class="card reveal">
+          <p style="opacity:0.8;">“Their digital marketing strategies helped us grow our online presence significantly.
+            Highly recommended!”</p>
+          <h4 style="margin-top:15px;">— Arjun Verma</h4>
+          <p style="opacity:0.6; font-size:14px;">E-commerce Brand</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <h2 class="reveal">Contact Us</h2>
+
+      <div class="services" style="margin-top:30px;">
+
+        <div class="card reveal">
+          <h3>📞 Phone</h3>
+          <p style="opacity:0.7;margin-top:10px;">89250 33533</p>
+        </div>
+
+        <div class="card reveal">
+          <h3>📧 Email</h3>
+          <p style="opacity:0.7;margin-top:10px;">yencodetechnologies@gmail.com</p>
+        </div>
+
+        <div class="card reveal">
+          <h3>📍 Address</h3>
+          <p style="opacity:0.7;margin-top:10px;">No.1, Jeganathapuram,<br>Velachery, Chennai - 600042</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Vanta.js BIRDS 3D Background -->
+  <div id="vanta-bg"></div>
+
+  <script>
+    // MOBILE MENU TOGGLE
+    const menuBtn = document.getElementById('menuBtn');
+    const navMenu = document.getElementById('navMenu');
+
+    menuBtn.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+    });
+
+    // NAVBAR EFFECT
+    window.addEventListener("scroll", () => {
+      document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 50)
+    })
+
+    // GSAP ANIMATION
+    gsap.registerPlugin(ScrollTrigger)
+
+    gsap.utils.toArray('.reveal').forEach(el => {
+      gsap.from(el, {
+        opacity: 0,
+        y: 60,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: { trigger: el, start: 'top 85%' }
+      })
+    })
+
+    // 🐦 VANTA BIRDS 3D ANIMATION
+    VANTA.BIRDS({
+      el: "#vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      backgroundColor: 0x003d4d,
+      color1: 0x00b4d8,
+      color2: 0xe0fbfc,
+      colorMode: "lerp",
+      birdSize: 1.5,
+      wingSpan: 30,
+      speedLimit: 5,
+      separation: 60,
+      alignment: 40,
+      cohesion: 40,
+      quantity: 4
+    })
+  </script>
+
+
+
+  <!-- WhatsApp Button -->
+  <a href="https://wa.me/918925033533" target="_blank" class="whatsapp-btn"><i class="fa-brands fa-whatsapp"></i></a>
+
+</body>
+
+</html>
