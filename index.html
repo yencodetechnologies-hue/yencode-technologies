@@ -10,9 +10,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
-  <!-- Three.js + Vanta Birds -->
+  <!-- Three.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -20,243 +19,70 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="images/logo.png">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial
-    }
+  <!-- Google Fonts: Outfit -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
 
-    html {
-      scroll-behavior: smooth;
-    }
-
-    /* � OCEANIC GRADIENT BACKGROUND */
-    body {
-      background: linear-gradient(160deg, #003d4d 0%, #005f73 30%, #0a7499 60%, #e0fbfc 100%);
-      color: #fff;
-      overflow-x: hidden;
-    }
-
-    /* Vanta full-screen bg */
-    #vanta-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-    }
-
-    /* ocean mist overlay — very light white shimmer */
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(to bottom,
-          rgba(0, 61, 77, 0.60) 0%,
-          rgba(255, 255, 255, 0.08) 70%,
-          rgba(224, 251, 252, 0.18) 100%);
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    header {
-      position: fixed;
-      width: 100%;
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(0, 61, 77, 0.45);
-      backdrop-filter: blur(14px);
-      z-index: 10;
-      transition: 0.3s
-    }
-
-    header.scrolled {
-      background: rgba(0, 61, 77, 0.90)
-    }
-
-    nav {
-      display: flex;
-      align-items: center
-    }
-
-    nav a {
-      color: #fff;
-      margin-left: 20px;
-      text-decoration: none;
-      opacity: 0.8
-    }
-
-    /* mobile menu */
-    .menu-toggle {
-      display: none;
-      font-size: 28px;
-      cursor: pointer;
-    }
-
-    @media(max-width:768px) {
-      nav {
-        position: absolute;
-        top: 70px;
-        right: 20px;
-        background: rgba(0, 61, 77, 0.96);
-        backdrop-filter: blur(12px);
-        flex-direction: column;
-        padding: 20px;
-        border-radius: 12px;
-        display: none;
-      }
-
-      nav.active {
-        display: flex
-      }
-
-      nav a {
-        margin: 10px 0
-      }
-
-      .menu-toggle {
-        display: block
-      }
-    }
-
-    nav a:hover {
-      opacity: 1
-    }
-
-    section {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 120px 20px
-    }
-
-    .container {
-      max-width: 1100px;
-      z-index: 2
-    }
-
-    .hero h2 {
-      font-size: 60px;
-      letter-spacing: 1px
-    }
-
-    .hero p {
-      opacity: 0.7;
-      margin-top: 10px
-    }
-
-    .services,
-    .portfolio {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 25px;
-      margin-top: 40px
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 25px;
-      border-radius: 18px;
-      backdrop-filter: blur(16px);
-      transition: 0.4s
-    }
-
-    .card:hover {
-      transform: translateY(-8px) scale(1.02);
-      background: rgba(255, 255, 255, 0.1)
-    }
-
-    /* cinematic matrix canvas */
-    #matrix {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      opacity: 0.25;
-      filter: blur(1px);
-      pointer-events: none;
-    }
-
-
-
-    /* 📱 WhatsApp Floating Button */
-    .whatsapp-btn {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: #25D366;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      color: #fff;
-      text-decoration: none;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-      z-index: 20;
-      transition: 0.3s;
-    }
-
-    .whatsapp-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 15px 35px rgba(37, 211, 102, 0.6);
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+  <canvas id="globe-canvas" width="520" height="520"></canvas>
+
   <header id="navbar">
-    <div style="display:flex;align-items:center;gap:10px">
-      <img src="images/main-logo.png" alt="Yencode Logo" style="width:40px;height:40px;object-fit:contain;">
-      <h2>Yencode</h2>
-    </div>
-    <div class="menu-toggle" id="menuBtn">☰</div>
+    <a href="#home" class="logo-link">
+      <img src="images/logo_hd.png" alt="Yencode Logo icon" class="logo-icon">
+      <span class="logo-text">Yencode</span>
+    </a>
+    <div class="menu-toggle" id="menuBtn"><i class="fa-solid fa-bars"></i></div>
     <nav id="navMenu">
-      <a href="#home">Home</a>
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#portfolio">Portfolio</a>
-      <a href="#contact">Contact</a>
+      <div class="nav-indicator"></div>
+      <a href="#home" class="active"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="#about"><i class="fa-solid fa-circle-info"></i> About</a>
+      <a href="#services"><i class="fa-solid fa-screwdriver-wrench"></i> Services</a>
+      <a href="#portfolio"><i class="fa-solid fa-briefcase"></i> Portfolio</a>
+      <a href="#contact"><i class="fa-solid fa-envelope"></i> Contact</a>
     </nav>
   </header>
 
   <section id="home" class="hero">
     <div class="container">
-      <img src="images/main-logo.png" alt="Yencode Logo" style="width:120px;margin-bottom:20px;object-fit:contain;">
-      <h2 class="reveal">Future-Ready IT Solutions</h2>
-      <p class="reveal">We design and build powerful digital products for startups and businesses.</p>
+      <div class="hero-flex">
+        <div class="hero-content">
+          <!-- <img src="images/New Yencode Logo.png" alt="Yencode Logo"
+            style="width:120px;margin-bottom:20px;object-fit:contain;" class="reveal"> -->
+          <h2 class="reveal-right">Future-Ready IT Solutions</h2>
+          <p class="reveal-right">We design and build powerful digital products for startups and businesses.</p>
 
-      <!-- CTA Buttons -->
-      <div class="reveal" style="margin-top:25px; display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
-        <a href="#contact"
-          style="padding:12px 25px; border-radius:30px; background:#38bdf8; color:#000; text-decoration:none; font-weight:bold;">Get
-          Started</a>
-        <a href="#portfolio"
-          style="padding:12px 25px; border-radius:30px; border:1px solid rgba(255,255,255,0.3); color:#fff; text-decoration:none;">View
-          Work</a>
-      </div>
+          <!-- CTA Buttons -->
+          <div class="reveal" style="margin-top:25px; display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+            <a href="#contact"
+              style="padding:12px 25px; border-radius:30px; background:#38bdf8; color:#000; text-decoration:none; font-weight:bold;">Get
+              Started</a>
+            <a href="#portfolio"
+              style="padding:12px 25px; border-radius:30px; border:1px solid rgba(255,255,255,0.3); color:#fff; text-decoration:none;">View
+              Work</a>
+          </div>
 
-      <!-- Highlights -->
-      <div class="reveal"
-        style="margin-top:50px; display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:20px;">
-        <div class="card">
-          <h3>100+</h3>
-          <p>Projects Delivered</p>
+          <!-- Highlights (Moved Inside Content) -->
+          <div class="reveal"
+            style="margin-top:50px; display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:15px;">
+            <div class="card" style="padding: 15px;">
+              <h3 style="font-size: 24px;"><span class="count-up" data-target="100">0</span>+</h3>
+              <p style="font-size: 14px; margin-top: 5px;">Projects Delivered</p>
+            </div>
+            <div class="card" style="padding: 15px;">
+              <h3 style="font-size: 24px;"><span class="count-up" data-target="80">0</span>+</h3>
+              <p style="font-size: 14px; margin-top: 5px;">Happy Clients</p>
+            </div>
+            <div class="card" style="padding: 15px;">
+              <h3 style="font-size: 24px;"><span class="count-up" data-target="15">0</span>+</h3>
+              <p style="font-size: 14px; margin-top: 5px;">Years Experience</p>
+            </div>
+          </div>
         </div>
-        <div class="card">
-          <h3>80+</h3>
-          <p>Happy Clients</p>
-        </div>
-        <div class="card">
-          <h3>15+</h3>
-          <p>Years Experience</p>
+        <div class="hero-visual">
+          <img src="images/front2.png" alt="Yencode Future" class="floating-img">
         </div>
       </div>
 
@@ -265,262 +91,504 @@
 
   <section id="about">
     <div class="container">
-      <h2 class="reveal">About Yencode Technologies</h2>
+      <div class="section-flex section-flex-reverse">
+        <div class="section-content">
+          <h2 class="reveal">About Yencode Technologies</h2>
 
-      <p class="reveal" style="max-width:800px;margin:20px auto;opacity:0.8;line-height:1.7;">
-        Yencode Technologies is a forward-thinking IT company focused on delivering high-performance digital solutions
-        for modern businesses. We specialize in building scalable applications, sleek web platforms, and result-driven
-        digital marketing strategies that help brands grow in a competitive digital landscape.
-      </p>
+          <p class="reveal" style="margin:20px 0;opacity:0.8;line-height:1.7;">
+            Yencode Technologies is a forward-thinking IT company focused on delivering high-performance digital
+            solutions
+            for modern businesses. We specialize in building scalable applications, sleek web platforms, and
+            result-driven
+            digital marketing strategies that help brands grow in a competitive digital landscape.
+          </p>
 
-      <p class="reveal" style="max-width:800px;margin:10px auto;opacity:0.7;line-height:1.7;">
-        Our team combines technical expertise with creative innovation to transform ideas into impactful digital
-        products. Whether it's a startup looking to launch or an enterprise aiming to scale, we provide reliable,
-        future-ready solutions tailored to business needs.
-      </p>
+          <p class="reveal" style="margin:10px 0;opacity:0.7;line-height:1.7;">
+            Our team combines technical expertise with creative innovation to transform ideas into impactful digital
+            products. Whether it's a startup looking to launch or an enterprise aiming to scale, we provide reliable,
+            future-ready solutions tailored to business needs.
+          </p>
 
-      <!-- Professional highlights -->
-      <div class="services" style="margin-top:40px;">
-        <div class="card reveal">
-          <h3>🚀 Our Mission</h3>
-          <p style="opacity:0.7;margin-top:10px;">To empower businesses with innovative and scalable technology
-            solutions.</p>
+          <!-- Professional highlights -->
+          <!-- <div class="services" style="margin-top:30px; grid-template-columns: 1fr;">
+            <div class="card reveal" style="margin-bottom: 15px;">
+              <h3>🚀 Our Mission</h3>
+              <p style="opacity:0.7;margin-top:10px;">To empower businesses with innovative and scalable technology
+                solutions.</p>
+            </div>
+            <div class="card reveal" style="margin-bottom: 15px;">
+              <h3>🎯 Our Vision</h3>
+              <p style="opacity:0.7;margin-top:10px;">To become a trusted global technology partner for digital
+                transformation.</p>
+            </div>
+          </div> -->
         </div>
-
-        <div class="card reveal">
-          <h3>🎯 Our Vision</h3>
-          <p style="opacity:0.7;margin-top:10px;">To become a trusted global technology partner for digital
-            transformation.</p>
-        </div>
-
-        <div class="card reveal">
-          <h3>💡 Our Approach</h3>
-          <p style="opacity:0.7;margin-top:10px;">Client-focused, performance-driven, and built with modern
-            technologies.</p>
+        <div class="section-visual">
+          <img src="images/development_illustration.png" alt="About Yencode" class="floating-img"
+            style="max-width:550px;">
         </div>
       </div>
-
     </div>
   </section>
 
   <section id="services">
     <div class="container">
-      <h2 class="reveal">Services</h2>
-      <div class="services">
-        <a href="#app-dev" class="card reveal" style="text-decoration:none;color:#fff;">App Development</a>
-        <a href="#web-dev" class="card reveal" style="text-decoration:none;color:#fff;">Web Development</a>
-        <a href="#digital-marketing" class="card reveal" style="text-decoration:none;color:#fff;">Digital Marketing</a>
+      <div class="section-header reveal">
+        <span class="section-badge">Our Services</span>
+        <h2 class="section-title">Comprehensive IT Solutions</h2>
+        <p class="section-description">We provide a wide range of digital services to help your business thrive in the
+          modern era.</p>
+      </div>
+
+      <div class="services reveal">
+        <!-- Card 1: Development -->
+        <a href="#development" class="card"
+          style="text-decoration:none;color:#fff; height: 100%; display: flex; flex-direction: column;">
+          <div class="service-img-container">
+            <img src="images/service_dev.png" alt="Development Service" class="service-img">
+          </div>
+          <h3>Development</h3>
+          <p style="opacity:0.7;margin-top:10px;">Mobile, Web, Windows, and iOS Solutions</p>
+        </a>
+
+        <!-- Card 2: Design -->
+        <a href="#design" class="card"
+          style="text-decoration:none;color:#fff; height: 100%; display: flex; flex-direction: column;">
+          <div class="service-img-container">
+            <img src="images/service_design.png" alt="Design Service" class="service-img">
+          </div>
+          <h3>Design</h3>
+          <p style="opacity:0.7;margin-top:10px;">UI / UX and Visual Brand Identity</p>
+        </a>
+
+        <!-- Card 3: Digital Marketing -->
+        <a href="#marketing" class="card"
+          style="text-decoration:none;color:#fff; height: 100%; display: flex; flex-direction: column;">
+          <div class="service-img-container">
+            <img src="images/service_marketing.png" alt="Marketing Service" class="service-img">
+          </div>
+          <h3>Digital Marketing</h3>
+          <p style="opacity:0.7;margin-top:10px;">SEO, SMM, and Performance Campaigns</p>
+        </a>
+
+        <!-- Card 4: Business Solutions -->
+        <a href="#solutions" class="card"
+          style="text-decoration:none;color:#fff; height: 100%; display: flex; flex-direction: column;">
+          <div class="service-img-container">
+            <img src="images/service_dev.png" alt="Business Solutions" class="service-img"
+              style="filter: hue-rotate(90deg);">
+          </div>
+          <h3>Business Solutions</h3>
+          <p style="opacity:0.7;margin-top:10px;">SMS Gateways, Payment Integration & Google Services</p>
+        </a>
+
+        <!-- Card 5: Offline Marketing -->
+        <a href="#offline" class="card"
+          style="text-decoration:none;color:#fff; height: 100%; display: flex; flex-direction: column;">
+          <div class="service-img-container">
+            <img src="images/service_marketing.png" alt="Offline Marketing" class="service-img"
+              style="filter: hue-rotate(240deg);">
+          </div>
+          <h3>Offline Marketing</h3>
+          <p style="opacity:0.7;margin-top:10px;">Professional Pamphlet Design & Printing Services</p>
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- APP DEVELOPMENT PAGE -->
-  <section id="app-dev">
+  <!-- DEVELOPMENT SECTION -->
+  <section id="development">
     <div class="container">
-      <h2 class="reveal">App Development</h2>
-      <p class="reveal" style="max-width:800px;margin:20px auto;opacity:0.8;line-height:1.7;">
-        We build high-performance mobile applications tailored to your business needs. Our development process focuses
-        on scalability, user experience, and modern technologies to ensure your app stands out in a competitive market.
-      </p>
-      <div class="services">
-        <div class="card reveal">iOS & Android Development</div>
-        <div class="card reveal">Cross-Platform Solutions</div>
-        <div class="card reveal">UI/UX Focused Design</div>
+      <div class="section-flex section-flex-reverse">
+        <div class="section-content">
+          <h2 class="reveal">Development Services</h2>
+
+
+          <div id="dev-slider" class="sub-slider-wrapper">
+            <div class="sub-slider-track">
+              <!-- Slide 1: Mobile -->
+              <div class="sub-slide">
+                <div id="dev-mobile">
+                  <h3 class="reveal">Mobile App Development</h3>
+                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    Expertise in building high-performance, feature-rich, and scalable mobile applications for Android
+                    and iOS using Flutter, React Native, and Java. We focus on delivering smooth user experiences with
+                    native-like performance.
+                  </p>
+                  <div class="services" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">E-commerce</div>
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Social Media</div>
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">On-Demand</div>
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Enterprise</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 2: Website -->
+              <div class="sub-slide">
+                <div id="dev-web">
+                  <h3 class="reveal">Website Development</h3>
+                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    Custom website development using modern technologies like React, Next.js, and Node.js. We build
+                    responsive, SEO-friendly, and blazing-fast websites that convert visitors into customers.
+                  </p>
+                  <div class="services" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Corporate</div>
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Portfolio</div>
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">SaaS</div>
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">LMS</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 3: Windows -->
+              <div class="sub-slide">
+                <div id="dev-windows">
+                  <h3 class="reveal">Windows Software</h3>
+                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    Robust desktop applications built with .NET, C#, and Electron. From inventory management to
+                    specialized enterprise tools, we build software that works offline and integrates deeply with OS
+                    features.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Slide 4: iOS -->
+              <div class="sub-slide">
+                <div id="dev-ios">
+                  <h3 class="reveal">iOS App Development</h3>
+                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    Dedicated iOS development for the Apple ecosystem. We build premium applications for iPhone and
+                    iPad, adhering to Apple's Human Interface Guidelines for visual excellence.
+                  </p>
+                  <p class="reveal" style="margin:10px 0;opacity:0.7;font-size: 15px;">
+                    Our services include native Swift app development, Flutter-based iOS apps, App Store deployment,
+                    performance optimization, and regular updates & support.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="sub-nav">
+              <div class="sub-nav-btn sub-prev"><i class="fa-solid fa-arrow-left"></i></div>
+              <div class="sub-dots"></div>
+              <div class="sub-nav-btn sub-next"><i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="section-visual">
+          <!-- Space for sphere (Left side) -->
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- WEB DEVELOPMENT PAGE -->
-  <section id="web-dev">
+  <!-- DESIGN SECTION -->
+  <section id="design">
     <div class="container">
-      <h2 class="reveal">Web Development</h2>
-      <p class="reveal" style="max-width:800px;margin:20px auto;opacity:0.8;line-height:1.7;">
-        Our web development services deliver responsive, fast, and visually engaging websites. We create platforms that
-        not only look great but also perform exceptionally across all devices.
-      </p>
-      <div class="services">
-        <div class="card reveal">Responsive Website Design</div>
-        <div class="card reveal">E-commerce Development</div>
-        <div class="card reveal">Custom Web Applications</div>
+      <div class="section-flex">
+        <div class="section-content">
+          <h2 class="reveal">Design Services</h2>
+          <div id="ui-ux" style="margin-top:40px;">
+            <h3 class="reveal">UI / UX Design</h3>
+            <p class="reveal" style="margin:20px 0;opacity:0.8;line-height:1.7;">
+              UI/UX design focuses on creating visually appealing, easy-to-use, and meaningful digital experiences.
+              We design modern and intuitive interfaces for mobile apps and websites that improve usability, enhance
+              user satisfaction, and increase customer engagement.
+            </p>
+            <p class="reveal" style="margin:10px 0;opacity:0.7;font-size: 15px;">
+              Our process includes user research, wireframing, prototyping, and usability testing to ensure smooth
+              navigation and clear interaction flows. Every design matches your brand identity while delivering high
+              performance and accessibility.
+            </p>
+            <div id="design-slider" class="sub-slider-wrapper">
+              <div class="sub-slider-track">
+                <!-- Slide 1 -->
+                <div class="sub-slide">
+                  <div class="services" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Wireframing</div>
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Prototyping</div>
+                  </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="sub-slide">
+                  <div class="services" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">User Research</div>
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Brand Identity</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sub-nav">
+                <div class="sub-nav-btn sub-prev"><i class="fa-solid fa-arrow-left"></i></div>
+                <div class="sub-dots"></div>
+                <div class="sub-nav-btn sub-next"><i class="fa-solid fa-arrow-right"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="section-visual">
+          <!-- Space for sphere (Right side) -->
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- DIGITAL MARKETING PAGE -->
-  <section id="digital-marketing">
+  <!-- MARKETING SECTION -->
+  <section id="marketing">
     <div class="container">
-      <h2 class="reveal">Digital Marketing</h2>
-      <p class="reveal" style="max-width:800px;margin:20px auto;opacity:0.8;line-height:1.7;">
-        We help businesses grow their online presence through strategic digital marketing. From SEO to social media
-        campaigns, our solutions are designed to drive traffic, engagement, and conversions.
-      </p>
-      <div class="services">
-        <div class="card reveal">Search Engine Optimization (SEO)</div>
-        <div class="card reveal">Social Media Marketing</div>
-        <div class="card reveal">Social Media Management</div>
-        <div class="card reveal">Performance Marketing</div>
-        <div class="card reveal">Google Ads</div>
+      <div class="section-flex section-flex-reverse">
+        <div class="section-content">
+          <h2 class="reveal">Digital Marketing Services</h2>
 
+          <div id="mkt-slider" class="sub-slider-wrapper">
+            <div class="sub-slider-track">
+              <!-- Slide 1: SMM -->
+              <div class="sub-slide">
+                <div id="mkt-smm">
+                  <h3 class="reveal">Social Media Marketing (SMM)</h3>
+                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    We promote your brand on top social platforms such as Facebook, Instagram, YouTube, Twitter,
+                    LinkedIn, and
+                    Quora. Our SMM services help you engage with your audience, increase followers, build brand trust,
+                    and
+                    generate quality leads.
+                  </p>
+                  <div class="services" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Organic Growth</div>
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Lead Gen</div>
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Brand Trust</div>
+                  </div>
+                </div>
+              </div>
 
+              <!-- Slide 2: Paid -->
+              <div class="sub-slide">
+                <div id="mkt-paid">
+                  <h3 class="reveal">Paid Campaigns</h3>
+                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    We manage high-performance paid advertising campaigns across platforms like Google Ads (Search, Play
+                    Store, YouTube), Facebook & Instagram Ads, LinkedIn Ads, Quora Ads, and Microsoft Ads. These
+                    campaigns
+                    maximize your ROI.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Slide 3: SEO -->
+              <div class="sub-slide">
+                <div id="mkt-seo">
+                  <h3 class="reveal">Search Engine Optimization (SEO)</h3>
+                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    Rank #1 on Google with our advanced SEO strategies. We optimize your website's performance, content,
+                    and
+                    backlink profile to drive organic traffic and increase your business authority online.
+                  </p>
+                  <div class="services" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Technical SEO</div>
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">On-Page</div>
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Link Building</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sub-nav">
+              <div class="sub-nav-btn sub-prev"><i class="fa-solid fa-arrow-left"></i></div>
+              <div class="sub-dots"></div>
+              <div class="sub-nav-btn sub-next"><i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="section-visual">
+          <!-- Space for sphere (Left side) -->
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- GOOGLE ADS PAGE -->
-  <!-- <section id="google-ads">
+  <!-- BUSINESS SOLUTIONS SECTION -->
+  <section id="solutions">
     <div class="container">
-      <h2 class="reveal">Google Ads</h2>
-      <p class="reveal" style="max-width:800px;margin:20px auto;opacity:0.8;line-height:1.7;">
-        Maximize your ROI with targeted Google Ads campaigns. We help you reach the right audience at the right time,
-        driving quality traffic and increasing conversions through data-driven advertising strategies.
-      </p>
-      <div class="services">
-        <div class="card reveal">Search Ads (PPC)</div>
-        <div class="card reveal">Display Advertising</div>
-        <div class="card reveal">Remarketing Campaigns</div>
-        <div class="card reveal">Shopping Ads</div>
+      <div class="section-flex">
+        <div class="section-content">
+          <h2 class="reveal">Business Solutions</h2>
+
+          <div id="sol-slider" class="sub-slider-wrapper">
+            <div class="sub-slider-track">
+              <!-- Slide 1: Contact & SMS -->
+              <div class="sub-slide">
+                <div id="sol-contact">
+                  <h3 class="reveal">Contact Marketing & SMS Gateway</h3>
+                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    Our contact marketing solutions include Email, SMS, and WhatsApp Marketing. An SMS Gateway enables
+                    you to
+                    send promotional bulk SMS or automated transactional SMS for OTPs, alerts, and notifications
+                    instantly.
+                  </p>
+                  <div class="services" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">WhatsApp Hub</div>
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Email Campaigns</div>
+                    <div class="card reveal" style="padding: 12px; font-size: 13px;">OTP / Alerts</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 2: Payment Gateways -->
+              <div class="sub-slide">
+                <div id="sol-gateway">
+                  <h3 class="reveal">Payment Gateways</h3>
+                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    We integrate secure gateways such as Razorpay, CCAvenue, PayU, PayPal, Stripe, and NTT Data. This
+                    ensures
+                    fast processing, high security, and multiple payment options for your customers.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Slide 3: Google Services -->
+              <div class="sub-slide">
+                <div id="sol-google">
+                  <h3 class="reveal">Google Services</h3>
+                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    We provide setup and integration for Google Cloud Console, GSuite (Workspace), Gmail for Business,
+                    Google
+                    Drive, Maps API, Places API, Google Fit, and more to enhance business productivity.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="sub-nav">
+              <div class="sub-nav-btn sub-prev"><i class="fa-solid fa-arrow-left"></i></div>
+              <div class="sub-dots"></div>
+              <div class="sub-nav-btn sub-next"><i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="section-visual">
+          <!-- Space for sphere (Right side) -->
+        </div>
       </div>
     </div>
-  </section> -->
+  </section>
+
+  <!-- OFFLINE MARKETING SECTION -->
+  <section id="offline">
+    <div class="container">
+      <div class="section-flex section-flex-reverse">
+        <div class="section-content">
+          <h2 class="reveal">Offline Marketing</h2>
+          <div id="off-printing" style="margin-top:40px;">
+            <h3 class="reveal">Pamphlet & Printing Services</h3>
+            <p class="reveal" style="margin:20px 0;opacity:0.8;line-height:1.7;">
+              Professional design and high-quality printing for pamphlets, flyers, brochures, visiting cards, banners,
+              and posters. High-impact designs combined with premium print quality boost your market presence.
+            </p>
+          </div>
+        </div>
+        <div class="section-visual">
+          <!-- Space for sphere (Left side) -->
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section id="portfolio">
     <div class="container">
-      <h2 class="reveal">Portfolio</h2>
-      <div class="portfolio">
-
-        <div class="card reveal">
-          <img src="images/maccess.png" alt="M Access App"
-            style="width:100%;height:180px;object-fit:contain;border-radius:12px;margin-bottom:15px;padding:15px;background:rgba(255,255,255,0.06);">
-          <h3>M Access</h3>
-          <p style="opacity:0.7;margin-top:10px;">A modern mobile application designed for seamless access management
-            and user-friendly experience. Built with a focus on performance, security, and intuitive design.</p>
+      <div class="section-flex">
+        <div class="section-content">
+          <h2 class="reveal">Portfolio</h2>
+          <div class="services" style="grid-template-columns: 1fr; margin-top: 30px;">
+            <div class="card reveal" style="margin-bottom: 20px;">
+              <img src="images/maccess.png" alt="M Access" style="width:80px; margin-bottom: 10px;">
+              <h3>M Access</h3>
+              <p style="opacity:0.7;margin-top:10px;">Mobile application for seamless access management.</p>
+            </div>
+            <div class="card reveal">
+              <img src="images/common.jpeg" alt="Common Group" style="width:80px; margin-bottom: 10px;">
+              <h3>Common Group</h3>
+              <p style="opacity:0.7;margin-top:10px;">A collaborative platform for communication.</p>
+            </div>
+          </div>
         </div>
-
-        <div class="card reveal">
-          <img src="images/common.jpeg" alt="Common Group"
-            style="width:100%;height:180px;object-fit:contain;border-radius:12px;margin-bottom:15px;padding:15px;background:rgba(255,255,255,0.06);">
-          <h3>Common Group</h3>
-          <p style="opacity:0.7;margin-top:10px;">A collaborative platform designed to connect users and streamline
-            communication within groups. Focused on usability, scalability, and seamless interaction.</p>
+        <div class="section-visual">
+          <!-- Space for sphere (Right side) -->
         </div>
-
       </div>
     </div>
   </section>
 
-  <section id="testimonials">
+
+
+  <section id="contact" class="contact-section">
     <div class="container">
-      <h2 class="reveal">What Our Clients Say</h2>
-
-      <div class="services" style="margin-top:40px;">
-
-        <div class="card reveal">
-          <p style="opacity:0.8;">“Yencode Technologies transformed our idea into a fully functional app. Their team is
-            highly professional and delivers on time.”</p>
-          <h4 style="margin-top:15px;">— Rahul Sharma</h4>
-          <p style="opacity:0.6; font-size:14px;">Startup Founder</p>
-        </div>
-
-        <div class="card reveal">
-          <p style="opacity:0.8;">“Amazing web development service! Our website looks modern and performs perfectly
-            across all devices.”</p>
-          <h4 style="margin-top:15px;">— Priya Mehta</h4>
-          <p style="opacity:0.6; font-size:14px;">Business Owner</p>
-        </div>
-
-        <div class="card reveal">
-          <p style="opacity:0.8;">“Their digital marketing strategies helped us grow our online presence significantly.
-            Highly recommended!”</p>
-          <h4 style="margin-top:15px;">— Arjun Verma</h4>
-          <p style="opacity:0.6; font-size:14px;">E-commerce Brand</p>
-        </div>
-
+      <div class="section-header reveal">
+        <span class="section-badge">Contact Us</span>
+        <h2 class="section-title">Let's Build Something Great</h2>
+        <p class="section-description">Ready to start your next project or have questions about our services?
+          Reach out to us and our team will get back to you within 24 hours.</p>
       </div>
 
+      <div class="contact-content">
+        <!-- Contact Info -->
+        <div class="contact-info reveal">
+          <h3 class="contact-info-title">Get in Touch</h3>
+          <p class="contact-info-text">Have a project in mind? We'd love to hear from you. Send us a message
+            and let's start a conversation.</p>
+
+          <div class="contact-info-cards">
+            <div class="contact-info-card">
+              <div class="contact-info-icon">
+                <i class="fa-solid fa-phone"></i>
+              </div>
+              <div>
+                <h4>Call Us</h4>
+                <a href="tel:+918925033533">+91 89250 33533</a>
+              </div>
+            </div>
+
+            <div class="contact-info-card">
+              <div class="contact-info-icon">
+                <i class="fa-solid fa-envelope"></i>
+              </div>
+              <div>
+                <h4>Email Us</h4>
+                <a href="mailto:yencodetechnologies@gmail.com">yencodetechnologies@gmail.com</a>
+              </div>
+            </div>
+
+            <div class="contact-info-card">
+              <div class="contact-info-icon">
+                <i class="fa-solid fa-location-dot"></i>
+              </div>
+              <div>
+                <h4>Visit Us</h4>
+                <p>No.1, Jeganathapuram, Velachery, Chennai - 600042</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Media -->
+          <div class="contact-social">
+            <h4>Follow Us</h4>
+            <div class="contact-social-icons">
+              <a href="#" class="contact-social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+              <a href="#" class="contact-social-icon"><i class="fa-brands fa-twitter"></i></a>
+              <a href="#" class="contact-social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+              <a href="#" class="contact-social-icon"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section id="contact">
-    <div class="container">
-      <h2 class="reveal">Contact Us</h2>
 
-      <div class="services" style="margin-top:30px;">
-
-        <div class="card reveal">
-          <h3>📞 Phone</h3>
-          <p style="opacity:0.7;margin-top:10px;">89250 33533</p>
-        </div>
-
-        <div class="card reveal">
-          <h3>📧 Email</h3>
-          <p style="opacity:0.7;margin-top:10px;">yencodetechnologies@gmail.com</p>
-        </div>
-
-        <div class="card reveal">
-          <h3>📍 Address</h3>
-          <p style="opacity:0.7;margin-top:10px;">No.1, Jeganathapuram,<br>Velachery, Chennai - 600042</p>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Vanta.js BIRDS 3D Background -->
-  <div id="vanta-bg"></div>
-
-  <script>
-    // MOBILE MENU TOGGLE
-    const menuBtn = document.getElementById('menuBtn');
-    const navMenu = document.getElementById('navMenu');
-
-    menuBtn.addEventListener('click', () => {
-      navMenu.classList.toggle('active');
-    });
-
-    // NAVBAR EFFECT
-    window.addEventListener("scroll", () => {
-      document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 50)
-    })
-
-    // GSAP ANIMATION
-    gsap.registerPlugin(ScrollTrigger)
-
-    gsap.utils.toArray('.reveal').forEach(el => {
-      gsap.from(el, {
-        opacity: 0,
-        y: 60,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: { trigger: el, start: 'top 85%' }
-      })
-    })
-
-    // 🐦 VANTA BIRDS 3D ANIMATION
-    VANTA.BIRDS({
-      el: "#vanta-bg",
-      mouseControls: true,
-      touchControls: true,
-      gyroControls: false,
-      minHeight: 200.00,
-      minWidth: 200.00,
-      scale: 1.00,
-      scaleMobile: 1.00,
-      backgroundColor: 0x003d4d,
-      color1: 0x00b4d8,
-      color2: 0xe0fbfc,
-      colorMode: "lerp",
-      birdSize: 1.5,
-      wingSpan: 30,
-      speedLimit: 5,
-      separation: 60,
-      alignment: 40,
-      cohesion: 40,
-      quantity: 4
-    })
-  </script>
+  <script src="script.js"></script>
 
 
+  <!-- Footer -->
 
   <!-- WhatsApp Button -->
   <a href="https://wa.me/918925033533" target="_blank" class="whatsapp-btn"><i class="fa-brands fa-whatsapp"></i></a>
