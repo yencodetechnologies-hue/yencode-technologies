@@ -102,9 +102,9 @@ counts.forEach(count => {
     });
 });
 
-// GSAP ANIMATION
-gsap.registerPlugin(ScrollTrigger)
-
+// GSAP ANIMATION DISBLED FOR HEADERS AND PARAGRAPHS
+// gsap.registerPlugin(ScrollTrigger)
+/*
 // Specialized heading reveal
 gsap.utils.toArray('.section-content h2, .section-content h3, .section-title').forEach(el => {
     ScrollTrigger.create({
@@ -159,6 +159,7 @@ gsap.utils.toArray('.reveal-right').forEach(el => {
         }
     })
 })
+*/
 
 // ═══════════ PARTICLES ═══════════
 const canvas = document.getElementById('globe-canvas');
@@ -437,7 +438,10 @@ updCanvasPos();
 
         // Perspective Projection
         const camZ = 520;
-        const scale = camZ / (camZ + rz + 100) * canSc;
+        const zPos = rz + 100;
+        if (zPos + camZ <= 0) return; // Prevent particles too close or behind camera
+
+        const scale = (camZ / (camZ + zPos)) * canSc;
         const px = curCX + rx * scale, py = curCY + ry * scale;
 
         // Dynamic alpha & size
@@ -445,12 +449,14 @@ updCanvasPos();
         const hNorm = Math.max(0, Math.min(1, (-ry + 180) / 360));
         let dotSize = p.s * scale * (0.9 + hNorm * 1.3);
         dotSize *= 1 + Math.sin(aT * 5.5 + p.i * 0.22) * 0.18; // breathing
+        dotSize = Math.max(0, dotSize); // Ensure non-negative radius
+        if (dotSize <= 0) return; // Skip drawing if too small
 
-        // Neon Gradient
-        const r = 40 + hNorm * 80;
-        const g = 180 + hNorm * 75;
-        const b = 220 + hNorm * 35;
-        const glowAlpha = alpha * (0.7 + hNorm * 0.3);
+        // Cyan/Teal/Light Blue (vibrant on dark blue background)
+        const r = 34 + hNorm * 100;
+        const g = 211 + hNorm * 44;
+        const b = 238 + hNorm * 17;
+        const glowAlpha = alpha * (0.8 + hNorm * 0.2);
 
         ctx.beginPath(); ctx.arc(px, py, dotSize, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${r | 0}, ${g | 0}, ${b | 0}, ${glowAlpha})`;
@@ -459,7 +465,7 @@ updCanvasPos();
         // Bloom halo
         if (hNorm > 0.6) {
             ctx.beginPath(); ctx.arc(px, py, dotSize * 1.8, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(80, 220, 255, ${alpha * 0.12})`;
+            ctx.fillStyle = `rgba(6, 182, 212, ${alpha * 0.15})`;
             ctx.fill();
         }
     });

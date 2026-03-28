@@ -4,20 +4,88 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Yencode Technologies</title>
+
+  <!-- Primary SEO Meta Tags -->
+  <title>Yencode Technologies | Web Development, Mobile Apps & Digital Marketing Chennai</title>
+  <meta name="description"
+    content="Yencode Technologies is a Chennai-based IT company offering expert Web Development, Mobile App Development (Android & iOS), UI/UX Design, Digital Marketing, SEO, SMS Gateway, and Business Solutions for startups and enterprises." />
+  <meta name="keywords"
+    content="web development Chennai, mobile app development, iOS app development, Flutter app development, UI UX design, digital marketing Chennai, SEO services, SMS gateway, payment gateway integration, software company Chennai, Yencode Technologies" />
+  <meta name="author" content="Yencode Technologies" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#06b6d4" />
+  <link rel="canonical" href="https://www.yencodetechnologies.com/" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.yencodetechnologies.com/" />
+  <meta property="og:title" content="Yencode Technologies | Future-Ready IT Solutions" />
+  <meta property="og:description"
+    content="We design and build powerful digital products — Web, Mobile, Design, Marketing & Business Solutions for startups and enterprises in Chennai." />
+  <meta property="og:image" content="images/Yencode.png" />
+  <meta property="og:site_name" content="Yencode Technologies" />
+  <meta property="og:locale" content="en_IN" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Yencode Technologies | Future-Ready IT Solutions" />
+  <meta name="twitter:description"
+    content="Web Development, Mobile Apps, UI/UX Design, Digital Marketing & Business Solutions — Chennai's trusted tech partner." />
+  <meta name="twitter:image" content="images/Yencode.png" />
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Yencode Technologies",
+    "url": "https://www.yencodetechnologies.com",
+    "logo": "https://www.yencodetechnologies.com/images/Yencode.png",
+    "description": "Chennai-based IT company specializing in Web Development, Mobile Apps, UI/UX Design, Digital Marketing, and Business Solutions.",
+    "foundingLocation": "Chennai, Tamil Nadu, India",
+    "email": "info@yencodetechnologies.com",
+    "telephone": "+918925033533",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "No.1, Jeganathapuram, Velachery",
+      "addressLocality": "Chennai",
+      "addressRegion": "Tamil Nadu",
+      "postalCode": "600042",
+      "addressCountry": "IN"
+    },
+    "sameAs": [
+      "https://www.facebook.com/yencodetechnologies",
+      "https://www.linkedin.com/company/yencodetechnologies",
+      "https://www.instagram.com/yencodetechnologies"
+    ],
+    "serviceArea": {
+      "@type": "Place",
+      "name": "Chennai, India"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "IT Services",
+      "itemListElement": [
+        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Web Development"}},
+        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Mobile App Development"}},
+        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "UI/UX Design"}},
+        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Digital Marketing & SEO"}},
+        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "SMS Gateway & Payment Integration"}}
+      ]
+    }
+  }
+  </script>
 
   <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
-  <!-- Three.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="icon" type="image/png" href="images/Yencode.png">
+  <link rel="apple-touch-icon" href="images/Yencode.png">
 
   <!-- Google Fonts: Outfit -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
@@ -27,55 +95,54 @@
 
 <body>
 
+
   <canvas id="globe-canvas" width="520" height="520"></canvas>
 
   <header id="navbar">
     <a href="#home" class="logo-link">
-      <img src="images/logo_hd.png" alt="Yencode Logo icon" class="logo-icon">
+      <img src="images/Yencode.png" alt="Yencode Logo icon" class="logo-icon">
       <span class="logo-text">Yencode</span>
     </a>
-    <div class="menu-toggle" id="menuBtn"><i class="fa-solid fa-bars"></i></div>
+    <div class="menu-toggle" id="menuBtn"><i class="fa-solid fa-bars-staggered"></i></div>
     <nav id="navMenu">
       <div class="nav-indicator"></div>
-      <a href="#home" class="active"><i class="fa-solid fa-house"></i> Home</a>
-      <a href="#about"><i class="fa-solid fa-circle-info"></i> About</a>
-      <a href="#services"><i class="fa-solid fa-screwdriver-wrench"></i> Services</a>
-      <a href="#portfolio"><i class="fa-solid fa-briefcase"></i> Portfolio</a>
-      <a href="#contact"><i class="fa-solid fa-envelope"></i> Contact</a>
+      <a href="#home" class="active"><i class="fa-solid fa-house-laptop"></i> Home</a>
+      <a href="#about"><i class="fa-solid fa-rocket"></i> About</a>
+      <a href="#services"><i class="fa-solid fa-layer-group"></i> Services</a>
+      <a href="#portfolio"><i class="fa-solid fa-diagram-project"></i> Portfolio</a>
+      <a href="#contact"><i class="fa-solid fa-paper-plane"></i> Contact</a>
     </nav>
   </header>
 
   <section id="home" class="hero">
     <div class="container">
       <div class="hero-flex">
-        <div class="hero-content">
+        <div class="hero-content" style="flex: 1.2; max-width: 800px; text-align: center; margin: 0 auto; display: flex; flex-direction: column; align-items: center;">
           <!-- <img src="images/New Yencode Logo.png" alt="Yencode Logo"
             style="width:120px;margin-bottom:20px;object-fit:contain;" class="reveal"> -->
-          <h2 class="reveal-right">Future-Ready IT Solutions</h2>
-          <p class="reveal-right">We design and build powerful digital products for startups and businesses.</p>
+          <h1 style="text-align: center; font-family: 'Outfit', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); background: linear-gradient(135deg, var(--color-cyan), var(--color-purple), var(--color-pink)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; line-height: 1.1; margin-bottom: 20px;">
+            Future-Ready IT Solutions</h1>
+          <p style="text-align: center;">We design and build powerful digital products for startups
+            and businesses.</p>
 
           <!-- CTA Buttons -->
-          <div class="reveal" style="margin-top:25px; display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
-            <a href="#contact"
-              style="padding:12px 25px; border-radius:30px; background:#38bdf8; color:#000; text-decoration:none; font-weight:bold;">Get
-              Started</a>
-            <a href="#portfolio"
-              style="padding:12px 25px; border-radius:30px; border:1px solid rgba(255,255,255,0.3); color:#fff; text-decoration:none;">View
-              Work</a>
+          <div class="cta-buttons">
+            <a href="#contact" class="btn-primary">Get Started</a>
+            <a href="#portfolio" class="btn-secondary">View Work</a>
           </div>
 
-          <!-- Highlights (Moved Inside Content) -->
-          <div class="reveal"
-            style="margin-top:50px; display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:15px;">
-            <div class="card" style="padding: 15px;">
+          <!-- Highlights (Centered Row) -->
+          <div
+            style="margin-top:40px; display:flex; justify-content:center; flex-wrap:wrap; gap:20px; width: 100%;">
+            <div class="card" style="padding: 15px; flex: 1; min-width: 140px; max-width: 180px;">
               <h3 style="font-size: 24px;"><span class="count-up" data-target="100">0</span>+</h3>
               <p style="font-size: 14px; margin-top: 5px;">Projects Delivered</p>
             </div>
-            <div class="card" style="padding: 15px;">
+            <div class="card" style="padding: 15px; flex: 1; min-width: 140px; max-width: 180px;">
               <h3 style="font-size: 24px;"><span class="count-up" data-target="80">0</span>+</h3>
               <p style="font-size: 14px; margin-top: 5px;">Happy Clients</p>
             </div>
-            <div class="card" style="padding: 15px;">
+            <div class="card" style="padding: 15px; flex: 1; min-width: 140px; max-width: 180px;">
               <h3 style="font-size: 24px;"><span class="count-up" data-target="15">0</span>+</h3>
               <p style="font-size: 14px; margin-top: 5px;">Years Experience</p>
             </div>
@@ -85,7 +152,6 @@
           <img src="images/front2.png" alt="Yencode Future" class="floating-img">
         </div>
       </div>
-
     </div>
   </section>
 
@@ -93,9 +159,9 @@
     <div class="container">
       <div class="section-flex section-flex-reverse">
         <div class="section-content">
-          <h2 class="reveal">About Yencode Technologies</h2>
+          <h2>About Yencode Technologies</h2>
 
-          <p class="reveal" style="margin:20px 0;opacity:0.8;line-height:1.7;">
+          <p style="margin:20px 0;opacity:0.8;line-height:1.7;">
             Yencode Technologies is a forward-thinking IT company focused on delivering high-performance digital
             solutions
             for modern businesses. We specialize in building scalable applications, sleek web platforms, and
@@ -103,7 +169,7 @@
             digital marketing strategies that help brands grow in a competitive digital landscape.
           </p>
 
-          <p class="reveal" style="margin:10px 0;opacity:0.7;line-height:1.7;">
+          <p style="margin:10px 0;opacity:0.7;line-height:1.7;">
             Our team combines technical expertise with creative innovation to transform ideas into impactful digital
             products. Whether it's a startup looking to launch or an enterprise aiming to scale, we provide reliable,
             future-ready solutions tailored to business needs.
@@ -133,19 +199,20 @@
 
   <section id="services">
     <div class="container">
-      <div class="section-header reveal">
-        <span class="section-badge">Our Services</span>
+      <div class="section-header">
+        <!-- <span class="section-badge">Our Services</span> -->
         <h2 class="section-title">Comprehensive IT Solutions</h2>
-        <p class="section-description">We provide a wide range of digital services to help your business thrive in the
-          modern era.</p>
+        <!-- <p class="section-description">We provide a wide range of digital services to help your business thrive in the
+          modern era.</p> -->
       </div>
 
-      <div class="services reveal">
+      <div class="services">
         <!-- Card 1: Development -->
         <a href="#development" class="card"
-          style="text-decoration:none;color:#fff; height: 100%; display: flex; flex-direction: column;">
+          style="text-decoration:none; height: 100%; display: flex; flex-direction: column;">
           <div class="service-img-container">
-            <img src="images/service_dev.png" alt="Development Service" class="service-img">
+            <img src="images/service_dev.png" alt="Development Service" class="service-img" style="animation-delay: 0s;"
+              loading="lazy">
           </div>
           <h3>Development</h3>
           <p style="opacity:0.7;margin-top:10px;">Mobile, Web, Windows, and iOS Solutions</p>
@@ -153,30 +220,32 @@
 
         <!-- Card 2: Design -->
         <a href="#design" class="card"
-          style="text-decoration:none;color:#fff; height: 100%; display: flex; flex-direction: column;">
+          style="text-decoration:none; height: 100%; display: flex; flex-direction: column;">
           <div class="service-img-container">
-            <img src="images/service_design.png" alt="Design Service" class="service-img">
+            <img src="images/service_design.png" alt="Design Service" class="service-img" style="animation-delay: 0.5s;"
+              loading="lazy">
           </div>
           <h3>Design</h3>
-          <p style="opacity:0.7;margin-top:10px;">UI / UX and Visual Brand Identity</p>
+          <p style="opacity:0.7;margin-top:10px;">UI/UX, Branding, and Graphic Design</p>
         </a>
 
         <!-- Card 3: Digital Marketing -->
         <a href="#marketing" class="card"
-          style="text-decoration:none;color:#fff; height: 100%; display: flex; flex-direction: column;">
+          style="text-decoration:none; height: 100%; display: flex; flex-direction: column;">
           <div class="service-img-container">
-            <img src="images/service_marketing.png" alt="Marketing Service" class="service-img">
+            <img src="images/service_marketing.png" alt="Digital Marketing Service" class="service-img"
+              style="animation-delay: 1s;" loading="lazy">
           </div>
           <h3>Digital Marketing</h3>
-          <p style="opacity:0.7;margin-top:10px;">SEO, SMM, and Performance Campaigns</p>
+          <p style="opacity:0.7;margin-top:10px;">SEO, SMM, and Content Strategy</p>
         </a>
 
         <!-- Card 4: Business Solutions -->
         <a href="#solutions" class="card"
-          style="text-decoration:none;color:#fff; height: 100%; display: flex; flex-direction: column;">
+          style="text-decoration:none; height: 100%; display: flex; flex-direction: column;">
           <div class="service-img-container">
             <img src="images/service_dev.png" alt="Business Solutions" class="service-img"
-              style="filter: hue-rotate(90deg);">
+              style="filter: hue-rotate(90deg); animation-delay: 1.5s;" loading="lazy">
           </div>
           <h3>Business Solutions</h3>
           <p style="opacity:0.7;margin-top:10px;">SMS Gateways, Payment Integration & Google Services</p>
@@ -184,10 +253,10 @@
 
         <!-- Card 5: Offline Marketing -->
         <a href="#offline" class="card"
-          style="text-decoration:none;color:#fff; height: 100%; display: flex; flex-direction: column;">
+          style="text-decoration:none; height: 100%; display: flex; flex-direction: column;">
           <div class="service-img-container">
             <img src="images/service_marketing.png" alt="Offline Marketing" class="service-img"
-              style="filter: hue-rotate(240deg);">
+              style="filter: hue-rotate(240deg); animation-delay: 2s;" loading="lazy">
           </div>
           <h3>Offline Marketing</h3>
           <p style="opacity:0.7;margin-top:10px;">Professional Pamphlet Design & Printing Services</p>
@@ -201,7 +270,7 @@
     <div class="container">
       <div class="section-flex section-flex-reverse">
         <div class="section-content">
-          <h2 class="reveal">Development Services</h2>
+          <h2>Development Services</h2>
 
 
           <div id="dev-slider" class="sub-slider-wrapper">
@@ -209,11 +278,16 @@
               <!-- Slide 1: Mobile -->
               <div class="sub-slide">
                 <div id="dev-mobile">
-                  <h3 class="reveal">Mobile App Development</h3>
-                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
-                    Expertise in building high-performance, feature-rich, and scalable mobile applications for Android
-                    and iOS using Flutter, React Native, and Java. We focus on delivering smooth user experiences with
-                    native-like performance.
+                  <h3>Mobile & iOS App Development</h3>
+                  <p style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    We design and develop high-performance mobile applications for Android and iOS
+                    platforms, tailored to your business needs. Our services include native Swift apps,
+                    Flutter-based cross-platform apps, App Store and Play Store deployment, performance
+                    optimization, secure authentication, API integration, payment gateway integration, and
+                    regular updates and maintenance. We focus on creating scalable, fast, and user-friendly
+                    mobile solutions with modern UI/UX designs that enhance usability, improve customer
+                    engagement, and deliver a seamless experience for Apple users, startups, and
+                    enterprises alike.
                   </p>
                   <div class="services" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
                     <div class="card reveal" style="padding: 12px; font-size: 13px;">E-commerce</div>
@@ -227,10 +301,14 @@
               <!-- Slide 2: Website -->
               <div class="sub-slide">
                 <div id="dev-web">
-                  <h3 class="reveal">Website Development</h3>
-                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
-                    Custom website development using modern technologies like React, Next.js, and Node.js. We build
-                    responsive, SEO-friendly, and blazing-fast websites that convert visitors into customers.
+                  <h3>Website Development</h3>
+                  <p style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    We create responsive, modern, and SEO-friendly websites that convert visitors into
+                    customers. From business websites and e-commerce platforms to portfolios, landing
+                    pages, dashboards, and CMS solutions, every site we build is fast, secure, and mobile-
+                    friendly. Our focus is on optimizing performance, improving usability, and enhancing
+                    your online presence to help your business reach and engage your target audience
+                    effectively.
                   </p>
                   <div class="services" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
                     <div class="card reveal" style="padding: 12px; font-size: 13px;">Corporate</div>
@@ -244,26 +322,13 @@
               <!-- Slide 3: Windows -->
               <div class="sub-slide">
                 <div id="dev-windows">
-                  <h3 class="reveal">Windows Software</h3>
-                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
-                    Robust desktop applications built with .NET, C#, and Electron. From inventory management to
-                    specialized enterprise tools, we build software that works offline and integrates deeply with OS
-                    features.
-                  </p>
-                </div>
-              </div>
-
-              <!-- Slide 4: iOS -->
-              <div class="sub-slide">
-                <div id="dev-ios">
-                  <h3 class="reveal">iOS App Development</h3>
-                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
-                    Dedicated iOS development for the Apple ecosystem. We build premium applications for iPhone and
-                    iPad, adhering to Apple's Human Interface Guidelines for visual excellence.
-                  </p>
-                  <p class="reveal" style="margin:10px 0;opacity:0.7;font-size: 15px;">
-                    Our services include native Swift app development, Flutter-based iOS apps, App Store deployment,
-                    performance optimization, and regular updates & support.
+                  <h3>Windows Software Development</h3>
+                  <p style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    We develop powerful desktop applications for Windows to automate and streamline
+                    business operations. Our solutions include custom business software, billing and
+                    inventory systems, ERP solutions, employee management software, database
+                    integration, and secure login systems. These tools improve productivity, reduce manual
+                    work, and allow your team to focus on growth and efficiency.
                   </p>
                 </div>
               </div>
@@ -288,18 +353,15 @@
     <div class="container">
       <div class="section-flex">
         <div class="section-content">
-          <h2 class="reveal">Design Services</h2>
+          <h2>Design Services</h2>
           <div id="ui-ux" style="margin-top:40px;">
-            <h3 class="reveal">UI / UX Design</h3>
-            <p class="reveal" style="margin:20px 0;opacity:0.8;line-height:1.7;">
-              UI/UX design focuses on creating visually appealing, easy-to-use, and meaningful digital experiences.
-              We design modern and intuitive interfaces for mobile apps and websites that improve usability, enhance
-              user satisfaction, and increase customer engagement.
-            </p>
-            <p class="reveal" style="margin:10px 0;opacity:0.7;font-size: 15px;">
-              Our process includes user research, wireframing, prototyping, and usability testing to ensure smooth
-              navigation and clear interaction flows. Every design matches your brand identity while delivering high
-              performance and accessibility.
+            <h3>UI / UX Design</h3>
+            <p style="margin:20px 0;opacity:0.8;line-height:1.7;">
+              We specialize in creating visually appealing and intuitive digital experiences. Our UI/UX
+              design process includes user research, wireframing, prototyping, and usability testing to
+              ensure smooth navigation and clear interaction flows. Every interface is crafted to match your brand
+              identity while delivering high performance, accessibility, and conversion-focused results, improving
+              usability, customer satisfaction, and engagement.
             </p>
             <div id="design-slider" class="sub-slider-wrapper">
               <div class="sub-slider-track">
@@ -339,55 +401,73 @@
     <div class="container">
       <div class="section-flex section-flex-reverse">
         <div class="section-content">
-          <h2 class="reveal">Digital Marketing Services</h2>
+          <h2>Digital Marketing</h2>
 
           <div id="mkt-slider" class="sub-slider-wrapper">
             <div class="sub-slider-track">
               <!-- Slide 1: SMM -->
               <div class="sub-slide">
                 <div id="mkt-smm">
-                  <h3 class="reveal">Social Media Marketing (SMM)</h3>
-                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
-                    We promote your brand on top social platforms such as Facebook, Instagram, YouTube, Twitter,
-                    LinkedIn, and
-                    Quora. Our SMM services help you engage with your audience, increase followers, build brand trust,
-                    and
-                    generate quality leads.
+                  <h3>Digital Marketing & SEO</h3>
+                  <p style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    We offer comprehensive digital marketing solutions to grow your business online and
+                    reach the right audience. Our Social Media Marketing (SMM) services promote your
+                    brand on platforms such as Facebook, Instagram, YouTube, Twitter, LinkedIn, and
+                    Quora, helping increase followers, engagement, and brand trust. With Contact
+                    Marketing, we enable direct communication via Email, SMS, and WhatsApp, allowing
+                    you to share promotions, updates, and personalized messages to build long-term
+                    customer relationships. Additionally, our Search Engine Optimization (SEO) strategies
+                    enhance your website’s visibility on Google and other search engines, boosting organic
+                    rankings, driving traffic, and helping potential customers find your business easily.
+                    Together, these services create a powerful marketing ecosystem that drives
+                    engagement, conversions, and sustainable growth.
                   </p>
-                  <div class="services" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
-                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Organic Growth</div>
-                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Lead Gen</div>
-                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Brand Trust</div>
-                  </div>
+
                 </div>
               </div>
 
-              <!-- Slide 2: Paid -->
               <div class="sub-slide">
-                <div id="mkt-paid">
-                  <h3 class="reveal">Paid Campaigns</h3>
-                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
-                    We manage high-performance paid advertising campaigns across platforms like Google Ads (Search, Play
-                    Store, YouTube), Facebook & Instagram Ads, LinkedIn Ads, Quora Ads, and Microsoft Ads. These
-                    campaigns
-                    maximize your ROI.
+                <div id="mkt-branding">
+                  <h3>Corporate Branding & Designing</h3>
+                  <p style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    Our corporate branding and designing services focus on building a strong, consistent,
+                    and trustworthy identity for your business across all digital and offline platforms. We
+                    create professional brand strategies, logos, color systems, typography, and visual assets,
+                    along with modern website and application designs that reflect your company's values
+                    and vision. Our approach ensures brand consistency, visual clarity, and high usability,
+                    helping businesses enhance recognition, build customer trust, and stand out in
+                    competitive markets.
                   </p>
                 </div>
               </div>
 
-              <!-- Slide 3: SEO -->
+              <!-- Slide 3: Paid -->
               <div class="sub-slide">
-                <div id="mkt-seo">
-                  <h3 class="reveal">Search Engine Optimization (SEO)</h3>
-                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
-                    Rank #1 on Google with our advanced SEO strategies. We optimize your website's performance, content,
-                    and
-                    backlink profile to drive organic traffic and increase your business authority online.
+                <div id="mkt-paid-2-campaigns">
+                  <h3>Paid Campaigns</h3>
+                  <p style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    Reach your audience quickly and efficiently with high-performance paid advertising
+                    campaigns. We manage Google Ads (Search, Display, YouTube, Play Store), Facebook &
+                    Instagram Ads, LinkedIn Ads, Quora Ads, and Microsoft Ads. Our campaigns are
+                    optimized to drive traffic, increase conversions, and maximize ROI for your business.
                   </p>
-                  <div class="services" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
-                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Technical SEO</div>
-                    <div class="card reveal" style="padding: 12px; font-size: 13px;">On-Page</div>
-                    <div class="card reveal" style="padding: 12px; font-size: 13px;">Link Building</div>
+                </div>
+              </div>
+
+              <!-- Slide 4: Offline Marketing -->
+              <div class="sub-slide">
+                <div id="mkt-offline">
+                  <h3>Offline Marketing & Branding</h3>
+                  <p style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    Beyond digital, we help you build a physical presence. Our offline marketing
+                    strategies include large-scale outdoor advertising, professional print media
+                    (brochures, business cards, banners), and high-quality branded merchandise to
+                    increase your brand visibility in the real world.
+                  </p>
+                  <div class="service-tags" style="margin-top:15px; display:flex; gap:10px; flex-wrap:wrap;">
+                    <span class="tag" style="background:rgba(236, 72, 153, 0.1); border:1px solid rgba(236, 72, 153, 0.3); padding:5px 12px; border-radius:50px; font-size:12px; color:var(--color-pink);">Print Media</span>
+                    <span class="tag" style="background:rgba(168, 85, 247, 0.1); border:1px solid rgba(168, 85, 247, 0.3); padding:5px 12px; border-radius:50px; font-size:12px; color:var(--color-purple);">Outdoor Ads</span>
+                    <span class="tag" style="background:rgba(6, 182, 212, 0.1); border:1px solid rgba(6, 182, 212, 0.3); padding:5px 12px; border-radius:50px; font-size:12px; color:var(--color-cyan);">Event Branding</span>
                   </div>
                 </div>
               </div>
@@ -412,19 +492,19 @@
     <div class="container">
       <div class="section-flex">
         <div class="section-content">
-          <h2 class="reveal">Business Solutions</h2>
+          <h1>Business Solutions</h1>
 
           <div id="sol-slider" class="sub-slider-wrapper">
             <div class="sub-slider-track">
               <!-- Slide 1: Contact & SMS -->
               <div class="sub-slide">
                 <div id="sol-contact">
-                  <h3 class="reveal">Contact Marketing & SMS Gateway</h3>
-                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
-                    Our contact marketing solutions include Email, SMS, and WhatsApp Marketing. An SMS Gateway enables
-                    you to
-                    send promotional bulk SMS or automated transactional SMS for OTPs, alerts, and notifications
-                    instantly.
+                  <h3>Contact Marketing & SMS Gateway</h3>
+                  <p style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    Our SMS Gateway solutions enable computers, websites, and applications to send and
+                    receive text messages across global telecom networks. We support both promotional
+                    bulk SMS campaigns for marketing and automated transactional SMS for OTPs, alerts,
+                    and notifications, helping businesses communicate instantly, reliably, and at scale.
                   </p>
                   <div class="services" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
                     <div class="card reveal" style="padding: 12px; font-size: 13px;">WhatsApp Hub</div>
@@ -437,23 +517,37 @@
               <!-- Slide 2: Payment Gateways -->
               <div class="sub-slide">
                 <div id="sol-gateway">
-                  <h3 class="reveal">Payment Gateways</h3>
-                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
-                    We integrate secure gateways such as Razorpay, CCAvenue, PayU, PayPal, Stripe, and NTT Data. This
-                    ensures
-                    fast processing, high security, and multiple payment options for your customers.
+                  <h3>Payment Gateways</h3>
+                  <p style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    We integrate secure and reliable payment gateways such as Razorpay, CCAvenue, PayU,
+                    PayPal, Stripe, and NTT Data. This allows businesses to accept online payments
+                    smoothly for both online and offline transactions, ensuring fast processing, multiple
+                    payment options, and high security for your customers.
                   </p>
                 </div>
               </div>
 
               <!-- Slide 3: Google Services -->
               <div class="sub-slide">
-                <div id="sol-google">
-                  <h3 class="reveal">Google Services</h3>
-                  <p class="reveal" style="margin:15px 0;opacity:0.8;line-height:1.7;">
-                    We provide setup and integration for Google Cloud Console, GSuite (Workspace), Gmail for Business,
-                    Google
-                    Drive, Maps API, Places API, Google Fit, and more to enhance business productivity.
+                <div id="sol-google-2-services">
+                  <h3>Google Services</h3>
+                  <p style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    We provide setup and integration for Google Cloud and related services, including
+                    Gmail for Business, Google Drive, Google Meet, Google Maps API, Google Places API,
+                    Google Fit, and more. These tools help businesses operate securely, efficiently, and
+                    intelligently in the cloud.
+                  </p>
+                </div>
+              </div>
+              <div class="sub-slide">
+                <div id="sol-printing">
+                  <h3>Printing & Designing Services</h3>
+                  <p style="margin:15px 0;opacity:0.8;line-height:1.7;">
+                    We offer professional design and high-quality printing services to promote your
+                    business offline. Our services include designing and printing brochures, flyers,
+                    pamphlets, visiting cards, banners, and posters. Attractive designs combined with
+                    premium print quality help businesses enhance brand visibility, create a lasting
+                    impression, and strengthen market presence.
                   </p>
                 </div>
               </div>
@@ -478,10 +572,10 @@
     <div class="container">
       <div class="section-flex section-flex-reverse">
         <div class="section-content">
-          <h2 class="reveal">Offline Marketing</h2>
+          <h2>Offline Marketing</h2>
           <div id="off-printing" style="margin-top:40px;">
-            <h3 class="reveal">Pamphlet & Printing Services</h3>
-            <p class="reveal" style="margin:20px 0;opacity:0.8;line-height:1.7;">
+            <h3>Pamphlet & Printing Services</h3>
+            <p style="margin:20px 0;opacity:0.8;line-height:1.7;">
               Professional design and high-quality printing for pamphlets, flyers, brochures, visiting cards, banners,
               and posters. High-impact designs combined with premium print quality boost your market presence.
             </p>
@@ -496,19 +590,27 @@
 
   <section id="portfolio">
     <div class="container">
-      <div class="section-flex">
+      <div class="section-header">
+        <!-- <span class="section-badge">Portfolio</span> -->
+        <h2 class="section-title">Our Recent Work</h2>
+      </div>
+      <div class="section-flex" style="min-height: auto;">
         <div class="section-content">
-          <h2 class="reveal">Portfolio</h2>
-          <div class="services" style="grid-template-columns: 1fr; margin-top: 30px;">
-            <div class="card reveal" style="margin-bottom: 20px;">
-              <img src="images/maccess.png" alt="M Access" style="width:80px; margin-bottom: 10px;">
+          <div class="portfolio-grid" style="margin: 20px 0 0 0; width: 100%;">
+            <div class="card">
+              <img src="images/maccess.png" alt="M Access"
+                style="width:100px; margin-bottom: 5px; border-radius: 12px;">
               <h3>M Access</h3>
-              <p style="opacity:0.7;margin-top:10px;">Mobile application for seamless access management.</p>
+              <p style="opacity:0.7;margin-top:5px;line-height:1.6;">A modern mobile application for seamless access
+                management and security control. Built with Flutter for high performance across platforms.</p>
             </div>
-            <div class="card reveal">
-              <img src="images/common.jpeg" alt="Common Group" style="width:80px; margin-bottom: 10px;">
+            <div class="card">
+              <img src="images/common.jpeg" alt="Common Group"
+                style="width:100px; margin-bottom: 5px; border-radius: 12px;">
               <h3>Common Group</h3>
-              <p style="opacity:0.7;margin-top:10px;">A collaborative platform for communication.</p>
+              <p style="opacity:0.7;margin-top:10px;line-height:1.6;">A collaborative platform designed for efficient
+                team
+                communication and project coordination, streamlining workflows for groups.</p>
             </div>
           </div>
         </div>
@@ -523,7 +625,7 @@
 
   <section id="contact" class="contact-section">
     <div class="container">
-      <div class="section-header reveal">
+      <div class="section-header">
         <span class="section-badge">Contact Us</span>
         <h2 class="section-title">Let's Build Something Great</h2>
         <p class="section-description">Ready to start your next project or have questions about our services?
@@ -532,7 +634,7 @@
 
       <div class="contact-content">
         <!-- Contact Info -->
-        <div class="contact-info reveal">
+        <div class="contact-info">
           <h3 class="contact-info-title">Get in Touch</h3>
           <p class="contact-info-text">Have a project in mind? We'd love to hear from you. Send us a message
             and let's start a conversation.</p>
@@ -554,7 +656,7 @@
               </div>
               <div>
                 <h4>Email Us</h4>
-                <a href="mailto:yencodetechnologies@gmail.com">yencodetechnologies@gmail.com</a>
+                <a href="mailto:info@yencodetechnologies.com">info@yencodetechnologies.com</a>
               </div>
             </div>
 
@@ -573,10 +675,15 @@
           <div class="contact-social">
             <h4>Follow Us</h4>
             <div class="contact-social-icons">
-              <a href="#" class="contact-social-icon"><i class="fa-brands fa-facebook-f"></i></a>
-              <a href="#" class="contact-social-icon"><i class="fa-brands fa-twitter"></i></a>
-              <a href="#" class="contact-social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
-              <a href="#" class="contact-social-icon"><i class="fa-brands fa-instagram"></i></a>
+              <a href="https://www.facebook.com/yencodetechnologies" target="_blank" rel="noopener"
+                aria-label="Yencode Technologies on Facebook" class="contact-social-icon"><i
+                  class="fa-brands fa-facebook-f"></i></a>
+              <a href="https://www.linkedin.com/company/yencodetechnologies" target="_blank" rel="noopener"
+                aria-label="Yencode Technologies on LinkedIn" class="contact-social-icon"><i
+                  class="fa-brands fa-linkedin-in"></i></a>
+              <a href="https://www.instagram.com/yencodetechnologies" target="_blank" rel="noopener"
+                aria-label="Yencode Technologies on Instagram" class="contact-social-icon"><i
+                  class="fa-brands fa-instagram"></i></a>
             </div>
           </div>
         </div>
@@ -587,11 +694,80 @@
 
   <script src="script.js"></script>
 
+  <!-- WhatsApp Button -->
+  <a href="https://wa.me/918925033533" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"
+    class="whatsapp-btn"><i class="fa-brands fa-whatsapp"></i></a>
 
   <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#home" class="logo-link" aria-label="Yencode Technologies Home">
+            <img src="images/Yencode.png" alt="Yencode Technologies Logo" class="logo-icon" style="height:45px;">
+            <span class="logo-text" style="font-size:1.4rem;">Yencode</span>
+          </a>
+          <p class="footer-tagline">Providing end-to-end digital solutions for modern businesses globally.</p>
+          <div class="footer-socials">
+            <a href="https://facebook.com/yencodetechnologies" target="_blank" rel="noopener" aria-label="Facebook"
+              class="fsoc-icon"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://linkedin.com/company/yencodetechnologies" target="_blank" rel="noopener"
+              aria-label="LinkedIn" class="fsoc-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://instagram.com/yencodetechnologies" target="_blank" rel="noopener"
+              aria-label="Instagram" class="fsoc-icon"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://wa.me/918925033533" target="_blank" rel="noopener" aria-label="WhatsApp"
+              class="fsoc-icon"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
+        </div>
 
-  <!-- WhatsApp Button -->
-  <a href="https://wa.me/918925033533" target="_blank" class="whatsapp-btn"><i class="fa-brands fa-whatsapp"></i></a>
+        <div class="footer-links-col">
+          <h4 class="footer-col-title">Quick Links</h4>
+          <ul>
+            <li><a href="#home"><i class="fa-solid fa-arrow-right-long"></i> Home</a></li>
+            <li><a href="#about"><i class="fa-solid fa-arrow-right-long"></i> About Us</a></li>
+            <li><a href="#services"><i class="fa-solid fa-arrow-right-long"></i> Services</a></li>
+            <li><a href="#portfolio"><i class="fa-solid fa-arrow-right-long"></i> Portfolio</a></li>
+            <li><a href="#contact"><i class="fa-solid fa-arrow-right-long"></i> Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-col">
+          <h4 class="footer-col-title">Services</h4>
+          <ul>
+            <li><a href="#development"><i class="fa-solid fa-chevron-right"></i> Web Development</a></li>
+            <li><a href="#development"><i class="fa-solid fa-chevron-right"></i> Mobile App Dev</a></li>
+            <li><a href="#design"><i class="fa-solid fa-chevron-right"></i> UI/UX Design</a></li>
+            <li><a href="#marketing"><i class="fa-solid fa-chevron-right"></i> Digital Marketing</a></li>
+            <li><a href="#solutions"><i class="fa-solid fa-chevron-right"></i> Business Solutions</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-col">
+          <h4 class="footer-col-title">Contact Info</h4>
+          <ul class="footer-contact-list">
+            <li><i class="fa-solid fa-phone"></i> <a href="tel:+918925033533">+91 89250 33533</a></li>
+            <li><i class="fa-solid fa-envelope"></i> <a
+                href="mailto:info@yencodetechnologies.com">info@yencodetechnologies.com</a></li>
+            <li><i class="fa-solid fa-location-dot"></i> No.1, Jeganathapuram, Velachery, Chennai - 600042</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+          <p>&copy; <span id="footer-year"></span> Yencode Technologies. All rights reserved.</p>
+          <div style="display: flex; gap: 15px;">
+            <a href="#" style="color:#9ca3af; text-decoration:none; font-size:13px;">Privacy Policy</a>
+            <a href="#" style="color:#9ca3af; text-decoration:none; font-size:13px;">Terms of Service</a>
+          </div>
+        </div>
+        <p class="footer-credit">Crafted with <i class="fa-solid fa-heart" style="color:#ec4899;"></i> in Chennai, India
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
 
 </body>
 
