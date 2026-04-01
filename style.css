@@ -17,6 +17,8 @@
 html {
     scroll-behavior: smooth;
     scroll-padding-top: 90px;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 /* LIGHT BACKGROUND (Vanta Clouds) */
@@ -25,12 +27,16 @@ body {
     color: #e2e8f0;
     overflow-x: hidden;
     min-height: 100vh;
+    width: 100%;
+    position: relative;
 }
 
 
 
 header {
     position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     padding: 12px 40px;
     display: flex;
@@ -539,8 +545,8 @@ section {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
     z-index: 1;
     transition: opacity 0.5s ease;
@@ -1334,22 +1340,30 @@ section {
 
 @media (max-width: 600px) {
     section {
-        padding: 30px 12px;
+        padding: 50px 15px;
     }
 
     .container {
-        padding: 0 8px;
+        padding: 0 10px;
     }
 
     h2 {
-        font-size: 1.4rem;
+        font-size: 1.8rem;
+    }
+    
+    .card {
+        padding: 20px;
+        border-radius: 20px;
+    }
+    
+    .service-img-container {
+        height: 200px;
     }
 
     .services {
-        display: flex !important;
-        flex-direction: column !important;
+        display: grid !important;
         grid-template-columns: 1fr !important;
-        gap: 12px !important;
+        gap: 20px !important;
     }
 
     .whatsapp-btn {
@@ -1391,7 +1405,13 @@ section {
     }
 
     .hero-content h1 {
-        font-size: 2.2rem !important;
+        font-size: 2.6rem !important;
+        line-height: 1.2;
+    }
+
+    .hero p {
+        font-size: 1.15rem;
+        margin-top: 15px;
     }
 
     .stat-card {
