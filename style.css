@@ -322,6 +322,8 @@ section {
     opacity: 1;
     transform: none;
     transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .section-content h2.revealed,
@@ -343,11 +345,14 @@ section {
     opacity: 1;
     transform: none;
     transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1) 0.1s;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .section-content {
     flex: 1;
-    min-width: 300px;
+    min-width: 280px; /* Reduced to fit mobile screens better */
+    width: 100%;
     z-index: 2;
     text-align: center;
 }
@@ -1330,11 +1335,13 @@ section {
     }
 
     h2 {
-        font-size: 1.6rem;
+        font-size: 1.8rem; /* Adjusted for consistency */
+        overflow-wrap: break-word;
     }
 
     h3 {
-        font-size: 1.1rem;
+        font-size: 1.4rem; /* Adjusted for better mobile view */
+        overflow-wrap: break-word;
     }
 }
 
@@ -1348,7 +1355,13 @@ section {
     }
 
     h2 {
+        font-size: 1.5rem; /* Further reduced for small mobile */
+        margin-bottom: 15px;
+    }
+
+    h1 {
         font-size: 1.8rem;
+        margin-bottom: 20px;
     }
     
     .card {
