@@ -1581,6 +1581,348 @@
       color: var(--cyan-light);
     }
 
+    /* ── BENTO & GLASSMORPHISM CONTACT STYLES ── */
+    .contact-page-wrap {
+      background: #ffffff !important;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .contact-page-wrap::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      top: 15%;
+      left: 10%;
+      background: radial-gradient(circle, rgba(0, 189, 212, 0.05) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .contact-page-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(0, 189, 212, 0.04) 1px, transparent 1px), 
+        linear-gradient(90deg, rgba(0, 189, 212, 0.04) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bento-container {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 24px;
+      margin-top: 30px;
+    }
+
+    .bento-sidebar {
+      grid-column: span 5;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .bento-card {
+      background: #0d1e38;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 35px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .bento-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 189, 212, 0.25);
+      background: #112244;
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.45),
+        0 0 20px rgba(0, 189, 212, 0.05);
+    }
+
+    .bento-card h3 {
+      font-size: 20px;
+      color: #fff;
+      margin-bottom: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .bento-card .card-desc {
+      color: #94a3b8;
+      font-size: 14px;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    .glowing-orb {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      background: rgba(0, 189, 212, 0.1);
+      border-radius: 50%;
+      filter: blur(40px);
+      pointer-events: none;
+      z-index: 0;
+      top: -30px;
+      left: -30px;
+    }
+
+    /* Info Items */
+    .info-items {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .info-item-link {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      text-decoration: none;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .info-item-link:hover {
+      background: rgba(0, 189, 212, 0.05);
+      border-color: rgba(0, 189, 212, 0.15);
+      transform: translateX(5px);
+    }
+
+    .info-icon {
+      width: 46px;
+      height: 46px;
+      background: rgba(0, 189, 212, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cyan-light);
+      font-size: 18px;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .info-item-link:hover .info-icon {
+      background: var(--gradient);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(0, 189, 212, 0.4);
+    }
+
+    .info-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .info-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .info-value {
+      font-size: 14px;
+      color: #e2e8f0;
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    /* Hours Block */
+    .hours-block {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      margin-bottom: 25px;
+    }
+
+    .hours-block i {
+      font-size: 20px;
+      color: var(--cyan-light);
+    }
+
+    /* Social Block */
+    .social-block {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .bento-socials {
+      display: flex;
+      gap: 10px;
+    }
+
+    .bento-socials a {
+      width: 38px;
+      height: 38px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .bento-socials a:hover {
+      background: var(--gradient);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 0 15px rgba(0, 189, 212, 0.4);
+      transform: translateY(-3px);
+    }
+
+    /* Form Card Styles */
+    .bento-card.form-card {
+      grid-column: 3 / span 8;
+    }
+
+    .form-bento-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .form-field-card {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .form-field-card:hover {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .name-field, .phone-field {
+      grid-column: span 1;
+    }
+
+    .email-field, .message-field, .submit-container {
+      grid-column: span 2;
+    }
+
+    .form-field-card label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-field-card label .required {
+      color: var(--cyan-light);
+      margin-left: 2px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      left: 15px;
+      color: #475569;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .input-wrapper input,
+    .input-wrapper textarea {
+      width: 100%;
+      padding: 12px 15px 12px 42px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .input-wrapper input:focus,
+    .input-wrapper textarea:focus {
+      border-color: var(--cyan-light);
+      background: rgba(0, 0, 0, 0.35);
+      box-shadow: 0 0 12px rgba(55, 242, 248, 0.15);
+    }
+
+    .input-wrapper input:focus + i,
+    .input-wrapper textarea:focus + i {
+      color: var(--cyan-light);
+    }
+
+    .input-wrapper textarea {
+      resize: none;
+      padding-left: 15px;
+    }
+
+    /* Submit Button */
+    .submit-container {
+      margin-top: 10px;
+    }
+
+    .bento-submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--gradient);
+      border: none;
+      border-radius: 16px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 25px rgba(0, 189, 212, 0.3);
+    }
+
+    .bento-submit-btn:hover {
+      box-shadow: 
+        0 12px 30px rgba(0, 189, 212, 0.5),
+        0 0 20px rgba(55, 242, 248, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .bento-submit-btn:active {
+      transform: translateY(0);
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
       .services-grid {
@@ -1597,6 +1939,19 @@
 
       .hero {
         min-height: 0;
+      }
+
+      .bento-sidebar {
+        grid-column: span 12;
+        flex-direction: row;
+      }
+      
+      .bento-sidebar .bento-card {
+        flex: 1;
+      }
+
+      .bento-card.form-card {
+        grid-column: 1 / span 12;
       }
 
       .hero-slide {
@@ -1687,6 +2042,14 @@
         display: inline-block;
         margin-top: 20px;
       }
+
+      .bento-sidebar {
+        flex-direction: column;
+      }
+      
+      .name-field, .phone-field {
+        grid-column: span 2;
+      }
     }
   </style>
 </head>
@@ -1762,33 +2125,67 @@
   </nav>
 
 
-  <section class="contact-page-wrap" style="background: #f8fafc; min-height: calc(100vh - 120px); padding-top: 130px; padding-bottom: 80px; position: relative;">
-    <!-- background curve -->
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 250px; background: #3b82f6; border-bottom-left-radius: 50% 15%; border-bottom-right-radius: 50% 15%; z-index: 0;"></div>
+  <section class="contact-page-wrap" style="min-height: calc(100vh - 120px); padding-top: 50px; padding-bottom: 80px; position: relative;">
     
-    <div class="container" style="position: relative; z-index: 1; max-width: 500px; margin: 0 auto;">
-      <div class="contact-card" style="background: #fff; border: 1.5px solid #dbeafe; border-radius: 20px; padding: 40px 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); text-align: center;">
-        <h2 style="font-size: 28px; margin-bottom: 5px; color: #1e3a8a; font-weight: 700;">Get <span style="color: #3b82f6; text-shadow: 1px 1px 2px rgba(59, 130, 246, 0.2);">Instant Support</span></h2>
-        <p style="color: #64748b; margin-bottom: 25px; font-size: 15px;">Fill up form below, our team will get back soon</p>
-        
-        <form id="contactForm">
-          <div style="margin-bottom: 15px;">
-            <input type="text" placeholder="Name *" style="width: 100%; padding: 14px 20px; border: 1px solid #cbd5e1; border-radius: 12px; outline: none; font-size: 15px; color: #334155;" required>
-          </div>
-          <div style="margin-bottom: 15px;">
-            <input type="tel" placeholder="Phone *" style="width: 100%; padding: 14px 20px; border: 1px solid #cbd5e1; border-radius: 12px; outline: none; font-size: 15px; color: #334155;" required>
-          </div>
-          <div style="margin-bottom: 15px;">
-            <input type="email" placeholder="Email" style="width: 100%; padding: 14px 20px; border: 1px solid #cbd5e1; border-radius: 12px; outline: none; font-size: 15px; color: #334155;">
-          </div>
+    <div class="container" style="position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 20px;">
+      <!-- Section Title -->
+      <div class="contact-header" style="text-align: center; margin-bottom: 50px;">
+        <span class="contact-eyebrow" style="background: rgba(0, 189, 212, 0.1); color: var(--cyan-dark); padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; display: inline-block; margin-bottom: 15px; border: 1px solid rgba(0, 189, 212, 0.3);">Contact Us</span>
+        <h2 style="font-size: 38px; color: #0f172a; font-weight: 800; font-family: 'Poppins', sans-serif;">
+          Get <span style="background: linear-gradient(135deg, var(--cyan-light), var(--cyan-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Instant Support</span>
+        </h2>
+        <p style="color: #475569; margin-top: 10px; font-size: 16px; max-width: 600px; margin-left: auto; margin-right: auto;">Fill out the form below or reach out to us directly. Our team will get back to you shortly.</p>
+      </div>
 
-          <div style="margin-bottom: 20px;">
-            <textarea placeholder="More info . . ." rows="4" style="width: 100%; padding: 14px 20px; border: 1px solid #cbd5e1; border-radius: 12px; outline: none; font-size: 15px; color: #334155; resize: none;"></textarea>
-          </div>
-          <button type="submit" style="width: 100%; padding: 15px; background: #3b82f6; color: #fff; border: none; border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.2s;">
-            <i class="far fa-check-circle"></i> Submit
-          </button>
-        </form>
+      <div class="bento-container">
+        <!-- Right Column: Form Bento Card -->
+        <div class="bento-card form-card glass-morphic">
+          <div class="glowing-orb" style="top: -50px; right: -50px; left: auto; background: rgba(55, 242, 248, 0.12);"></div>
+          
+          <form id="contactForm">
+            <div class="form-bento-grid">
+              
+              <div class="form-field-card name-field">
+                <label for="nameInput">Name <span class="required">*</span></label>
+                <div class="input-wrapper">
+                  <i class="far fa-user"></i>
+                  <input type="text" id="nameInput" placeholder="John Doe" required>
+                </div>
+              </div>
+              
+              <div class="form-field-card phone-field">
+                <label for="phoneInput">Phone <span class="required">*</span></label>
+                <div class="input-wrapper">
+                  <i class="fas fa-mobile-alt"></i>
+                  <input type="tel" id="phoneInput" placeholder="+91 89250 33533" required>
+                </div>
+              </div>
+              
+              <div class="form-field-card email-field">
+                <label for="emailInput">Email Address</label>
+                <div class="input-wrapper">
+                  <i class="far fa-envelope"></i>
+                  <input type="email" id="emailInput" placeholder="john@example.com">
+                </div>
+              </div>
+              
+              <div class="form-field-card message-field">
+                <label for="messageInput">Project Details / Message</label>
+                <div class="input-wrapper">
+                  <textarea id="messageInput" placeholder="Tell us about your project or support needs..." rows="5"></textarea>
+                </div>
+              </div>
+              
+              <div class="submit-container">
+                <button type="submit" class="bento-submit-btn">
+                  <span>Send Message</span>
+                  <i class="far fa-paper-plane"></i>
+                </button>
+              </div>
+              
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </section>
