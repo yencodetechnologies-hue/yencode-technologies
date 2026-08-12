@@ -9,7 +9,52 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_change_me';
+const crypto = require('crypto');
 
+const PAYU_KEY = process.env.PAYU_KEY;
+const PAYU_SALT = process.env.PAYU_SALT;
+const PAYU_BASE_URL = process.env.PAYU_BASE_URL || 'https://test.payu.in/_payment'; // use https://secure.payu.in/_payment in production
+
+app.post('/api/payment/payu-initiate', requireAuth, (req, res) => {
+  const { amount, firstname, email, phone } = req.body || {};
+
+  if (!amount || !firstname || !email || !phone) {
+    return res.status(400).json({ success: false, message: 'amount, firstname, email, phone are required' });
+  }
+
+  const txnid = 'TXN' + Date.now();
+  const productinfo = 'Yencode Technologies Service';
+
+  // PayU hash sequence: key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5||||||SALT
+  const hashString = `${PAYU_KEY}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${PAYU_SALT}`;
+  const hash = crypto.createHash('sha512').update(hashString).digest('hex');
+
+  return res.json({
+    success: true,
+    payuUrl: PAYU_BASE_URL,
+    params: {
+      key: PAYU_KEY,
+      txnid,
+      amount,
+      productinfo,
+      firstname,
+      email,
+      phone,
+      surl: `${process.env.APP_BASE_URL}/api/payment/payu-success`,
+      furl: `${process.env.APP_BASE_URL}/api/payment/payu-failure`,
+      hash,
+    },
+  });
+});
+
+app.post('/api/payment/payu-success', (req, res) => {
+  // TODO: verify response hash, mark order paid, then redirect to your frontend
+  res.redirect(`${process.env.FRONTEND_URL}/payment-success`);
+});
+
+app.post('/api/payment/payu-failure', (req, res) => {
+  res.redirect(`${process.env.FRONTEND_URL}/payment-failed`);
+});
 // ---------------------------------------------------------------------------
 // "Database" — single account, matching the requested credentials.
 // Swap this for a real DB (MongoDB/Postgres) later; keep the same shape.
@@ -88,19 +133,65 @@ app.get('/api/account', requireAuth, (req, res) => {
 // POST /api/payment/initiate  (protected)
 // Stub endpoint — wire this to Razorpay/Stripe etc. later.
 // ---------------------------------------------------------------------------
-app.post('/api/payment/initiate', requireAuth, (req, res) => {
-  const { amount = 0, purpose = 'Service Payment' } = req.body || {};
+// PayU init — mirrors M-Business PaymentController.initPayU
+app.post('/api/payment/payu-initiate', requireAuth, (req, res) => {
+  try {
+    const { amount, firstname, email, phone } = req.body || {};
 
-  return res.json({
-    success: true,
-    payment: {
-      id: 'PAY-' + Date.now(),
-      amount,
-      purpose,
-      status: 'pending',
-      email: req.user.email,
-    },
-  });
+    const parsedAmount = parseFloat(String(amount).replace(/[^0-9.]/g, '')) || 0;
+    if (parsedAmount <= 0) {
+      return res.status(400).json({ success: false, message: 'Amount must be greater than 0' });
+    }
+    const formattedAmount = parsedAmount.toFixed(2);
+
+    // Falls back to PayU's public test credentials if .env is missing them —
+    // this is what stops the "PayU credentials missing" error.
+    const key = process.env.PAYU_KEY || 'gtKFFx';
+    const salt = process.env.PAYU_SALT || '4R38IvwiV57FwVpsgOvTXBdLE4tHUXFW';
+
+    const txnid = `txn_${Date.now()}`;
+    const productinfo = 'Yencode Technologies Payment';
+    const fname = (firstname || '').trim() || 'Customer';
+    const mail = (email || '').trim();
+    const ph = (phone || '9999999999').replace(/\D/g, '').slice(0, 10) || '9999999999';
+
+    const hashString = `${key}|${txnid}|${formattedAmount}|${productinfo}|${fname}|${mail}|||||||||||${salt}`;
+    const hash = crypto.createHash('sha512').update(hashString).digest('hex');
+
+    const backendUrl = (process.env.APP_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
+    const env = process.env.PAYU_ENV === 'prod' ? 'prod' : 'test';
+    const payuUrl = env === 'prod' ? 'https://secure.payu.in/_payment' : 'https://test.payu.in/_payment';
+
+    return res.json({
+      success: true,
+      payuUrl,
+      params: {
+        key,
+        txnid,
+        amount: formattedAmount,
+        productinfo,
+        firstname: fname,
+        email: mail,
+        phone: ph,
+        surl: `${backendUrl}/api/payment/payu-success`,
+        furl: `${backendUrl}/api/payment/payu-failure`,
+        hash,
+      },
+    });
+  } catch (err) {
+    console.error('[PayU] initiate error:', err.message);
+    return res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+app.post('/api/payment/payu-success', (req, res) => {
+  console.log('PayU success callback:', req.body);
+  res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/payment-success`);
+});
+
+app.post('/api/payment/payu-failure', (req, res) => {
+  console.log('PayU failure callback:', req.body);
+  res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/payment-failed`);
 });
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));

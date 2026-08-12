@@ -4,7 +4,7 @@ import Home from './pages/Home'
 import Contact from './pages/Contact'
 import Quote from './pages/Quote'
 import Login from './pages/Login'
-
+import Account from './pages/Account'
 export default function App() {
   return (
     <BrowserRouter>
@@ -14,6 +14,7 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
       <Route path="/quote" element={<Quote />} />
 <Route path="/login" element={<Login />} />
+<Route path="/account" element={<Account />} />
         </Route>
       </Routes>
     </BrowserRouter>
