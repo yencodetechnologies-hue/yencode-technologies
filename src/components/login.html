@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Login | Yencode Technologies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#000213;
+    --card:#0a0e24;
+    --border:#1c2340;
+    --text:#fff;
+    --muted:#94a3b8;
+    --accent:#5be0ff;
+    --accent2:#22d3ee;
+    --error:#ef4444;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:radial-gradient(circle at 20% 20%, rgba(91,224,255,0.08), transparent 40%),
+               radial-gradient(circle at 80% 80%, rgba(34,211,238,0.08), transparent 40%),
+               var(--bg);
+    font-family:'Outfit', sans-serif;
+    color:var(--text);
+    padding:20px;
+  }
+  .login-card{
+    width:100%;
+    max-width:400px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:36px 32px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  }
+  .logo-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    justify-content:center;
+    margin-bottom:8px;
+  }
+  .logo-row span{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:20px;
+    background:linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:22px;
+    text-align:center;
+    margin-bottom:6px;
+  }
+  .subtitle{
+    text-align:center;
+    color:var(--muted);
+    font-size:14px;
+    margin-bottom:28px;
+  }
+  label{
+    display:block;
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:6px;
+  }
+  .field{margin-bottom:18px;}
+  input{
+    width:100%;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:#060a1c;
+    color:var(--text);
+    font-size:14px;
+    outline:none;
+    transition:border-color .2s;
+  }
+  input:focus{border-color:var(--accent);}
+  .btn{
+    width:100%;
+    padding:12px 14px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(90deg, var(--accent), var(--accent2));
+    color:#001018;
+    font-weight:600;
+    font-size:15px;
+    cursor:pointer;
+    margin-top:6px;
+    transition:opacity .2s, transform .1s;
+  }
+  .btn:hover{opacity:0.9;}
+  .btn:active{transform:scale(0.98);}
+  .btn:disabled{opacity:0.6;cursor:not-allowed;}
+  .error-msg{
+    color:var(--error);
+    font-size:13px;
+    margin-top:14px;
+    text-align:center;
+    min-height:16px;
+  }
+  .hint{
+    margin-top:22px;
+    padding-top:16px;
+    border-top:1px solid var(--border);
+    font-size:12px;
+    color:var(--muted);
+    text-align:center;
+    line-height:1.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="login-card">
+  <div class="logo-row"><span>Yencode Technologies</span></div>
+  <h1>Welcome back</h1>
+  <p class="subtitle">Login to access your account</p>
+
+  <form id="loginForm">
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="you@company.com" required autocomplete="username" />
+    </div>
+    <div class="field">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password" />
+    </div>
+    <button type="submit" class="btn" id="loginBtn">Login</button>
+    <div class="error-msg" id="errorMsg"></div>
+  </form>
+
+  <div class="hint">Demo credentials — yencodetechnologies@gmail.com / 123456</div>
+</div>
+
+<script src="config.js"></script>
+<script src="auth.js"></script>
+<script>
+  const form = document.getElementById('loginForm');
+  const errorMsg = document.getElementById('errorMsg');
+  const loginBtn = document.getElementById('loginBtn');
+
+  // If already logged in, skip straight to account page
+  if (getToken()) {
+    window.location.href = '/yencodetechnologies/account';
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorMsg.textContent = '';
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Logging in...';
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        errorMsg.textContent = data.message || 'Login failed. Please try again.';
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Login';
+        return;
+      }
+
+      setToken(data.token);
+      setAccount(data.account);
+      window.location.href = '/yencodetechnologies/account';
+    } catch (err) {
+      errorMsg.textContent = 'Could not reach the server. Please try again.';
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Login';
+    }
+  });
+</script>
+</body>
+</html>

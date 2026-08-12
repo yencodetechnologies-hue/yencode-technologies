@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Account | Yencode Technologies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#000213;
+    --card:#0a0e24;
+    --border:#1c2340;
+    --text:#fff;
+    --muted:#94a3b8;
+    --accent:#5be0ff;
+    --accent2:#22d3ee;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:radial-gradient(circle at 20% 20%, rgba(91,224,255,0.08), transparent 40%),
+               radial-gradient(circle at 80% 80%, rgba(34,211,238,0.08), transparent 40%),
+               var(--bg);
+    font-family:'Outfit', sans-serif;
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .account-card{
+    width:100%;
+    max-width:460px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:32px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  }
+  .top-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px;
+  }
+  .top-row span{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:18px;
+    background:linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .logout-btn{
+    background:none;
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:6px 14px;
+    border-radius:8px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:'Outfit', sans-serif;
+  }
+  .logout-btn:hover{color:var(--text);border-color:var(--accent);}
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:22px;
+    margin-bottom:20px;
+  }
+  .info-row{
+    display:flex;
+    justify-content:space-between;
+    padding:14px 0;
+    border-bottom:1px solid var(--border);
+    font-size:14px;
+  }
+  .info-row:last-of-type{border-bottom:none;}
+  .info-label{color:var(--muted);}
+  .info-value{font-weight:500;text-align:right;}
+  .account-section{
+    margin-top:24px;
+    padding:16px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:#060a1c;
+  }
+  .account-section h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:15px;
+    margin-bottom:8px;
+  }
+  .account-section p{
+    font-size:13px;
+    color:var(--muted);
+    line-height:1.6;
+  }
+  .pay-btn{
+    width:100%;
+    margin-top:24px;
+    padding:13px 14px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(90deg, var(--accent), var(--accent2));
+    color:#001018;
+    font-weight:600;
+    font-size:15px;
+    cursor:pointer;
+  }
+  .pay-btn:hover{opacity:0.9;}
+  .loading{
+    text-align:center;
+    color:var(--muted);
+    padding:40px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="account-card" id="accountCard" style="display:none;">
+  <div class="top-row">
+    <span>Yencode Technologies</span>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <h1>My Account</h1>
+
+  <div class="info-row">
+    <span class="info-label">Company Name</span>
+    <span class="info-value" id="companyName">—</span>
+  </div>
+  <div class="info-row">
+    <span class="info-label">Email</span>
+    <span class="info-value" id="email">—</span>
+  </div>
+  <div class="info-row">
+    <span class="info-label">Mobile Number</span>
+    <span class="info-value" id="mobileNumber">—</span>
+  </div>
+
+  <div class="account-section">
+    <h2>Account</h2>
+    <p>Your account is active. Manage your subscription, billing details, and services from here.</p>
+  </div>
+
+  <button class="pay-btn" id="payBtn">Pay</button>
+</div>
+
+<div class="loading" id="loadingState">Loading account...</div>
+
+<script src="config.js"></script>
+<script src="auth.js"></script>
+<script>
+  (async function init() {
+    if (!requireAuthOrRedirect()) return;
+
+    const cached = getAccount();
+    if (cached) renderAccount(cached);
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/account`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
+
+      if (res.status === 401) {
+        clearToken();
+        window.location.href = '/yencodetechnologies/login';
+        return;
+      }
+
+      const data = await res.json();
+      if (data.success) {
+        setAccount(data.account);
+        renderAccount(data.account);
+      }
+    } catch (err) {
+      // If the network call fails but we already have cached account data, keep showing it.
+      if (!cached) {
+        document.getElementById('loadingState').textContent =
+          'Could not load account. Please check your connection and refresh.';
+      }
+    }
+  })();
+
+  function renderAccount(account) {
+    document.getElementById('companyName').textContent = account.companyName;
+    document.getElementById('email').textContent = account.email;
+    document.getElementById('mobileNumber').textContent = account.mobileNumber;
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('accountCard').style.display = 'block';
+  }
+
+  document.getElementById('payBtn').addEventListener('click', () => {
+    window.location.href = '/yencodetechnologies/payment';
+  });
+</script>
+</body>
+</html>
