@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { Eye, EyeOff } from "lucide-react";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
 export default function Login() {
@@ -9,7 +9,7 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-
+const [showPassword, setShowPassword] = useState(false)
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
@@ -31,7 +31,7 @@ export default function Login() {
 
       localStorage.setItem('yencode_token', data.token)
       localStorage.setItem('yencode_account', JSON.stringify(data.account))
-      navigate('/account')
+      navigate('/list')
     } catch (err) {
       setError('Could not reach the server. Please try again.')
       setLoading(false)
@@ -58,19 +58,29 @@ export default function Login() {
               style={styles.input}
             />
           </div>
-          <div style={styles.field}>
-            <label style={styles.label} htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              autoComplete="current-password"
-              required
-              style={styles.input}
-            />
-          </div>
+       <div style={styles.field}>
+  <label style={styles.label} htmlFor="password">Password</label>
+  <div style={styles.passwordWrapper}>
+    <input
+      id="password"
+      type={showPassword ? 'text' : 'password'}
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      placeholder="••••••••"
+      autoComplete="current-password"
+      required
+      style={styles.passwordInput}
+    />
+<button
+  type="button"
+  onClick={() => setShowPassword(!showPassword)}
+  style={styles.eyeBtn}
+  aria-label={showPassword ? 'Hide password' : 'Show password'}
+>
+  {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
+</button>
+  </div>
+</div>
           <button type="submit" disabled={loading} style={styles.button}>
             {loading ? 'Logging in...' : 'Login'}
           </button>
@@ -99,6 +109,30 @@ const styles = {
     padding: '36px 32px',
     boxShadow: '0 20px 60px rgba(0,0,0,0.08)',
   },
+  passwordWrapper: { position: 'relative' },
+passwordInput: {
+  width: '100%',
+  padding: '12px 44px 12px 14px',
+  borderRadius: 10,
+  border: '1px solid #d1d5db',
+  fontSize: 14,
+  outline: 'none',
+  boxSizing: 'border-box',
+},
+eyeBtn: {
+  position: 'absolute',
+  right: 10,
+  top: '50%',
+  transform: 'translateY(-50%)',
+  background: 'transparent',
+  border: 'none',
+  cursor: 'pointer',
+  padding: 4,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '#6b7280',
+},
   heading: {
     fontFamily: "'Poppins', sans-serif",
     fontSize: 22,

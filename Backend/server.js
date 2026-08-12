@@ -2,11 +2,23 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-
+const mongoose = require("mongoose");
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB Connected Successfully");
+
+    app.listen(process.env.PORT || 5000, () => {
+      console.log(`Server running on port ${process.env.PORT || 5000}`);
+    });
+  })
+  .catch((error) => {
+    console.error("MongoDB Connection Error:", error);
+  });
 const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_change_me';
 const crypto = require('crypto');

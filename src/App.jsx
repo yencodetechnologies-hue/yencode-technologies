@@ -5,6 +5,9 @@ import Contact from './pages/Contact'
 import Quote from './pages/Quote'
 import Login from './pages/Login'
 import Account from './pages/Account'
+import List from './pages/List'
+import PaymentSuccess from './pages/PaymentSuccess'
+import PaymentFailed from './pages/PaymentFailed'
 export default function App() {
   return (
     <BrowserRouter>
@@ -15,6 +18,9 @@ export default function App() {
       <Route path="/quote" element={<Quote />} />
 <Route path="/login" element={<Login />} />
 <Route path="/account" element={<Account />} />
+<Route path="/list" element={<List />} />
+<Route path="/payment-success" element={<PaymentSuccess />} />
+<Route path="/payment-failed" element={<PaymentFailed />} />
         </Route>
       </Routes>
     </BrowserRouter>
