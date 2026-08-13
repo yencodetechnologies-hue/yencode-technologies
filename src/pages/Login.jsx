@@ -16,10 +16,10 @@ const [showPassword, setShowPassword] = useState(false)
     e.preventDefault()
     setError('')
     setLoading(true)
-  if (email === 'yencodetechnologies@gmail.com' && password === '123456') {
-      localStorage.setItem('yencode_token', 'demo-token')
-      localStorage.setItem('yencode_account', JSON.stringify({ companyName: 'Yencode Technologies', email, mobileNumber: '' }))
-      navigate('/list')
+  if (email === 'yencodetechnologies@gmail.com' && password === 'password123456') {
+      localStorage.setItem('yencode_token', data.token)
+      localStorage.setItem('yencode_account', JSON.stringify(data.account))
+      navigate('/account')
       setLoading(false)
       return
     }
