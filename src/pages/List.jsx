@@ -19,6 +19,7 @@ const [form, setForm] = useState({ companyName: '', mobileNumber: '', email: '',
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [editingId, setEditingId] = useState(null)
 
   useEffect(() => {
     const role = localStorage.getItem('yencode_role')
@@ -96,6 +97,35 @@ async function toggleAccountStatus(entry) {
     }))
   }
 
+  function openEditModal(entry) {
+    setEditingId(entry._id)
+    setForm({
+      companyName: entry.companyName || '',
+      mobileNumber: entry.mobileNumber || '',
+      email: entry.email || '',
+      password: entry.password || '',
+      amount: entry.paymentDetails?.amount || '',
+    })
+    setError('')
+    setShowModal(true)
+  }
+
+  async function handleDelete(entry) {
+    if (!window.confirm(`Delete ${entry.companyName}? This cannot be undone.`)) return
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/companies/${entry._id}`, { method: 'DELETE' })
+      const data = await res.json()
+      if (data.success) {
+        setEntries((prev) => prev.filter((e) => e._id !== entry._id))
+      } else {
+        alert(data.message || 'Could not delete company.')
+      }
+    } catch (err) {
+      console.error('Delete error:', err)
+      alert('Could not reach the server.')
+    }
+  }
+
   async function handleAdd() {
     setError('')
 
@@ -112,8 +142,13 @@ async function toggleAccountStatus(entry) {
     setSaving(true)
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/companies`, {
-        method: 'POST',
+      const isEditing = Boolean(editingId)
+      const url = isEditing
+        ? `${API_BASE_URL}/api/companies/${editingId}`
+        : `${API_BASE_URL}/api/companies`
+
+      const res = await fetch(url, {
+        method: isEditing ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -133,16 +168,13 @@ async function toggleAccountStatus(entry) {
         return
       }
 
-      // Add the returned company immediately to the UI.
-      setEntries((prev) => [...prev, data.company])
-
       setForm(EMPTY_FORM)
+      setEditingId(null)
       setShowModal(false)
 
-      // Re-fetch from MongoDB so refresh/persistent data is confirmed.
       await fetchCompanies()
     } catch (err) {
-      console.error('POST companies error:', err)
+      console.error('Save companies error:', err)
       setError(
         'Could not reach the server. Make sure the backend is deployed and running.'
       )
@@ -161,6 +193,7 @@ async function toggleAccountStatus(entry) {
             onClick={() => {
               setError('')
               setForm(EMPTY_FORM)
+              setEditingId(null)
               setShowModal(true)
             }}
             style={styles.addBtn}
@@ -187,6 +220,7 @@ async function toggleAccountStatus(entry) {
               <thead>
                 <tr>
 <th style={styles.th}>S.No</th>
+          <th style={styles.th}>S.No</th>
             <th style={styles.th}>Company Name</th>
             <th style={styles.th}>Mobile Number</th>
             <th style={styles.th}>Email</th>
@@ -194,7 +228,7 @@ async function toggleAccountStatus(entry) {
             <th style={styles.th}>Amount</th>
             <th style={styles.th}>Payment Status</th>
             <th style={styles.th}>Account Status</th>
-            <th style={styles.th}>Receipt</th>
+            <th style={styles.th}>Actions</th>
                 </tr>
               </thead>
 
@@ -235,13 +269,8 @@ async function toggleAccountStatus(entry) {
                     </td>
 
                     <td style={styles.td}>
-                      {entry.paymentStatus === 'Payment Successful' ? (
-                        <button style={styles.receiptBtn} onClick={() => alert('Receipt view coming next')}>
-                          View Receipt
-                        </button>
-                      ) : (
-                        '-'
-                      )}
+                      <button style={styles.editBtn} onClick={() => openEditModal(entry)}>Edit</button>
+                      <button style={styles.deleteBtn} onClick={() => handleDelete(entry)}>Delete</button>
                     </td>
                   </tr>
                 ))}
@@ -262,7 +291,7 @@ async function toggleAccountStatus(entry) {
             style={styles.modal}
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 style={styles.modalHeading}>Add Company</h2>
+            <h2 style={styles.modalHeading}>{editingId ? 'Edit Company' : 'Add Company'}</h2>
 
             <div style={styles.field}>
               <label style={styles.label}>Company Name</label>
@@ -325,7 +354,7 @@ async function toggleAccountStatus(entry) {
                 disabled={saving}
                 style={styles.addBtn}
               >
-                {saving ? 'Adding...' : 'Add'}
+                {saving ? 'Saving...' : editingId ? 'Update' : 'Add'}
               </button>
             </div>
           </div>
@@ -537,10 +566,22 @@ const styles = {
     verticalAlign: 'middle',
   }),
 
-  receiptBtn: {
+  editBtn: {
     background: '#fff',
     border: '1px solid #d1d5db',
     color: '#111827',
+    padding: '6px 12px',
+    borderRadius: 8,
+    fontSize: 12,
+    fontWeight: 600,
+    cursor: 'pointer',
+    marginRight: 6,
+  },
+
+  deleteBtn: {
+    background: '#fef2f2',
+    border: '1px solid #fecaca',
+    color: '#dc2626',
     padding: '6px 12px',
     borderRadius: 8,
     fontSize: 12,
