@@ -90,12 +90,14 @@ app.post('/api/payment/payu-failure', (req, res) => {
 // "Database" — single account, matching the requested credentials.
 // Swap this for a real DB (MongoDB/Postgres) later; keep the same shape.
 // ---------------------------------------------------------------------------
-const ACCOUNT = {
-  email: process.env.ADMIN_EMAIL || 'yencodetechnologies@gmail.com',
-  password: process.env.ADMIN_PASSWORD || '123456', // plain text only for this demo
-  companyName: 'Yencode Technologies',
-  mobileNumber: '+91 90000 00000',
-};
+const mongoose_Schema = new mongoose.Schema({
+  companyName: { type: String, required: true },
+  mobileNumber: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+}, { timestamps: true });
+
+const CompanyAccount = mongoose.model('CompanyAccount', mongoose_Schema);
 
 // ---------------------------------------------------------------------------
 // Middleware: verify JWT on protected routes
@@ -119,47 +121,114 @@ function requireAuth(req, res, next) {
 // ---------------------------------------------------------------------------
 // POST /api/login
 // ---------------------------------------------------------------------------
-app.post('/login', (req, res) => {
+app.post('/api/companies', async (req, res) => {
+  try {
+    const { companyName, mobileNumber, email, password } = req.body || {};
+    if (!companyName || !mobileNumber || !email || !password) {
+      return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+    const exists = await CompanyAccount.findOne({ email: email.trim().toLowerCase() });
+    if (exists) {
+      return res.status(409).json({ success: false, message: 'Email already registered' });
+    }
+    const company = await CompanyAccount.create({
+      companyName,
+      mobileNumber,
+      email: email.trim().toLowerCase(),
+      password, // NOTE: plain text for now — hash with bcrypt before production
+    });
+    return res.json({ success: true, company: { _id: company._id, companyName, mobileNumber, email: company.email } });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+app.get('/api/companies', async (req, res) => {
+  try {
+    const companies = await CompanyAccount.find({}, 'companyName mobileNumber email createdAt').sort({ createdAt: -1 });
+    return res.json({ success: true, companies });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+app.post('/api/companies', async (req, res) => {
+  try {
+    const { companyName, mobileNumber, email, password } = req.body || {};
+    if (!companyName || !mobileNumber || !email || !password) {
+      return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+    const exists = await CompanyAccount.findOne({ email: email.trim().toLowerCase() });
+    if (exists) {
+      return res.status(409).json({ success: false, message: 'Email already registered' });
+    }
+    const company = await CompanyAccount.create({
+      companyName,
+      mobileNumber,
+      email: email.trim().toLowerCase(),
+      password,
+    });
+    return res.json({ success: true, company: { _id: company._id, companyName, mobileNumber, email: company.email } });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+app.get('/api/companies', async (req, res) => {
+  try {
+    const companies = await CompanyAccount.find({}, 'companyName mobileNumber email createdAt').sort({ createdAt: -1 });
+    return res.json({ success: true, companies });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+app.post('/login', async (req, res) => {
   const { email, password } = req.body || {};
 
   if (!email || !password) {
     return res.status(400).json({ success: false, message: 'Email and password are required' });
   }
 
-  const emailMatches = email.trim().toLowerCase() === ACCOUNT.email.toLowerCase();
-  const passwordMatches = password === ACCOUNT.password;
+  try {
+    const account = await CompanyAccount.findOne({ email: email.trim().toLowerCase() });
+    if (!account || account.password !== password) {
+      return res.status(401).json({ success: false, message: 'Invalid email or password' });
+    }
 
-  if (!emailMatches || !passwordMatches) {
-    return res.status(401).json({ success: false, message: 'Invalid email or password' });
+    const token = jwt.sign({ email: account.email }, JWT_SECRET, { expiresIn: '2h' });
+
+    return res.json({
+      success: true,
+      token,
+      account: {
+        companyName: account.companyName,
+        email: account.email,
+        mobileNumber: account.mobileNumber,
+      },
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Server error' });
   }
-
-  const token = jwt.sign({ email: ACCOUNT.email }, JWT_SECRET, { expiresIn: '2h' });
-
-  return res.json({
-    success: true,
-    token,
-    account: {
-      companyName: ACCOUNT.companyName,
-      email: ACCOUNT.email,
-      mobileNumber: ACCOUNT.mobileNumber,
-    },
-  });
 });
 
 // ---------------------------------------------------------------------------
 // GET /api/account  (protected)
 // ---------------------------------------------------------------------------
-app.get('/api/account', requireAuth, (req, res) => {
-  return res.json({
-    success: true,
-    account: {
-      companyName: ACCOUNT.companyName,
-      email: ACCOUNT.email,
-      mobileNumber: ACCOUNT.mobileNumber,
-    },
-  });
-});
+app.get('/api/account', requireAuth, async (req, res) => {
+  try {
+  const companySchema = new mongoose.Schema({
+  companyName: { type: String, required: true },
+  mobileNumber: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+}, { timestamps: true });
 
+const CompanyAccount = mongoose.model('CompanyAccount', companySchema);
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
 // ---------------------------------------------------------------------------
 // POST /api/payment/initiate  (protected)
 // Stub endpoint — wire this to Razorpay/Stripe etc. later.

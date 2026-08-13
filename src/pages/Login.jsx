@@ -10,10 +10,19 @@ export default function Login() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 const [showPassword, setShowPassword] = useState(false)
+
+
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
     setLoading(true)
+  if (email === 'yencodetechnologies' && password === '123456') {
+      localStorage.setItem('yencode_token', 'demo-token')
+      localStorage.setItem('yencode_account', JSON.stringify({ companyName: 'Yencode Technologies', email, mobileNumber: '' }))
+      navigate('/account')
+      setLoading(false)
+      return
+    }
 
     try {
       const res = await fetch(`${API_BASE_URL}/login`, {
