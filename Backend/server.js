@@ -12,14 +12,14 @@ mongoose
   .then(() => {
     console.log("MongoDB Connected Successfully");
 
-    app.listen(process.env.PORT || 5000, () => {
-      console.log(`Server running on port ${process.env.PORT || 5000}`);
+    app.listen(process.env.PORT || 1524, () => {
+      console.log(`Server running on port ${process.env.PORT || 1524}`);
     });
   })
   .catch((error) => {
     console.error("MongoDB Connection Error:", error);
   });
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 1524;
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_change_me';
 const crypto = require('crypto');
 
@@ -170,7 +170,7 @@ app.post('/api/payment/payu-initiate', requireAuth, (req, res) => {
     const hashString = `${key}|${txnid}|${formattedAmount}|${productinfo}|${fname}|${mail}|||||||||||${salt}`;
     const hash = crypto.createHash('sha512').update(hashString).digest('hex');
 
-    const backendUrl = (process.env.APP_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
+    const backendUrl = (process.env.APP_BASE_URL || 'http://localhost:1524').replace(/\/$/, '');
     const env = process.env.PAYU_ENV === 'prod' ? 'prod' : 'test';
     const payuUrl = env === 'prod' ? 'https://secure.payu.in/_payment' : 'https://test.payu.in/_payment';
 
