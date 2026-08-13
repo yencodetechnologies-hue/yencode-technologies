@@ -9,6 +9,7 @@ const EMPTY_FORM = {
   mobileNumber: '',
   email: '',
   password: '',
+  amount: '',
 }
 
 export default function List() {
