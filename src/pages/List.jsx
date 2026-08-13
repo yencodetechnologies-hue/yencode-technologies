@@ -12,7 +12,7 @@ const EMPTY_FORM = {
 
 export default function List() {
   const [showModal, setShowModal] = useState(false)
-  const [form, setForm] = useState(EMPTY_FORM)
+const [form, setForm] = useState({ companyName: '', mobileNumber: '', email: '', password: '', amount: '' })
   const [entries, setEntries] = useState([])
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
@@ -146,10 +146,14 @@ export default function List() {
             <table style={styles.table}>
               <thead>
                 <tr>
-                  <th style={styles.th}>Company Name</th>
-                  <th style={styles.th}>Mobile Number</th>
-                  <th style={styles.th}>Email</th>
-                  <th style={styles.th}>Password</th>
+<th style={styles.th}>S.No</th>
+            <th style={styles.th}>Company Name</th>
+            <th style={styles.th}>Mobile Number</th>
+            <th style={styles.th}>Email</th>
+            <th style={styles.th}>Password</th>
+            <th style={styles.th}>Payment Status</th>
+            <th style={styles.th}>Account Status</th>
+            <th style={styles.th}>Receipt</th>
                 </tr>
               </thead>
 
@@ -228,25 +232,16 @@ export default function List() {
                 placeholder="Enter email"
               />
             </div>
-
-            <div style={styles.field}>
+<div style={styles.field}>
               <label style={styles.label}>Password</label>
-
-              <input
-                name="password"
-                type="text"
-                value={form.password}
-                onChange={handleChange}
-                style={styles.input}
-                placeholder="Enter password"
-              />
+              <input name="password" type="password" value={form.password} onChange={handleChange} style={styles.input} />
+            </div>
+            <div style={styles.field}>
+              <label style={styles.label}>Amount</label>
+              <input name="amount" type="number" min="0" placeholder="Enter amount" value={form.amount} onChange={handleChange} style={styles.input} />
             </div>
 
-            {error && (
-              <p style={styles.error}>
-                {error}
-              </p>
-            )}
+            {error && <p style={styles.error}>{error}</p>}
 
             <div style={styles.modalBtnRow}>
               <button

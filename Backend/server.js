@@ -95,6 +95,14 @@ const mongoose_Schema = new mongoose.Schema({
   mobileNumber: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  accountStatus: { type: Boolean, default: true },
+  paymentStatus: { type: String, enum: ['Pending', 'Payment Successful', 'Payment Failed'], default: 'Pending' },
+  paymentDetails: {
+    amount: Number,
+    txnid: String,
+    paymentDate: Date,
+    mode: String,
+  },
 }, { timestamps: true });
 
 const CompanyAccount = mongoose.model('CompanyAccount', mongoose_Schema);
@@ -188,30 +196,10 @@ app.post('/api/companies', async (req, res) => {
 
 app.get('/api/companies', async (req, res) => {
   try {
-    const companies = await CompanyAccount
-      .find({})
-      .sort({ createdAt: -1 });
-
-    return res.json({
-      success: true,
-      companies: companies.map((company) => ({
-        _id: company._id,
-        companyName: company.companyName,
-        mobileNumber: company.mobileNumber,
-        email: company.email,
-        password: company.password,
-        createdAt: company.createdAt
-      }))
-    });
-
+    const companies = await CompanyAccount.find({}, 'companyName mobileNumber email accountStatus paymentStatus paymentDetails createdAt').sort({ createdAt: -1 });
+    return res.json({ success: true, companies });
   } catch (err) {
-    console.error('GET /api/companies error:', err);
-
-    return res.status(500).json({
-      success: false,
-      message: 'Server error',
-      error: err.message
-    });
+    return res.status(500).json({ success: false, message: 'Server error' });
   }
 });
 
@@ -228,6 +216,9 @@ app.post('/login', async (req, res) => {
     if (!account || account.password !== password) {
       return res.status(401).json({ success: false, message: 'Invalid email or password' });
     }
+    if (!account.accountStatus) {
+      return res.status(403).json({ success: false, message: 'This account has been disabled.' });
+    }
 
     const token = jwt.sign({ email: account.email }, JWT_SECRET, { expiresIn: '2h' });
 
@@ -235,9 +226,11 @@ app.post('/login', async (req, res) => {
       success: true,
       token,
       account: {
+        _id: account._id,
         companyName: account.companyName,
         email: account.email,
         mobileNumber: account.mobileNumber,
+        paymentStatus: account.paymentStatus,
       },
     });
   } catch (err) {
