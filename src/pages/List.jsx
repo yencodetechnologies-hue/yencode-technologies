@@ -220,7 +220,6 @@ async function toggleAccountStatus(entry) {
               <thead>
                 <tr>
 <th style={styles.th}>S.No</th>
-          <th style={styles.th}>S.No</th>
             <th style={styles.th}>Company Name</th>
             <th style={styles.th}>Mobile Number</th>
             <th style={styles.th}>Email</th>
