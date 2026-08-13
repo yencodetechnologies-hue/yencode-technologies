@@ -280,6 +280,7 @@ app.post('/login', async (req, res) => {
         email: account.email,
         mobileNumber: account.mobileNumber,
         paymentStatus: account.paymentStatus,
+        paymentDetails: account.paymentDetails,
       },
     });
   } catch (err) {
@@ -294,12 +295,18 @@ app.get('/api/account', requireAuth, async (req, res) => {
   try {
     const account = await CompanyAccount.findOne({ email: req.user.email });
     if (!account) return res.status(404).json({ success: false, message: 'Account not found' });
+    const allAccounts = await CompanyAccount.find({}, '_id').sort({ createdAt: 1 });
+    const serialNumber = allAccounts.findIndex((a) => a._id.equals(account._id)) + 1;
     return res.json({
       success: true,
       account: {
+        _id: account._id,
+        serialNumber,
         companyName: account.companyName,
         email: account.email,
         mobileNumber: account.mobileNumber,
+        paymentStatus: account.paymentStatus,
+        paymentDetails: account.paymentDetails,
       },
     });
   } catch (err) {

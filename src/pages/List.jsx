@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || 'https://yencodeweb.octosofttechnologies.in'
@@ -11,6 +12,7 @@ const EMPTY_FORM = {
 }
 
 export default function List() {
+  const navigate = useNavigate()
   const [showModal, setShowModal] = useState(false)
 const [form, setForm] = useState({ companyName: '', mobileNumber: '', email: '', password: '', amount: '' })
   const [entries, setEntries] = useState([])
@@ -19,8 +21,13 @@ const [form, setForm] = useState({ companyName: '', mobileNumber: '', email: '',
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
+    const role = localStorage.getItem('yencode_role')
+    if (role !== 'admin') {
+      navigate('/login')
+      return
+    }
     fetchCompanies()
-  }, [])
+  }, [navigate])
 
   async function fetchCompanies() {
     setLoading(true)

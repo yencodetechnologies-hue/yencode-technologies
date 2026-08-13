@@ -17,9 +17,10 @@ const [showPassword, setShowPassword] = useState(false)
     setError('')
     setLoading(true)
   if (email === 'yencodetechnologies@gmail.com' && password === 'password123456') {
-      localStorage.setItem('yencode_token', data.token)
-      localStorage.setItem('yencode_account', JSON.stringify(data.account))
-      navigate('/account')
+      localStorage.setItem('yencode_token', 'demo-token')
+      localStorage.setItem('yencode_role', 'admin')
+      localStorage.setItem('yencode_account', JSON.stringify({ companyName: 'Yencode Technologies', email, mobileNumber: '' }))
+      navigate('/list')
       setLoading(false)
       return
     }
@@ -39,6 +40,7 @@ const [showPassword, setShowPassword] = useState(false)
       }
 
       localStorage.setItem('yencode_token', data.token)
+      localStorage.setItem('yencode_role', 'company')
       localStorage.setItem('yencode_account', JSON.stringify(data.account))
       navigate('/account')
     } catch (err) {
