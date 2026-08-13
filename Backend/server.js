@@ -6,7 +6,8 @@ const mongoose = require("mongoose");
 const app = express();
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://www.yencodetechnologies.com'
+  'https://www.yencodetechnologies.com',
+      "https://yencodeweb.octosofttechnologies.in"
 ];
 
 app.use(cors({
