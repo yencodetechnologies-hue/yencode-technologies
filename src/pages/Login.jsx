@@ -40,7 +40,7 @@ const [showPassword, setShowPassword] = useState(false)
 
       localStorage.setItem('yencode_token', data.token)
       localStorage.setItem('yencode_account', JSON.stringify(data.account))
-      navigate('/list')
+      navigate('/account')
     } catch (err) {
       setError('Could not reach the server. Please try again.')
       setLoading(false)
