@@ -50,20 +50,33 @@ const [form, setForm] = useState({ companyName: '', mobileNumber: '', email: '',
 
 
 async function toggleAccountStatus(entry) {
+    const newStatus = !entry.accountStatus
+
+    // Update the UI immediately so the switch always responds to a click.
+    setEntries((prev) =>
+      prev.map((e) => (e._id === entry._id ? { ...e, accountStatus: newStatus } : e))
+    )
+
     try {
       const res = await fetch(`${API_BASE_URL}/api/companies/${entry._id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accountStatus: !entry.accountStatus }),
+        body: JSON.stringify({ accountStatus: newStatus }),
       })
       const data = await res.json()
-      if (data.success) {
+      if (!data.success) {
+        console.error('Toggle status failed on server:', data.message)
+        // Revert if the server rejected it.
         setEntries((prev) =>
-          prev.map((e) => (e._id === entry._id ? { ...e, accountStatus: data.company.accountStatus } : e))
+          prev.map((e) => (e._id === entry._id ? { ...e, accountStatus: entry.accountStatus } : e))
         )
       }
     } catch (err) {
-      console.error('Toggle status error:', err)
+      console.error('Toggle status network error:', err)
+      // Revert if the request never reached the server.
+      setEntries((prev) =>
+        prev.map((e) => (e._id === entry._id ? { ...e, accountStatus: entry.accountStatus } : e))
+      )
     }
   }
 
@@ -204,10 +217,14 @@ async function toggleAccountStatus(entry) {
                     <td style={styles.td}>
                       <button
                         onClick={() => toggleAccountStatus(entry)}
-                        style={styles.toggleBtn(entry.accountStatus)}
+                        style={styles.switchTrack(entry.accountStatus)}
+                        aria-label={entry.accountStatus ? 'Turn account OFF' : 'Turn account ON'}
                       >
-                        {entry.accountStatus ? 'ON' : 'OFF'}
+                        <span style={styles.switchThumb(entry.accountStatus)} />
                       </button>
+                      <span style={styles.switchLabel(entry.accountStatus)}>
+                        {entry.accountStatus ? 'ON' : 'OFF'}
+                      </span>
                     </td>
 
                     <td style={styles.td}>
@@ -481,15 +498,36 @@ const styles = {
       status === 'Payment Successful' ? '#16a34a' : status === 'Payment Failed' ? '#dc2626' : '#a16207',
   }),
 
-  toggleBtn: (isOn) => ({
-    padding: '6px 14px',
+  switchTrack: (isOn) => ({
+    position: 'relative',
+    width: 44,
+    height: 24,
     borderRadius: 999,
     border: 'none',
-    fontSize: 12,
-    fontWeight: 700,
     cursor: 'pointer',
-    background: isOn ? '#111827' : '#e5e7eb',
-    color: isOn ? '#fff' : '#6b7280',
+    background: isOn ? '#16a34a' : '#d1d5db',
+    transition: 'background 0.2s ease',
+    verticalAlign: 'middle',
+    marginRight: 8,
+  }),
+
+  switchThumb: (isOn) => ({
+    position: 'absolute',
+    top: 3,
+    left: isOn ? 23 : 3,
+    width: 18,
+    height: 18,
+    borderRadius: '50%',
+    background: '#fff',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+    transition: 'left 0.2s ease',
+  }),
+
+  switchLabel: (isOn) => ({
+    fontSize: 12,
+    fontWeight: 600,
+    color: isOn ? '#16a34a' : '#6b7280',
+    verticalAlign: 'middle',
   }),
 
   receiptBtn: {
