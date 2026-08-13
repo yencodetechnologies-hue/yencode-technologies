@@ -23,7 +23,7 @@ exports.initiatePayU = (req, res) => {
     const txnid = `txn_${Date.now()}`;
     const ph = (phone || "9999999999").replace(/\D/g, "").slice(0, 10) || "9999999999";
 
-    const hashString = `${key}|${txnid}|${formattedAmount}|${productinfo}|${fname}|${mail}||||||||||${salt}`;
+    const hashString = `${key}|${txnid}|${formattedAmount}|${productinfo}|${fname}|${mail}|||||||||||${salt}`;
     const hash = crypto.createHash("sha512").update(hashString).digest("hex");
 
     const backendUrl = (process.env.APP_BASE_URL || "http://localhost:1524").replace(/\/$/, "");
