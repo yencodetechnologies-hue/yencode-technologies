@@ -15,8 +15,8 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
-    console.log('Incoming request origin:', origin);
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || origin === "null") return callback(null, true);
+    if (allowedOrigins.includes(origin) || origin.endsWith("payu.in")) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
