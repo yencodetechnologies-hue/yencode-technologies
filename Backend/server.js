@@ -179,7 +179,7 @@ app.use(cors({
   origin: [
     "http://localhost:5173",
     "https://yencodetechnologies.com",
-    "https://yencodeweb.octosofttechnologies.in/api/health"
+    "https://yencodeweb.octosofttechnologies.in"
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
