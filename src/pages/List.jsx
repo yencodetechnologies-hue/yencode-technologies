@@ -21,6 +21,7 @@ const [form, setForm] = useState({ companyName: '', mobileNumber: '', email: '',
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [editingId, setEditingId] = useState(null)
+  const [showPassword, setShowPassword] = useState(true)
 
   useEffect(() => {
     const role = localStorage.getItem('yencode_role')
@@ -105,7 +106,7 @@ async function toggleAccountStatus(entry) {
       mobileNumber: entry.mobileNumber || '',
       email: entry.email || '',
       password: entry.password || '',
-      amount: entry.paymentDetails?.amount || '',
+      amount: entry.amount || entry.paymentDetails?.amount || '',
     })
     setError('')
     setShowModal(true)
@@ -162,10 +163,16 @@ async function toggleAccountStatus(entry) {
         }),
       })
 
-      const data = await res.json()
+      let data;
+      try {
+        data = await res.json()
+      } catch (parseError) {
+        setError(`Server error: received unexpected format (Status: ${res.status}). Endpoint may be missing.`)
+        return
+      }
 
       if (!res.ok || !data.success) {
-        setError(data.message || `Request failed: ${res.status}`)
+        setError(data?.message || `Request failed: ${res.status}`)
         return
       }
 
@@ -246,7 +253,7 @@ async function toggleAccountStatus(entry) {
                     <td style={styles.td}>{entry.password}</td>
 
                     <td style={styles.td}>
-                      {entry.paymentDetails?.amount ? `₹${entry.paymentDetails.amount}` : '-'}
+                      {entry.amount || entry.paymentDetails?.amount ? `₹${entry.amount || entry.paymentDetails.amount}` : '-'}
                     </td>
 
                     <td style={styles.td}>
@@ -331,7 +338,33 @@ async function toggleAccountStatus(entry) {
             </div>
 <div style={styles.field}>
               <label style={styles.label}>Password</label>
-              <input name="password" type="password" value={form.password} onChange={handleChange} style={styles.input} />
+              <div style={{ position: 'relative' }}>
+                <input 
+                  name="password" 
+                  type={showPassword ? 'text' : 'password'} 
+                  value={form.password} 
+                  onChange={handleChange} 
+                  style={{ ...styles.input, paddingRight: '40px' }} 
+                />
+                <button
+                  type="button"
+                  onClick={(e) => { e.preventDefault(); setShowPassword(!showPassword); }}
+                  style={{
+                    position: 'absolute',
+                    right: '10px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontSize: '16px',
+                    padding: '0'
+                  }}
+                  title={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? '🙈' : '👁️'}
+                </button>
+              </div>
             </div>
             <div style={styles.field}>
               <label style={styles.label}>Amount</label>

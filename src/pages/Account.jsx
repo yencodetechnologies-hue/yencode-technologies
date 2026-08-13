@@ -10,6 +10,7 @@ const [amount, setAmount] = useState('')
   const [loading, setLoading] = useState(true)
   const [paying, setPaying] = useState(false)
   const [error, setError] = useState('')
+  const [showReceipt, setShowReceipt] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem('yencode_token')
@@ -97,56 +98,112 @@ async function handlePay() {
     <div style={styles.wrapper}>
       <div style={styles.card}>
         <div style={styles.topRow}>
-          <h1 style={styles.heading}>My Account</h1>
+          <h1 style={styles.heading}>Payment Portal</h1>
           <button onClick={handleLogout} style={styles.logoutBtn}>Logout</button>
         </div>
-
-        <div style={styles.field}>
-          <label style={styles.label}>Company Name</label>
-          <input name="companyName" value={form.companyName} onChange={handleChange} style={styles.input} />
-        </div>
-        <div style={styles.field}>
-          <label style={styles.label}>Email</label>
-          <input name="email" type="email" value={form.email} onChange={handleChange} style={styles.input} />
-        </div>
-        <div style={styles.field}>
-          <label style={styles.label}>Mobile Number</label>
-          <input name="mobileNumber" value={form.mobileNumber} onChange={handleChange} style={styles.input} />
-        </div>
-
-     <div style={styles.field}>
-          <label style={styles.label}>Amount</label>
-          <input
-            name="amount"
-            type="number"
-            min="1"
-            placeholder="Enter amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            style={styles.input}
-          />
-        </div>
-        <button onClick={handlePay} disabled={paying} style={styles.payBtn}>
-          {paying ? 'Redirecting to PayU...' : 'Pay'}
-        </button>
+        
         {error && <p style={styles.error}>{error}</p>}
+        
+        <div style={styles.tableWrapper}>
+          <table style={styles.table}>
+            <thead>
+              <tr>
+                <th style={styles.th}>S.No</th>
+                <th style={styles.th}>Company Name</th>
+                <th style={styles.th}>Mobile Number</th>
+                <th style={styles.th}>Email</th>
+                <th style={styles.th}>Amount</th>
+                <th style={styles.th}>Action</th>
+                {form.paymentStatus === 'Payment Successful' && (
+                  <th style={styles.th}>Receipt</th>
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={styles.td}>1</td>
+                <td style={styles.td}>{form.companyName}</td>
+                <td style={styles.td}>{form.mobileNumber}</td>
+                <td style={styles.td}>{form.email}</td>
+                <td style={styles.td}>
+                  <input
+                    name="amount"
+                    type="number"
+                    min="1"
+                    placeholder="Enter amount"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    style={styles.amountInput}
+                  />
+                </td>
+                <td style={styles.td}>
+                  <button onClick={handlePay} disabled={paying} style={styles.payBtn}>
+                    {paying ? '...' : 'Pay'}
+                  </button>
+                </td>
+                {form.paymentStatus === 'Payment Successful' && (
+                  <td style={styles.td}>
+                    <button onClick={() => setShowReceipt(true)} style={styles.receiptBtn}>
+                      View Receipt
+                    </button>
+                  </td>
+                )}
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      {showReceipt && form.paymentDetails && (
+        <div style={styles.overlay} onClick={() => setShowReceipt(false)}>
+          <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <h2 style={styles.modalHeading}>Payment Receipt</h2>
+            <div style={styles.receiptRow}>
+              <strong>Transaction ID:</strong> <span>{form.paymentDetails.txnid || '-'}</span>
+            </div>
+            <div style={styles.receiptRow}>
+              <strong>Date:</strong> <span>{form.paymentDetails.paymentDate ? new Date(form.paymentDetails.paymentDate).toLocaleString() : '-'}</span>
+            </div>
+            <div style={styles.receiptRow}>
+              <strong>Company:</strong> <span>{form.companyName}</span>
+            </div>
+            <div style={styles.receiptRow}>
+              <strong>Email:</strong> <span>{form.email}</span>
+            </div>
+            <div style={styles.receiptRow}>
+              <strong>Mobile:</strong> <span>{form.mobileNumber}</span>
+            </div>
+            <div style={styles.receiptRow}>
+              <strong>Status:</strong> <span style={{ color: '#16a34a', fontWeight: 'bold' }}>Success</span>
+            </div>
+            <div style={{ ...styles.receiptRow, borderTop: '2px dashed #e5e7eb', marginTop: 15, paddingTop: 15 }}>
+              <strong>Amount Paid:</strong> <span style={{ fontSize: 18, fontWeight: 'bold' }}>₹{form.paymentDetails.amount}</span>
+            </div>
+            <button onClick={() => setShowReceipt(false)} style={styles.closeBtn}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
 
 const styles = {
   wrapper: { minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, fontFamily: "'Inter', sans-serif" },
-  card: { width: '100%', maxWidth: 460, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 16, padding: 32, boxShadow: '0 20px 60px rgba(0,0,0,0.08)' },
+  card: { width: '100%', maxWidth: 1100, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 16, padding: 32, boxShadow: '0 20px 60px rgba(0,0,0,0.08)' },
   topRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
-  heading: { fontFamily: "'Poppins', sans-serif", fontSize: 22 },
+  heading: { fontFamily: "'Poppins', sans-serif", fontSize: 22, margin: 0 },
   logoutBtn: { background: 'none', border: '1px solid #d1d5db', color: '#6b7280', padding: '6px 14px', borderRadius: 8, fontSize: 13, cursor: 'pointer' },
-  field: { marginBottom: 16 },
-  label: { display: 'block', fontSize: 13, color: '#6b7280', marginBottom: 6 },
-  input: { width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, boxSizing: 'border-box' },
-  section: { marginTop: 24, padding: 16, border: '1px solid #e5e7eb', borderRadius: 12, background: '#f9fafb' },
-  sectionTitle: { fontFamily: "'Poppins', sans-serif", fontSize: 15, marginBottom: 8 },
-  sectionText: { fontSize: 13, color: '#6b7280' },
-  payBtn: { width: '100%', marginTop: 24, padding: 13, border: 'none', borderRadius: 10, background: '#111827', color: '#fff', fontWeight: 600, fontSize: 15, cursor: 'pointer' },
+  tableWrapper: { width: '100%', overflowX: 'auto' },
+  table: { width: '100%', borderCollapse: 'collapse', marginTop: 20 },
+  th: { textAlign: 'left', padding: '14px 12px', background: '#f9fafb', borderBottom: '1px solid #e5e7eb', fontSize: 13, color: '#374151' },
+  td: { padding: '14px 12px', borderBottom: '1px solid #f3f4f6', fontSize: 14, color: '#111827', verticalAlign: 'middle' },
+  amountInput: { width: 120, padding: '8px 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 14 },
+  payBtn: { background: '#111827', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  receiptBtn: { background: '#fff', color: '#2563eb', border: '1px solid #bfdbfe', padding: '8px 12px', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
   error: { color: '#ef4444', fontSize: 13, marginTop: 12, textAlign: 'center' },
+  overlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 },
+  modal: { background: '#fff', borderRadius: 12, padding: 28, width: '90%', maxWidth: 400, boxShadow: '0 20px 60px rgba(0,0,0,0.2)' },
+  modalHeading: { fontFamily: "'Poppins', sans-serif", fontSize: 18, marginBottom: 20, textAlign: 'center', borderBottom: '1px solid #e5e7eb', paddingBottom: 15 },
+  receiptRow: { display: 'flex', justifyContent: 'space-between', marginBottom: 12, fontSize: 14, color: '#374151' },
+  closeBtn: { width: '100%', marginTop: 20, padding: 10, background: '#f3f4f6', color: '#111827', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }
 }
