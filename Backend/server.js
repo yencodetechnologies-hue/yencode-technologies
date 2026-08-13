@@ -178,6 +178,7 @@ app.post('/api/payment/payu-initiate', requireAuth, (req, res) => {
 app.use(cors({
   origin: [
     "http://localhost:5173",
+    "https://yencodetechnologies.com/",
     "https://yencodeweb.octosofttechnologies.in/api/health"
   ],
   credentials: true,
