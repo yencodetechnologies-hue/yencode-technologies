@@ -5,7 +5,10 @@ const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
 const app = express();
 app.use(cors({
-  origin: process.env.FRONTEND_URL
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 
@@ -175,16 +178,7 @@ app.post('/api/payment/payu-initiate', requireAuth, (req, res) => {
     const backendUrl = (process.env.APP_BASE_URL || 'http://localhost:1524').replace(/\/$/, '');
     const env = process.env.PAYU_ENV === 'prod' ? 'prod' : 'test';
     const payuUrl = env === 'prod' ? 'https://secure.payu.in/_payment' : 'https://test.payu.in/_payment';
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://yencodetechnologies.com",
-    "https://yencodeweb.octosofttechnologies.in"
-  ],
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+
     return res.json({
       success: true,
       payuUrl,
