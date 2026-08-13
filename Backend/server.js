@@ -209,12 +209,12 @@ app.use(cors({
 
 app.post('/api/payment/payu-success', (req, res) => {
   console.log('PayU success callback:', req.body);
-  res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/payment-success`);
+  res.redirect(`${process.env.FRONTEND_URL || 'https://yencodeweb.octosofttechnologies.in/api/health'}/payment-success`);
 });
 
 app.post('/api/payment/payu-failure', (req, res) => {
   console.log('PayU failure callback:', req.body);
-  res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/payment-failed`);
+  res.redirect(`${process.env.FRONTEND_URL || 'https://yencodeweb.octosofttechnologies.in/api/health'}/payment-failed`);
 });
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
