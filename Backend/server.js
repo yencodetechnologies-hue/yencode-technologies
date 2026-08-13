@@ -102,7 +102,7 @@ function requireAuth(req, res, next) {
 // ---------------------------------------------------------------------------
 // POST /api/login
 // ---------------------------------------------------------------------------
-app.post('/api/login', (req, res) => {
+app.post('/login', (req, res) => {
   const { email, password } = req.body || {};
 
   if (!email || !password) {
