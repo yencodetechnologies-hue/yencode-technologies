@@ -175,7 +175,15 @@ app.post('/api/payment/payu-initiate', requireAuth, (req, res) => {
     const backendUrl = (process.env.APP_BASE_URL || 'http://localhost:1524').replace(/\/$/, '');
     const env = process.env.PAYU_ENV === 'prod' ? 'prod' : 'test';
     const payuUrl = env === 'prod' ? 'https://secure.payu.in/_payment' : 'https://test.payu.in/_payment';
-
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://yencodeweb.octosofttechnologies.in/api/health"
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
     return res.json({
       success: true,
       payuUrl,
