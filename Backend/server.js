@@ -152,36 +152,7 @@ app.get('/api/companies', async (req, res) => {
   }
 });
 
-app.post('/api/companies', async (req, res) => {
-  try {
-    const { companyName, mobileNumber, email, password } = req.body || {};
-    if (!companyName || !mobileNumber || !email || !password) {
-      return res.status(400).json({ success: false, message: 'All fields are required' });
-    }
-    const exists = await CompanyAccount.findOne({ email: email.trim().toLowerCase() });
-    if (exists) {
-      return res.status(409).json({ success: false, message: 'Email already registered' });
-    }
-    const company = await CompanyAccount.create({
-      companyName,
-      mobileNumber,
-      email: email.trim().toLowerCase(),
-      password,
-    });
-    return res.json({ success: true, company: { _id: company._id, companyName, mobileNumber, email: company.email } });
-  } catch (err) {
-    return res.status(500).json({ success: false, message: 'Server error' });
-  }
-});
 
-app.get('/api/companies', async (req, res) => {
-  try {
-    const companies = await CompanyAccount.find({}, 'companyName mobileNumber email createdAt').sort({ createdAt: -1 });
-    return res.json({ success: true, companies });
-  } catch (err) {
-    return res.status(500).json({ success: false, message: 'Server error' });
-  }
-});
 
 app.post('/login', async (req, res) => {
   const { email, password } = req.body || {};
@@ -217,14 +188,16 @@ app.post('/login', async (req, res) => {
 // ---------------------------------------------------------------------------
 app.get('/api/account', requireAuth, async (req, res) => {
   try {
-  const companySchema = new mongoose.Schema({
-  companyName: { type: String, required: true },
-  mobileNumber: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-}, { timestamps: true });
-
-const CompanyAccount = mongoose.model('CompanyAccount', companySchema);
+    const account = await CompanyAccount.findOne({ email: req.user.email });
+    if (!account) return res.status(404).json({ success: false, message: 'Account not found' });
+    return res.json({
+      success: true,
+      account: {
+        companyName: account.companyName,
+        email: account.email,
+        mobileNumber: account.mobileNumber,
+      },
+    });
   } catch (err) {
     return res.status(500).json({ success: false, message: 'Server error' });
   }
