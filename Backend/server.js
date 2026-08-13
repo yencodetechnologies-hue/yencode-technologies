@@ -182,7 +182,7 @@ app.post('/api/payment/payu-initiate', requireAuth, (req, res) => {
     const mail = (email || '').trim();
     const ph = (phone || '9999999999').replace(/\D/g, '').slice(0, 10) || '9999999999';
 
-    const hashString = `${key}|${txnid}|${formattedAmount}|${productinfo}|${fname}|${mail}|||||||||||${salt}`;
+     const hashString = `${key}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|${udf1}|${udf2}|${udf3}|${udf4}|${udf5}||||||${salt}`;
     const hash = crypto.createHash('sha512').update(hashString).digest('hex');
 
     const backendUrl = (process.env.APP_BASE_URL || 'http://localhost:1524').replace(/\/$/, '');
@@ -200,8 +200,7 @@ app.post('/api/payment/payu-initiate', requireAuth, (req, res) => {
         firstname: fname,
         email: mail,
         phone: ph,
-        surl: `${backendUrl}/api/payment/payu-success`,
-        furl: `${backendUrl}/api/payment/payu-failure`,
+      
         hash,
       },
     });
