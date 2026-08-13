@@ -123,35 +123,97 @@ function requireAuth(req, res, next) {
 // ---------------------------------------------------------------------------
 app.post('/api/companies', async (req, res) => {
   try {
-    const { companyName, mobileNumber, email, password } = req.body || {};
-    if (!companyName || !mobileNumber || !email || !password) {
-      return res.status(400).json({ success: false, message: 'All fields are required' });
-    }
-    const exists = await CompanyAccount.findOne({ email: email.trim().toLowerCase() });
-    if (exists) {
-      return res.status(409).json({ success: false, message: 'Email already registered' });
-    }
-    const company = await CompanyAccount.create({
+    const {
       companyName,
       mobileNumber,
-      email: email.trim().toLowerCase(),
-      password, // NOTE: plain text for now — hash with bcrypt before production
+      email,
+      password
+    } = req.body || {};
+
+    if (
+      !companyName?.trim() ||
+      !mobileNumber?.trim() ||
+      !email?.trim() ||
+      !password
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: 'All fields are required'
+      });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+
+    const exists = await CompanyAccount.findOne({
+      email: cleanEmail
     });
-    return res.json({ success: true, company: { _id: company._id, companyName, mobileNumber, email: company.email } });
+
+    if (exists) {
+      return res.status(409).json({
+        success: false,
+        message: 'Email already registered'
+      });
+    }
+
+    const company = await CompanyAccount.create({
+      companyName: companyName.trim(),
+      mobileNumber: mobileNumber.trim(),
+      email: cleanEmail,
+      password: password
+    });
+
+    return res.status(201).json({
+      success: true,
+      company: {
+        _id: company._id,
+        companyName: company.companyName,
+        mobileNumber: company.mobileNumber,
+        email: company.email,
+        password: company.password,
+        createdAt: company.createdAt
+      }
+    });
+
   } catch (err) {
-    return res.status(500).json({ success: false, message: 'Server error' });
+    console.error('POST /api/companies error:', err);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: err.message
+    });
   }
 });
+
 
 app.get('/api/companies', async (req, res) => {
   try {
-    const companies = await CompanyAccount.find({}, 'companyName mobileNumber email createdAt').sort({ createdAt: -1 });
-    return res.json({ success: true, companies });
+    const companies = await CompanyAccount
+      .find({})
+      .sort({ createdAt: -1 });
+
+    return res.json({
+      success: true,
+      companies: companies.map((company) => ({
+        _id: company._id,
+        companyName: company.companyName,
+        mobileNumber: company.mobileNumber,
+        email: company.email,
+        password: company.password,
+        createdAt: company.createdAt
+      }))
+    });
+
   } catch (err) {
-    return res.status(500).json({ success: false, message: 'Server error' });
+    console.error('GET /api/companies error:', err);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: err.message
+    });
   }
 });
-
 
 
 app.post('/login', async (req, res) => {

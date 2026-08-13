@@ -1,10 +1,18 @@
 import { useState, useEffect } from 'react'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://yencodeweb.octosofttechnologies.in'
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || 'https://yencodeweb.octosofttechnologies.in'
+
+const EMPTY_FORM = {
+  companyName: '',
+  mobileNumber: '',
+  email: '',
+  password: '',
+}
 
 export default function List() {
   const [showModal, setShowModal] = useState(false)
-  const [form, setForm] = useState({ companyName: '', mobileNumber: '', email: '', password: '' })
+  const [form, setForm] = useState(EMPTY_FORM)
   const [entries, setEntries] = useState([])
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
@@ -14,50 +22,91 @@ export default function List() {
     fetchCompanies()
   }, [])
 
-  function fetchCompanies() {
+  async function fetchCompanies() {
     setLoading(true)
-    fetch(`${API_BASE_URL}/api/companies`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) setEntries(data.companies)
-        setLoading(false)
-      })
-      .catch(() => setLoading(false))
+    setError('')
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/companies`)
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`)
+      }
+
+      const data = await res.json()
+
+      if (data.success) {
+        setEntries(data.companies || [])
+      } else {
+        setError(data.message || 'Could not load companies.')
+      }
+    } catch (err) {
+      console.error('GET companies error:', err)
+      setError('Could not load companies. Check backend/API deployment.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   function handleChange(e) {
-    setForm({ ...form, [e.target.name]: e.target.value })
+    const { name, value } = e.target
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
   }
 
   async function handleAdd() {
     setError('')
-    if (!form.companyName || !form.mobileNumber || !form.email || !form.password) {
+
+    if (
+      !form.companyName.trim() ||
+      !form.mobileNumber.trim() ||
+      !form.email.trim() ||
+      !form.password.trim()
+    ) {
       setError('All fields are required.')
       return
     }
+
     setSaving(true)
+
     try {
       const res = await fetch(`${API_BASE_URL}/api/companies`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          companyName: form.companyName.trim(),
+          mobileNumber: form.mobileNumber.trim(),
+          email: form.email.trim(),
+          password: form.password,
+        }),
       })
+
       const data = await res.json()
-      if (!data.success) {
-        setError(data.message || 'Could not add company.')
-        setSaving(false)
+
+      if (!res.ok || !data.success) {
+        setError(data.message || `Request failed: ${res.status}`)
         return
       }
-      setForm({ companyName: '', mobileNumber: '', email: '', password: '' })
+
+      // Add the returned company immediately to the UI.
+      setEntries((prev) => [...prev, data.company])
+
+      setForm(EMPTY_FORM)
       setShowModal(false)
-      setSaving(false)
-      if (data.company) {
-        setEntries((prev) => [...prev, data.company])
-      } else {
-        fetchCompanies()
-      }
+
+      // Re-fetch from MongoDB so refresh/persistent data is confirmed.
+      await fetchCompanies()
     } catch (err) {
-      setError('Could not reach the server.')
+      console.error('POST companies error:', err)
+      setError(
+        'Could not reach the server. Make sure the backend is deployed and running.'
+      )
+    } finally {
       setSaving(false)
     }
   }
@@ -66,53 +115,155 @@ export default function List() {
     <div style={styles.wrapper}>
       <div style={styles.card}>
         <div style={styles.topRow}>
-          <h1 style={styles.heading}>List</h1>
-          <button onClick={() => setShowModal(true)} style={styles.addBtn}>+ Add</button>
+          <h1 style={styles.heading}>Company List</h1>
+
+          <button
+            onClick={() => {
+              setError('')
+              setForm(EMPTY_FORM)
+              setShowModal(true)
+            }}
+            style={styles.addBtn}
+          >
+            + Add
+          </button>
         </div>
+
+        {error && !showModal && (
+          <div style={styles.pageError}>
+            {error}
+          </div>
+        )}
 
         {loading ? (
           <p style={styles.emptyText}>Loading...</p>
         ) : entries.length === 0 ? (
-          <p style={styles.emptyText}>No entries yet. Click "+ Add" to create one.</p>
+          <p style={styles.emptyText}>
+            No companies yet. Click "+ Add" to create one.
+          </p>
         ) : (
-          <div>
-            {entries.map((entry) => (
-              <div key={entry._id} style={styles.entryRow}>
-                <strong>{entry.companyName}</strong>
-                <span style={styles.entryEmail}>{entry.email}</span>
-              </div>
-            ))}
+          <div style={styles.tableWrapper}>
+            <table style={styles.table}>
+              <thead>
+                <tr>
+                  <th style={styles.th}>Company Name</th>
+                  <th style={styles.th}>Mobile Number</th>
+                  <th style={styles.th}>Email</th>
+                  <th style={styles.th}>Password</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {entries.map((entry) => (
+                  <tr key={entry._id}>
+                    <td style={styles.td}>
+                      {entry.companyName}
+                    </td>
+
+                    <td style={styles.td}>
+                      {entry.mobileNumber}
+                    </td>
+
+                    <td style={styles.td}>
+                      {entry.email}
+                    </td>
+
+                    <td style={styles.td}>
+                      {entry.password}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
 
       {showModal && (
-        <div style={styles.overlay} onClick={() => setShowModal(false)}>
-          <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <div
+          style={styles.overlay}
+          onClick={() => {
+            if (!saving) setShowModal(false)
+          }}
+        >
+          <div
+            style={styles.modal}
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 style={styles.modalHeading}>Add Company</h2>
 
             <div style={styles.field}>
               <label style={styles.label}>Company Name</label>
-              <input name="companyName" value={form.companyName} onChange={handleChange} style={styles.input} />
+
+              <input
+                name="companyName"
+                value={form.companyName}
+                onChange={handleChange}
+                style={styles.input}
+                placeholder="Enter company name"
+              />
             </div>
+
             <div style={styles.field}>
               <label style={styles.label}>Mobile Number</label>
-              <input name="mobileNumber" value={form.mobileNumber} onChange={handleChange} style={styles.input} />
+
+              <input
+                name="mobileNumber"
+                value={form.mobileNumber}
+                onChange={handleChange}
+                style={styles.input}
+                placeholder="Enter mobile number"
+              />
             </div>
+
             <div style={styles.field}>
               <label style={styles.label}>Email</label>
-              <input name="email" type="email" value={form.email} onChange={handleChange} style={styles.input} />
+
+              <input
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
+                style={styles.input}
+                placeholder="Enter email"
+              />
             </div>
+
             <div style={styles.field}>
               <label style={styles.label}>Password</label>
-              <input name="password" type="password" value={form.password} onChange={handleChange} style={styles.input} />
+
+              <input
+                name="password"
+                type="text"
+                value={form.password}
+                onChange={handleChange}
+                style={styles.input}
+                placeholder="Enter password"
+              />
             </div>
 
-            {error && <p style={styles.error}>{error}</p>}
+            {error && (
+              <p style={styles.error}>
+                {error}
+              </p>
+            )}
 
             <div style={styles.modalBtnRow}>
-              <button onClick={() => setShowModal(false)} style={styles.cancelBtn}>Cancel</button>
-              <button onClick={handleAdd} disabled={saving} style={styles.addBtn}>{saving ? 'Adding...' : 'Add'}</button>
+              <button
+                onClick={() => setShowModal(false)}
+                disabled={saving}
+                style={styles.cancelBtn}
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={handleAdd}
+                disabled={saving}
+                style={styles.addBtn}
+              >
+                {saving ? 'Adding...' : 'Add'}
+              </button>
             </div>
           </div>
         </div>
@@ -122,21 +273,160 @@ export default function List() {
 }
 
 const styles = {
-  wrapper: { minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, fontFamily: "'Inter', sans-serif" },
-  card: { width: '100%', maxWidth: 600, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 16, padding: 32, boxShadow: '0 20px 60px rgba(0,0,0,0.08)' },
-  topRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
-  heading: { fontFamily: "'Poppins', sans-serif", fontSize: 22 },
-  addBtn: { background: '#111827', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer' },
-  emptyText: { color: '#6b7280', fontSize: 14, textAlign: 'center', padding: '40px 0' },
-  entryRow: { display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid #f3f4f6' },
-  entryEmail: { color: '#6b7280', fontSize: 13 },
-  overlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 },
-  modal: { background: '#fff', borderRadius: 16, padding: 28, width: '90%', maxWidth: 420, boxShadow: '0 20px 60px rgba(0,0,0,0.2)' },
-  modalHeading: { fontFamily: "'Poppins', sans-serif", fontSize: 20, marginBottom: 20 },
-  field: { marginBottom: 14 },
-  label: { display: 'block', fontSize: 13, color: '#6b7280', marginBottom: 6 },
-  input: { width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, boxSizing: 'border-box' },
-  modalBtnRow: { display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 },
-  cancelBtn: { background: '#f3f4f6', color: '#111827', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer' },
-  error: { color: '#ef4444', fontSize: 13, marginTop: 4 },
+  wrapper: {
+    minHeight: '80vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+    fontFamily: "'Inter', sans-serif",
+  },
+
+  card: {
+    width: '100%',
+    maxWidth: 1100,
+    background: '#fff',
+    border: '1px solid #e5e7eb',
+    borderRadius: 16,
+    padding: 32,
+    boxShadow: '0 20px 60px rgba(0,0,0,0.08)',
+  },
+
+  topRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+
+  heading: {
+    fontFamily: "'Poppins', sans-serif",
+    fontSize: 22,
+    margin: 0,
+  },
+
+  addBtn: {
+    background: '#111827',
+    color: '#fff',
+    border: 'none',
+    padding: '10px 18px',
+    borderRadius: 8,
+    fontSize: 14,
+    fontWeight: 600,
+    cursor: 'pointer',
+  },
+
+  emptyText: {
+    color: '#6b7280',
+    fontSize: 14,
+    textAlign: 'center',
+    padding: '40px 0',
+  },
+
+  tableWrapper: {
+    width: '100%',
+    overflowX: 'auto',
+  },
+
+  table: {
+    width: '100%',
+    borderCollapse: 'collapse',
+  },
+
+  th: {
+    textAlign: 'left',
+    padding: '14px 12px',
+    background: '#f9fafb',
+    borderBottom: '1px solid #e5e7eb',
+    fontSize: 13,
+    color: '#374151',
+  },
+
+  td: {
+    padding: '14px 12px',
+    borderBottom: '1px solid #f3f4f6',
+    fontSize: 14,
+    color: '#111827',
+  },
+
+  pageError: {
+    background: '#fef2f2',
+    color: '#dc2626',
+    padding: '12px 14px',
+    borderRadius: 8,
+    marginBottom: 16,
+    fontSize: 14,
+  },
+
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'rgba(0,0,0,0.5)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+  },
+
+  modal: {
+    background: '#fff',
+    borderRadius: 16,
+    padding: 28,
+    width: '90%',
+    maxWidth: 420,
+    boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
+  },
+
+  modalHeading: {
+    fontFamily: "'Poppins', sans-serif",
+    fontSize: 20,
+    marginBottom: 20,
+  },
+
+  field: {
+    marginBottom: 14,
+  },
+
+  label: {
+    display: 'block',
+    fontSize: 13,
+    color: '#6b7280',
+    marginBottom: 6,
+  },
+
+  input: {
+    width: '100%',
+    padding: '10px 12px',
+    borderRadius: 8,
+    border: '1px solid #d1d5db',
+    fontSize: 14,
+    boxSizing: 'border-box',
+  },
+
+  modalBtnRow: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    gap: 10,
+    marginTop: 20,
+  },
+
+  cancelBtn: {
+    background: '#f3f4f6',
+    color: '#111827',
+    border: 'none',
+    padding: '10px 18px',
+    borderRadius: 8,
+    fontSize: 14,
+    fontWeight: 600,
+    cursor: 'pointer',
+  },
+
+  error: {
+    color: '#ef4444',
+    fontSize: 13,
+    marginTop: 4,
+  },
 }
