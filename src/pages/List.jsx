@@ -48,6 +48,25 @@ const [form, setForm] = useState({ companyName: '', mobileNumber: '', email: '',
     }
   }
 
+
+async function toggleAccountStatus(entry) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/companies/${entry._id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ accountStatus: !entry.accountStatus }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setEntries((prev) =>
+          prev.map((e) => (e._id === entry._id ? { ...e, accountStatus: data.company.accountStatus } : e))
+        )
+      }
+    } catch (err) {
+      console.error('Toggle status error:', err)
+    }
+  }
+
   function handleChange(e) {
     const { name, value } = e.target
 
@@ -83,6 +102,7 @@ const [form, setForm] = useState({ companyName: '', mobileNumber: '', email: '',
           mobileNumber: form.mobileNumber.trim(),
           email: form.email.trim(),
           password: form.password,
+          amount: form.amount,
         }),
       })
 
@@ -151,6 +171,7 @@ const [form, setForm] = useState({ companyName: '', mobileNumber: '', email: '',
             <th style={styles.th}>Mobile Number</th>
             <th style={styles.th}>Email</th>
             <th style={styles.th}>Password</th>
+            <th style={styles.th}>Amount</th>
             <th style={styles.th}>Payment Status</th>
             <th style={styles.th}>Account Status</th>
             <th style={styles.th}>Receipt</th>
@@ -158,22 +179,45 @@ const [form, setForm] = useState({ companyName: '', mobileNumber: '', email: '',
               </thead>
 
               <tbody>
-                {entries.map((entry) => (
+                {entries.map((entry, index) => (
                   <tr key={entry._id}>
+                    <td style={styles.td}>{index + 1}</td>
+
+                    <td style={styles.td}>{entry.companyName}</td>
+
+                    <td style={styles.td}>{entry.mobileNumber}</td>
+
+                    <td style={styles.td}>{entry.email}</td>
+
+                    <td style={styles.td}>{entry.password}</td>
+
                     <td style={styles.td}>
-                      {entry.companyName}
+                      {entry.paymentDetails?.amount ? `₹${entry.paymentDetails.amount}` : '-'}
                     </td>
 
                     <td style={styles.td}>
-                      {entry.mobileNumber}
+                      <span style={styles.statusBadge(entry.paymentStatus)}>
+                        {entry.paymentStatus || 'Pending'}
+                      </span>
                     </td>
 
                     <td style={styles.td}>
-                      {entry.email}
+                      <button
+                        onClick={() => toggleAccountStatus(entry)}
+                        style={styles.toggleBtn(entry.accountStatus)}
+                      >
+                        {entry.accountStatus ? 'ON' : 'OFF'}
+                      </button>
                     </td>
 
                     <td style={styles.td}>
-                      {entry.password}
+                      {entry.paymentStatus === 'Payment Successful' ? (
+                        <button style={styles.receiptBtn} onClick={() => alert('Receipt view coming next')}>
+                          View Receipt
+                        </button>
+                      ) : (
+                        '-'
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -423,5 +467,39 @@ const styles = {
     color: '#ef4444',
     fontSize: 13,
     marginTop: 4,
+  },
+
+  statusBadge: (status) => ({
+    display: 'inline-block',
+    padding: '4px 10px',
+    borderRadius: 999,
+    fontSize: 12,
+    fontWeight: 600,
+    background:
+      status === 'Payment Successful' ? '#dcfce7' : status === 'Payment Failed' ? '#fee2e2' : '#fef9c3',
+    color:
+      status === 'Payment Successful' ? '#16a34a' : status === 'Payment Failed' ? '#dc2626' : '#a16207',
+  }),
+
+  toggleBtn: (isOn) => ({
+    padding: '6px 14px',
+    borderRadius: 999,
+    border: 'none',
+    fontSize: 12,
+    fontWeight: 700,
+    cursor: 'pointer',
+    background: isOn ? '#111827' : '#e5e7eb',
+    color: isOn ? '#fff' : '#6b7280',
+  }),
+
+  receiptBtn: {
+    background: '#fff',
+    border: '1px solid #d1d5db',
+    color: '#111827',
+    padding: '6px 12px',
+    borderRadius: 8,
+    fontSize: 12,
+    fontWeight: 600,
+    cursor: 'pointer',
   },
 }

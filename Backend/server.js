@@ -135,7 +135,8 @@ app.post('/api/companies', async (req, res) => {
       companyName,
       mobileNumber,
       email,
-      password
+      password,
+      amount
     } = req.body || {};
 
     if (
@@ -167,7 +168,8 @@ app.post('/api/companies', async (req, res) => {
       companyName: companyName.trim(),
       mobileNumber: mobileNumber.trim(),
       email: cleanEmail,
-      password: password
+      password: password,
+      paymentDetails: amount ? { amount: Number(amount) } : undefined,
     });
 
     return res.status(201).json({
@@ -178,6 +180,9 @@ app.post('/api/companies', async (req, res) => {
         mobileNumber: company.mobileNumber,
         email: company.email,
         password: company.password,
+        accountStatus: company.accountStatus,
+        paymentStatus: company.paymentStatus,
+        paymentDetails: company.paymentDetails,
         createdAt: company.createdAt
       }
     });
@@ -198,6 +203,50 @@ app.get('/api/companies', async (req, res) => {
   try {
     const companies = await CompanyAccount.find({}, 'companyName mobileNumber email accountStatus paymentStatus paymentDetails createdAt').sort({ createdAt: -1 });
     return res.json({ success: true, companies });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+app.patch('/api/companies/:id/status', async (req, res) => {
+  try {
+    const { accountStatus } = req.body || {};
+    const company = await CompanyAccount.findByIdAndUpdate(
+      req.params.id,
+      { accountStatus: !!accountStatus },
+      { new: true }
+    );
+    if (!company) return res.status(404).json({ success: false, message: 'Company not found' });
+    return res.json({ success: true, company });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+app.put('/api/companies/:id', async (req, res) => {
+  try {
+    const { companyName, mobileNumber, email, password, amount } = req.body || {};
+    const update = {};
+    if (companyName?.trim()) update.companyName = companyName.trim();
+    if (mobileNumber?.trim()) update.mobileNumber = mobileNumber.trim();
+    if (email?.trim()) update.email = email.trim().toLowerCase();
+    if (password) update.password = password;
+    if (amount !== undefined) update['paymentDetails.amount'] = Number(amount);
+
+    const company = await CompanyAccount.findByIdAndUpdate(req.params.id, update, { new: true });
+    if (!company) return res.status(404).json({ success: false, message: 'Company not found' });
+    return res.json({ success: true, company });
+  } catch (err) {
+    console.error('PUT /api/companies/:id error:', err);
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+app.delete('/api/companies/:id', async (req, res) => {
+  try {
+    const company = await CompanyAccount.findByIdAndDelete(req.params.id);
+    if (!company) return res.status(404).json({ success: false, message: 'Company not found' });
+    return res.json({ success: true });
   } catch (err) {
     return res.status(500).json({ success: false, message: 'Server error' });
   }
