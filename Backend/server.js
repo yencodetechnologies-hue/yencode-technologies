@@ -4,11 +4,20 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
 const app = express();
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://www.yencodetechnologies.com'
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
 }));
 app.use(express.json());
 
