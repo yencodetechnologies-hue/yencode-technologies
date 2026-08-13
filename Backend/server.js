@@ -269,6 +269,4 @@ app.post('/api/payment/payu-failure', (req, res) => {
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 
-app.listen(PORT, () => {
-  console.log(`Yencode auth backend running on http://localhost:${PORT}`);
-});
+

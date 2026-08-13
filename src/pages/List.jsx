@@ -51,7 +51,11 @@ export default function List() {
       setForm({ companyName: '', mobileNumber: '', email: '', password: '' })
       setShowModal(false)
       setSaving(false)
-      fetchCompanies()
+      if (data.company) {
+        setEntries((prev) => [...prev, data.company])
+      } else {
+        fetchCompanies()
+      }
     } catch (err) {
       setError('Could not reach the server.')
       setSaving(false)
