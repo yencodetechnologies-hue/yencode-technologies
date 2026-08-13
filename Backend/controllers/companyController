@@ -145,6 +145,7 @@ exports.loginCompany = async (req, res) => {
 };
 
 // GET /api/account (protected)
+// GET /api/account (protected)
 exports.getAccount = async (req, res) => {
   try {
     const account = await CompanyAccount.findOne({ email: req.user.email });
@@ -155,6 +156,8 @@ exports.getAccount = async (req, res) => {
         companyName: account.companyName,
         email: account.email,
         mobileNumber: account.mobileNumber,
+        paymentStatus: account.paymentStatus,
+        paymentDetails: account.paymentDetails,
       },
     });
   } catch (err) {

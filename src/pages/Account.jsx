@@ -17,7 +17,11 @@ const [amount, setAmount] = useState('')
     if (!token) { navigate('/login'); return }
 
     const cached = localStorage.getItem('yencode_account')
-    if (cached) setForm(JSON.parse(cached))
+    if (cached) {
+      const cachedAccount = JSON.parse(cached)
+      setForm(cachedAccount)
+      setAmount(cachedAccount?.paymentDetails?.amount || '')
+    }
 
     fetch(`${API_BASE_URL}/api/account`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
@@ -28,6 +32,7 @@ const [amount, setAmount] = useState('')
         if (data?.success) {
           localStorage.setItem('yencode_account', JSON.stringify(data.account))
           setForm(data.account)
+          setAmount(data.account?.paymentDetails?.amount || '')
         }
         setLoading(false)
       })
@@ -126,15 +131,7 @@ async function handlePay() {
                 <td style={styles.td}>{form.mobileNumber}</td>
                 <td style={styles.td}>{form.email}</td>
                 <td style={styles.td}>
-                  <input
-                    name="amount"
-                    type="number"
-                    min="1"
-                    placeholder="Enter amount"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    style={styles.amountInput}
-                  />
+                  ₹{amount || 0}
                 </td>
                 <td style={styles.td}>
                   <button onClick={handlePay} disabled={paying} style={styles.payBtn}>

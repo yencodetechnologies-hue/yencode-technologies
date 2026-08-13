@@ -11,6 +11,9 @@ exports.initiatePayU = (req, res) => {
       return res.status(400).json({ success: false, message: "Amount must be greater than 0" });
     }
     const formattedAmount = parsedAmount.toFixed(2);
+    const productinfo = "Yencode Technologies Payment";
+    const fname = (firstname || "").trim() || "Customer";
+    const mail = (email || "").trim().toLowerCase();
 
     // Falls back to PayU's public test credentials if .env is missing them —
     // this is what stops the "PayU credentials missing" error.
@@ -18,9 +21,6 @@ exports.initiatePayU = (req, res) => {
     const salt = process.env.PAYU_SALT || "4R38IvwiV57FwVpsgOvTXBdLE4tHUXFW";
 
     const txnid = `txn_${Date.now()}`;
-    const productinfo = "Yencode Technologies Payment";
-    const fname = (firstname || "").trim() || "Customer";
-    const mail = (email || "").trim();
     const ph = (phone || "9999999999").replace(/\D/g, "").slice(0, 10) || "9999999999";
 
     const hashString = `${key}|${txnid}|${formattedAmount}|${productinfo}|${fname}|${mail}||||||||||${salt}`;
