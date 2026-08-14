@@ -157,7 +157,9 @@ async function handlePay() {
                   ₹{amount || 0}
                 </td>
       <td style={styles.td}>
-{form.paymentStatus === 'Payment Successful' ? null : (
+{form.paymentStatus === 'Payment Successful' ? (
+  <span style={styles.paidBtn}>Paid</span>
+) : (
   <button
     onClick={handlePay}
     disabled={paying}
