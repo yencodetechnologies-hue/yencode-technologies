@@ -9,8 +9,6 @@ const {
 
 router.post("/api/payment/payu-initiate", requireAuth, initiatePayU);
 router.post("/api/payment/payu-success", payuSuccess);
-router.get("/api/payment/payu-success", payuSuccess);
 router.post("/api/payment/payu-failure", payuFailure);
-router.get("/api/payment/payu-failure", payuFailure);
 
 module.exports = router;
