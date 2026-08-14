@@ -74,6 +74,12 @@ export default function Account() {
           navigate('/login')
           return
         }
+        if (res.status === 403) {
+          // Account has been disabled server-side. Keep local session but show message.
+          setError('This account has been disabled. Contact admin for access.')
+          setLoading(false)
+          return
+        }
 
         const data = await res.json()
 
