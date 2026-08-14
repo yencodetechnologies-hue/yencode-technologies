@@ -10,7 +10,9 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-async function sendPaymentSuccessEmail({ to, companyName, amount, txnid, paymentDate, pdfBuffer }) {
+async function sendPaymentSuccessEmail({ to, companyName, amount, txnid, payuId, paymentDate, pdfBuffer }) {
+  const visibleTransactionId = payuId || txnid || "-";
+
   await transporter.sendMail({
     from: `"Yencode Technologies" <${process.env.SMTP_USER}>`,
     to,
@@ -19,7 +21,7 @@ async function sendPaymentSuccessEmail({ to, companyName, amount, txnid, payment
       <h2>Payment Successful</h2>
       <p>Dear ${companyName},</p>
       <p>We have received your payment of <b>₹${amount}</b>.</p>
-      <p><b>Transaction ID:</b> ${txnid}</p>
+      <p><b>Transaction ID:</b> ${visibleTransactionId}</p>
       <p><b>Date:</b> ${new Date(paymentDate).toLocaleString()}</p>
       <p>Your receipt is attached.</p>
     `,

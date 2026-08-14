@@ -19,7 +19,7 @@ export default function Account() {
   const [error, setError] = useState('')
   const [showReceipt, setShowReceipt] = useState(false)
 
-  const receiptTransactionId = form.paymentDetails?.payuId || form.paymentDetails?.txnid || '-'
+  const receiptTransactionId = form.paymentDetails?.payuId || form.paymentDetails?.mihpayid || form.paymentDetails?.txnid || '-'
   const isPaid = normalizePaymentStatus(form.paymentStatus) === 'Successful / Paid'
 
   useEffect(() => {
