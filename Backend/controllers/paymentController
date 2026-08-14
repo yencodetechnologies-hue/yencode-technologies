@@ -72,7 +72,7 @@ exports.payuSuccess = async (req, res) => {
       mode: mode || "Online",
     },
   },
-  { new: true, runValidators: true }
+  { returnDocument: "after", runValidators: true }
 );  } catch (err) {
       console.error("Error updating payment status:", err);
     }
@@ -101,7 +101,7 @@ await CompanyAccount.findOneAndUpdate(
       mode: mode || "Online",
     },
   },
-  { new: true, runValidators: true }
+  { returnDocument: "after", runValidators: true }
 );
     } catch (err) {
       console.error("Error updating failed payment status:", err);

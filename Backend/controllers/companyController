@@ -68,7 +68,7 @@ exports.updateCompanyStatus = async (req, res) => {
     const company = await CompanyAccount.findByIdAndUpdate(
       req.params.id,
       { accountStatus: !!accountStatus },
-      { new: true }
+      { returnDocument: "after" }
     );
     if (!company) return res.status(404).json({ success: false, message: "Company not found" });
     return res.json({ success: true, company });
@@ -88,7 +88,7 @@ exports.updateCompany = async (req, res) => {
     if (password) update.password = password;
     if (amount !== undefined) update["paymentDetails.amount"] = Number(amount);
 
-    const company = await CompanyAccount.findByIdAndUpdate(req.params.id, update, { new: true });
+    const company = await CompanyAccount.findByIdAndUpdate(req.params.id, update, { returnDocument: "after" });
     if (!company) return res.status(404).json({ success: false, message: "Company not found" });
     return res.json({ success: true, company });
   } catch (err) {
