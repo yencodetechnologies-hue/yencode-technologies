@@ -5,8 +5,18 @@ export default function PaymentFailed() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const email = params.get('email') || ''
+
+    sessionStorage.setItem('yencode_payment_result', 'failed')
+    sessionStorage.setItem('yencode_payment_email', email)
+    sessionStorage.setItem('yencode_payment_failed', 'true')
     localStorage.removeItem('yencode_account')
-    const timer = setTimeout(() => navigate('/account'), 2500)
+
+    const timer = setTimeout(() => {
+      navigate('/account', { replace: true })
+    }, 2000)
+
     return () => clearTimeout(timer)
   }, [navigate])
 
