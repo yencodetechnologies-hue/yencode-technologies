@@ -79,7 +79,7 @@ exports.payuSuccess = async (req, res) => {
   }
 
   res.redirect(
-    `${process.env.FRONTEND_URL || "https://yencodeweb.octosofttechnologies.in"}/account`
+    `${process.env.FRONTEND_URL || "https://yencodeweb.octosofttechnologies.in"}/payment-success`
   );
 };
 
