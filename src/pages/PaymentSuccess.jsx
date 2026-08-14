@@ -5,8 +5,18 @@ export default function PaymentSuccess() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    const savedAccount = JSON.parse(localStorage.getItem('yencode_account') || '{}')
+    const updatedAccount = {
+      ...savedAccount,
+      paymentStatus: 'Successful / Paid',
+      paymentDetails: {
+        ...(savedAccount.paymentDetails || {}),
+        amount: savedAccount.paymentDetails?.amount || savedAccount.amount || 0,
+      },
+    }
+
+    localStorage.setItem('yencode_account', JSON.stringify(updatedAccount))
     sessionStorage.setItem('yencode_payment_success', 'true')
-    localStorage.removeItem('yencode_account')
 
     const timer = setTimeout(() => {
       navigate('/account', { replace: true })

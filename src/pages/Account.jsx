@@ -22,6 +22,28 @@ export default function Account() {
       return
     }
 
+    const justPaid = sessionStorage.getItem('yencode_payment_success') === 'true'
+
+    const applyCachedPaidState = () => {
+      const savedAccount = JSON.parse(localStorage.getItem('yencode_account') || '{}')
+      const nextForm = {
+        ...savedAccount,
+        paymentStatus: 'Successful / Paid',
+        paymentDetails: {
+          ...(savedAccount.paymentDetails || {}),
+          amount: savedAccount.paymentDetails?.amount || savedAccount.amount || 0,
+        },
+      }
+
+      setForm(nextForm)
+      setAmount(nextForm.paymentDetails?.amount || '')
+      sessionStorage.removeItem('yencode_payment_success')
+    }
+
+    if (justPaid) {
+      applyCachedPaidState()
+    }
+
     async function loadAccount() {
       try {
         setLoading(true)
@@ -43,20 +65,21 @@ export default function Account() {
         if (data?.success && data.account) {
           const normalizedAccount = {
             ...data.account,
-            paymentStatus: data.account.paymentStatus === 'Payment Successful' ? 'Paid' : data.account.paymentStatus,
+            paymentStatus: data.account.paymentStatus || 'Pending',
           }
 
-          setForm(normalizedAccount)
+          setForm((prev) => {
+            const merged = {
+              ...normalizedAccount,
+              paymentStatus: justPaid ? 'Successful / Paid' : normalizedAccount.paymentStatus,
+            }
+
+            localStorage.setItem('yencode_account', JSON.stringify(merged))
+            return merged
+          })
 
           setAmount(
-            normalizedAccount.paymentDetails?.amount ||
-            normalizedAccount.amount ||
-            ''
-          )
-
-          localStorage.setItem(
-            'yencode_account',
-            JSON.stringify(normalizedAccount)
+            (justPaid ? (data.account.paymentDetails?.amount || data.account.amount || 0) : (data.account.paymentDetails?.amount || data.account.amount || '')) || ''
           )
         }
       } catch (err) {
@@ -67,25 +90,8 @@ export default function Account() {
       }
     }
 
-    const justPaid = sessionStorage.getItem('yencode_payment_success') === 'true'
-    if (justPaid) {
-      const savedAccount = JSON.parse(localStorage.getItem('yencode_account') || '{}')
-      const nextForm = {
-        ...savedAccount,
-        paymentStatus: 'Paid',
-        paymentDetails: {
-          ...(savedAccount.paymentDetails || {}),
-          amount: savedAccount.paymentDetails?.amount || amount || 0,
-        },
-      }
-
-      setForm(nextForm)
-      setAmount(nextForm.paymentDetails?.amount || '')
-      sessionStorage.removeItem('yencode_payment_success')
-    }
-
     loadAccount()
-  }, [navigate, amount])
+  }, [navigate])
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
