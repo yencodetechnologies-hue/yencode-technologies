@@ -56,23 +56,18 @@ export default function Login() {
           <div style={styles.glow} aria-hidden="true" />
 
           <div style={styles.brandContent}>
-            <div style={styles.logoRow}>
-              <div style={styles.logoMark}>Y</div>
-              <div>
-                <div style={styles.logoWordmark}>YENCODE</div>
-                <div style={styles.logoSub}>TECHNOLOGIES</div>
-              </div>
+            <div style={styles.badge}>
             </div>
             <div>
-              <h2 style={styles.brandHeadline}>Build. Deploy. Scale.</h2>
+              <h2 style={styles.brandHeadline}>Your work,<br />organized.</h2>
               <p style={styles.brandBody}>
-                Sign in to manage your projects, track delivery, and stay
-                connected with your engineering team — all in one place.
+                One dashboard for projects, invoices, and client
+                communication — built for teams that move fast.
               </p>
             </div>
             <div style={styles.brandFooter}>
               <div style={styles.dot} />
-              <span>Secure company access</span>
+              <span>Encrypted • Trusted • Reliable</span>
             </div>
           </div>
         </div>
@@ -411,4 +406,5 @@ const styles = {
     fontWeight: 600,
     textDecoration: 'none',
   },
+  
 }
