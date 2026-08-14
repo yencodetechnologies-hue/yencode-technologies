@@ -12,10 +12,7 @@ export default function Account() {
   const [error, setError] = useState('')
   const [showReceipt, setShowReceipt] = useState(false)
 
-  const isPaid =
-    form.paymentStatus === 'Paid' ||
-    form.paymentStatus === 'Payment Successful' ||
-    form.paymentStatus === 'Successful / Paid'
+  const isPaid = form.paymentStatus === 'Paid' || form.paymentStatus === 'Payment Successful' || form.paymentStatus === 'Successful / Paid'
 
   useEffect(() => {
     const token = localStorage.getItem('yencode_token')
@@ -25,15 +22,13 @@ export default function Account() {
       return
     }
 
-    const result = sessionStorage.getItem('yencode_payment_result')
-    const justPaid = result === 'success'
-    const justFailed = result === 'failed'
+    const justPaid = sessionStorage.getItem('yencode_payment_success') === 'true'
 
-    const applyPaymentResult = (status) => {
+    const applyCachedPaidState = () => {
       const savedAccount = JSON.parse(localStorage.getItem('yencode_account') || '{}')
       const nextForm = {
         ...savedAccount,
-        paymentStatus: status,
+        paymentStatus: 'Successful / Paid',
         paymentDetails: {
           ...(savedAccount.paymentDetails || {}),
           amount: savedAccount.paymentDetails?.amount || savedAccount.amount || 0,
@@ -42,18 +37,11 @@ export default function Account() {
 
       setForm(nextForm)
       setAmount(nextForm.paymentDetails?.amount || '')
-      localStorage.setItem('yencode_account', JSON.stringify(nextForm))
-      sessionStorage.removeItem('yencode_payment_result')
       sessionStorage.removeItem('yencode_payment_success')
-      sessionStorage.removeItem('yencode_payment_failed')
     }
 
     if (justPaid) {
-      applyPaymentResult('Successful / Paid')
-    }
-
-    if (justFailed) {
-      applyPaymentResult('Unsuccessful / Payment Failed')
+      applyCachedPaidState()
     }
 
     async function loadAccount() {
@@ -75,21 +63,24 @@ export default function Account() {
         const data = await res.json()
 
         if (data?.success && data.account) {
-          const normalizedPaymentStatus =
-            data.account.paymentStatus === 'Payment Successful' || data.account.paymentStatus === 'Successful / Paid'
-              ? 'Successful / Paid'
-              : data.account.paymentStatus === 'Payment Failed' || data.account.paymentStatus === 'Unsuccessful / Payment Failed'
-                ? 'Unsuccessful / Payment Failed'
-                : data.account.paymentStatus || 'Pending'
-
-          const mergedAccount = {
+          const normalizedAccount = {
             ...data.account,
-            paymentStatus: justPaid ? 'Successful / Paid' : justFailed ? 'Unsuccessful / Payment Failed' : normalizedPaymentStatus,
+            paymentStatus: data.account.paymentStatus || 'Pending',
           }
 
-          setForm(mergedAccount)
-          setAmount(mergedAccount.paymentDetails?.amount || mergedAccount.amount || '')
-          localStorage.setItem('yencode_account', JSON.stringify(mergedAccount))
+          setForm((prev) => {
+            const merged = {
+              ...normalizedAccount,
+              paymentStatus: justPaid ? 'Successful / Paid' : normalizedAccount.paymentStatus,
+            }
+
+            localStorage.setItem('yencode_account', JSON.stringify(merged))
+            return merged
+          })
+
+          setAmount(
+            (justPaid ? (data.account.paymentDetails?.amount || data.account.amount || 0) : (data.account.paymentDetails?.amount || data.account.amount || '')) || ''
+          )
         }
       } catch (err) {
         console.error('Account loading error:', err)

@@ -78,10 +78,8 @@ exports.payuSuccess = async (req, res) => {
     }
   }
 
-  const emailQuery = email ? `&email=${encodeURIComponent(String(email).trim().toLowerCase())}` : "";
-
   res.redirect(
-    `${process.env.FRONTEND_URL || "https://yencodeweb.octosofttechnologies.in"}/payment-success?status=success${emailQuery}`
+    `${process.env.FRONTEND_URL || "https://yencodeweb.octosofttechnologies.in"}/payment-success`
   );
 };
 
@@ -110,9 +108,7 @@ await CompanyAccount.findOneAndUpdate(
     }
   }
 
-  const emailQuery = email ? `&email=${encodeURIComponent(String(email).trim().toLowerCase())}` : "";
-
   res.redirect(
-    `${process.env.FRONTEND_URL || "https://yencodeweb.octosofttechnologies.in"}/payment-failed?status=failed${emailQuery}`
+    `${process.env.FRONTEND_URL || "https://yencodeweb.octosofttechnologies.in"}/payment-failed`
   );
 };
