@@ -3,6 +3,13 @@ import { useNavigate } from 'react-router-dom'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ||   'https://yencodeweb.octosofttechnologies.in'
 
+function normalizePaymentStatus(status) {
+  if (!status) return 'Pending'
+  if (['Paid', 'Payment Successful', 'Successful / Paid'].includes(status)) return 'Successful / Paid'
+  if (['Payment Failed', 'Unsuccessful / Payment Failed'].includes(status)) return 'Unsuccessful / Payment Failed'
+  return status
+}
+
 export default function Account() {
   const navigate = useNavigate()
   const [form, setForm] = useState({ companyName: '', email: '', mobileNumber: '', paymentStatus: 'Pending' })
@@ -12,7 +19,7 @@ export default function Account() {
   const [error, setError] = useState('')
   const [showReceipt, setShowReceipt] = useState(false)
 
-  const isPaid = form.paymentStatus === 'Paid' || form.paymentStatus === 'Payment Successful' || form.paymentStatus === 'Successful / Paid'
+  const isPaid = normalizePaymentStatus(form.paymentStatus) === 'Successful / Paid'
 
   useEffect(() => {
     const token = localStorage.getItem('yencode_token')
@@ -65,7 +72,7 @@ export default function Account() {
         if (data?.success && data.account) {
           const normalizedAccount = {
             ...data.account,
-            paymentStatus: data.account.paymentStatus || 'Pending',
+            paymentStatus: normalizePaymentStatus(data.account.paymentStatus),
           }
 
           setForm((prev) => {

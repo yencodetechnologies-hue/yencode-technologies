@@ -12,6 +12,13 @@ const EMPTY_FORM = {
   amount: '',
 }
 
+function normalizePaymentStatus(status) {
+  if (!status) return 'Pending'
+  if (['Paid', 'Payment Successful', 'Successful / Paid'].includes(status)) return 'Successful / Paid'
+  if (['Payment Failed', 'Unsuccessful / Payment Failed'].includes(status)) return 'Unsuccessful / Payment Failed'
+  return status
+}
+
 export default function List() {
   const navigate = useNavigate()
   const [showModal, setShowModal] = useState(false)
@@ -267,9 +274,7 @@ async function toggleAccountStatus(entry) {
 
                     <td style={styles.td}>
                       <span style={styles.statusBadge(entry.paymentStatus)}>
-                        {entry.paymentStatus === 'Unsuccessful / Payment Failed' || entry.paymentStatus === 'Payment Failed'
-                          ? 'Unsuccessful / Payment Failed'
-                          : (entry.paymentStatus === 'Successful / Paid' || entry.paymentStatus === 'Payment Successful' || entry.paymentStatus === 'Paid' ? 'Successful / Paid' : (entry.paymentStatus || 'Pending'))}
+                        {normalizePaymentStatus(entry.paymentStatus)}
                       </span>
                     </td>
 
@@ -570,9 +575,9 @@ const styles = {
     fontSize: 12,
     fontWeight: 600,
     background:
-      status === 'Successful / Paid' || status === 'Payment Successful' || status === 'Paid' ? '#dcfce7' : status === 'Unsuccessful / Payment Failed' || status === 'Payment Failed' ? '#fee2e2' : '#fef9c3',
+      normalizePaymentStatus(status) === 'Successful / Paid' ? '#dcfce7' : normalizePaymentStatus(status) === 'Unsuccessful / Payment Failed' ? '#fee2e2' : '#fef9c3',
     color:
-      status === 'Successful / Paid' || status === 'Payment Successful' || status === 'Paid' ? '#16a34a' : status === 'Unsuccessful / Payment Failed' || status === 'Payment Failed' ? '#dc2626' : '#a16207',
+      normalizePaymentStatus(status) === 'Successful / Paid' ? '#16a34a' : normalizePaymentStatus(status) === 'Unsuccessful / Payment Failed' ? '#dc2626' : '#a16207',
   }),
 
   switchTrack: (isOn) => ({

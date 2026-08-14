@@ -2,6 +2,13 @@ const jwt = require("jsonwebtoken");
 const CompanyAccount = require("../models/CompanyAccount");
 const { JWT_SECRET } = require("../middleware/requireAuth");
 
+function normalizePaymentStatus(status) {
+  if (!status) return "Pending";
+  if (["Paid", "Payment Successful", "Successful / Paid"].includes(status)) return "Successful / Paid";
+  if (["Payment Failed", "Unsuccessful / Payment Failed"].includes(status)) return "Unsuccessful / Payment Failed";
+  return status;
+}
+
 // POST /api/companies
 exports.createCompany = async (req, res) => {
   try {
@@ -37,7 +44,7 @@ exports.createCompany = async (req, res) => {
         email: company.email,
         password: company.password,
         accountStatus: company.accountStatus,
-        paymentStatus: company.paymentStatus,
+        paymentStatus: normalizePaymentStatus(company.paymentStatus),
         paymentDetails: company.paymentDetails,
         createdAt: company.createdAt,
       },
@@ -55,7 +62,13 @@ exports.getCompanies = async (req, res) => {
       {},
       "companyName mobileNumber email password accountStatus paymentStatus paymentDetails createdAt"
     ).sort({ createdAt: -1 });
-    return res.json({ success: true, companies });
+
+    const normalizedCompanies = companies.map((company) => ({
+      ...company.toObject(),
+      paymentStatus: normalizePaymentStatus(company.paymentStatus),
+    }));
+
+    return res.json({ success: true, companies: normalizedCompanies });
   } catch (err) {
     return res.status(500).json({ success: false, message: "Server error" });
   }
@@ -135,7 +148,7 @@ exports.loginCompany = async (req, res) => {
         companyName: account.companyName,
         email: account.email,
         mobileNumber: account.mobileNumber,
-        paymentStatus: account.paymentStatus,
+        paymentStatus: normalizePaymentStatus(account.paymentStatus),
         paymentDetails: account.paymentDetails,
       },
     });
@@ -156,7 +169,7 @@ exports.getAccount = async (req, res) => {
         companyName: account.companyName,
         email: account.email,
         mobileNumber: account.mobileNumber,
-        paymentStatus: account.paymentStatus,
+        paymentStatus: normalizePaymentStatus(account.paymentStatus),
         paymentDetails: account.paymentDetails,
       },
     });
