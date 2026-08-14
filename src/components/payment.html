@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Payment | Yencode Technologies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#000213;--card:#0a0e24;--border:#1c2340;--text:#fff;
+    --muted:#94a3b8;--accent:#5be0ff;--accent2:#22d3ee;--success:#22c55e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:radial-gradient(circle at 20% 20%, rgba(91,224,255,0.08), transparent 40%),
+               radial-gradient(circle at 80% 80%, rgba(34,211,238,0.08), transparent 40%),
+               var(--bg);
+    font-family:'Outfit', sans-serif;color:var(--text);
+    display:flex;align-items:center;justify-content:center;padding:20px;
+  }
+  .card{
+    width:100%;max-width:420px;background:var(--card);border:1px solid var(--border);
+    border-radius:16px;padding:32px;box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  }
+  .back-link{
+    display:inline-block;color:var(--muted);font-size:13px;text-decoration:none;margin-bottom:18px;cursor:pointer;
+  }
+  .back-link:hover{color:var(--accent);}
+  h1{font-family:'Space Grotesk', sans-serif;font-size:22px;margin-bottom:6px;}
+  .subtitle{color:var(--muted);font-size:14px;margin-bottom:24px;}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;}
+  .field{margin-bottom:18px;}
+  input{
+    width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--border);
+    background:#060a1c;color:var(--text);font-size:14px;outline:none;
+  }
+  input:focus{border-color:var(--accent);}
+  .pay-btn{
+    width:100%;padding:13px 14px;border:none;border-radius:10px;
+    background:linear-gradient(90deg, var(--accent), var(--accent2));
+    color:#001018;font-weight:600;font-size:15px;cursor:pointer;
+  }
+  .pay-btn:disabled{opacity:.6;cursor:not-allowed;}
+  .result{
+    margin-top:20px;padding:16px;border-radius:12px;border:1px solid var(--border);
+    background:#060a1c;font-size:13px;display:none;
+  }
+  .result.show{display:block;}
+  .result h2{color:var(--success);font-family:'Space Grotesk', sans-serif;font-size:15px;margin-bottom:8px;}
+  .result p{color:var(--muted);margin-bottom:4px;}
+  .error-msg{color:#ef4444;font-size:13px;margin-top:10px;text-align:center;min-height:16px;}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <span class="back-link" onclick="window.location.href='/yencodetechnologies/account'">← Back to Account</span>
+  <h1>Payment</h1>
+  <p class="subtitle">Complete your payment below</p>
+
+  <form id="paymentForm">
+    <div class="field">
+      <label for="purpose">Purpose</label>
+      <input type="text" id="purpose" value="Service Payment" required />
+    </div>
+    <div class="field">
+      <label for="amount">Amount (INR)</label>
+      <input type="number" id="amount" min="1" placeholder="e.g. 5000" required />
+    </div>
+    <button type="submit" class="pay-btn" id="payBtn">Pay Now</button>
+    <div class="error-msg" id="errorMsg"></div>
+  </form>
+
+  <div class="result" id="result">
+    <h2>Payment Initiated ✓</h2>
+    <p id="resPayId"></p>
+    <p id="resAmount"></p>
+    <p id="resStatus"></p>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="auth.js"></script>
+<script>
+  if (!requireAuthOrRedirect()) { /* redirected */ }
+
+  const form = document.getElementById('paymentForm');
+  const errorMsg = document.getElementById('errorMsg');
+  const payBtn = document.getElementById('payBtn');
+  const result = document.getElementById('result');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorMsg.textContent = '';
+    payBtn.disabled = true;
+    payBtn.textContent = 'Processing...';
+
+    const purpose = document.getElementById('purpose').value.trim();
+    const amount = Number(document.getElementById('amount').value);
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/payment/initiate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getToken()}`,
+        },
+        body: JSON.stringify({ purpose, amount }),
+      });
+
+      if (res.status === 401) {
+        clearToken();
+        window.location.href = '/yencodetechnologies/login';
+        return;
+      }
+
+      const data = await res.json();
+      if (!data.success) {
+        errorMsg.textContent = data.message || 'Payment failed. Please try again.';
+        payBtn.disabled = false;
+        payBtn.textContent = 'Pay Now';
+        return;
+      }
+
+      document.getElementById('resPayId').textContent = `Payment ID: ${data.payment.id}`;
+      document.getElementById('resAmount').textContent = `Amount: ₹${data.payment.amount}`;
+      document.getElementById('resStatus').textContent = `Status: ${data.payment.status}`;
+      result.classList.add('show');
+      payBtn.textContent = 'Pay Now';
+      payBtn.disabled = false;
+    } catch (err) {
+      errorMsg.textContent = 'Could not reach the server. Please try again.';
+      payBtn.disabled = false;
+      payBtn.textContent = 'Pay Now';
+    }
+  });
+</script>
+</body>
+</html>

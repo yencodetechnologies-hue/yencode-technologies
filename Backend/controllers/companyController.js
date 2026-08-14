@@ -1,0 +1,166 @@
+const jwt = require("jsonwebtoken");
+const CompanyAccount = require("../models/CompanyAccount.js");
+const { JWT_SECRET } = require("../middleware/requireAuth");
+
+// POST /api/companies
+exports.createCompany = async (req, res) => {
+  try {
+    const { companyName, mobileNumber, email, password, amount } = req.body || {};
+
+    if (!companyName?.trim() || !mobileNumber?.trim() || !email?.trim() || !password) {
+      return res.status(400).json({ success: false, message: "All fields are required" });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+
+    const exists = await CompanyAccount.findOne({ email: cleanEmail });
+    if (exists) {
+      return res.status(409).json({ success: false, message: "Email already registered" });
+    }
+
+    const company = await CompanyAccount.create({
+      companyName: companyName.trim(),
+      mobileNumber: mobileNumber.trim(),
+      email: cleanEmail,
+      password: password,
+    paymentDetails: {
+  amount: amount !== undefined && amount !== null && amount !== '' ? Number(amount) : 0,
+},
+    });
+
+    return res.status(201).json({
+      success: true,
+      company: {
+        _id: company._id,
+        companyName: company.companyName,
+        mobileNumber: company.mobileNumber,
+        email: company.email,
+        password: company.password,
+        accountStatus: company.accountStatus,
+        paymentStatus: company.paymentStatus,
+        paymentDetails: company.paymentDetails,
+        createdAt: company.createdAt,
+      },
+    });
+  } catch (err) {
+    console.error("POST /api/companies error:", err);
+    return res.status(500).json({ success: false, message: "Server error", error: err.message });
+  }
+};
+
+// GET /api/companies
+exports.getCompanies = async (req, res) => {
+  try {
+    const companies = await CompanyAccount.find(
+      {},
+      "companyName mobileNumber email password accountStatus paymentStatus paymentDetails createdAt"
+    ).sort({ createdAt: -1 });
+    return res.json({ success: true, companies });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// PATCH /api/companies/:id/status
+exports.updateCompanyStatus = async (req, res) => {
+  try {
+    const { accountStatus } = req.body || {};
+    const company = await CompanyAccount.findByIdAndUpdate(
+      req.params.id,
+      { accountStatus: !!accountStatus },
+      { new: true }
+    );
+    if (!company) return res.status(404).json({ success: false, message: "Company not found" });
+    return res.json({ success: true, company });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// PUT /api/companies/:id
+exports.updateCompany = async (req, res) => {
+  try {
+    const { companyName, mobileNumber, email, password, amount } = req.body || {};
+    const update = {};
+    if (companyName?.trim()) update.companyName = companyName.trim();
+    if (mobileNumber?.trim()) update.mobileNumber = mobileNumber.trim();
+    if (email?.trim()) update.email = email.trim().toLowerCase();
+    if (password) update.password = password;
+    if (amount !== undefined) update["paymentDetails.amount"] = Number(amount);
+
+    const company = await CompanyAccount.findByIdAndUpdate(req.params.id, update, { new: true });
+    if (!company) return res.status(404).json({ success: false, message: "Company not found" });
+    return res.json({ success: true, company });
+  } catch (err) {
+    console.error("PUT /api/companies/:id error:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// DELETE /api/companies/:id
+exports.deleteCompany = async (req, res) => {
+  try {
+    const company = await CompanyAccount.findByIdAndDelete(req.params.id);
+    if (!company) return res.status(404).json({ success: false, message: "Company not found" });
+    return res.json({ success: true });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// POST /login
+exports.loginCompany = async (req, res) => {
+  const { email, password } = req.body || {};
+
+  if (!email || !password) {
+    return res.status(400).json({ success: false, message: "Email and password are required" });
+  }
+
+  try {
+    const account = await CompanyAccount.findOne({ email: email.trim().toLowerCase() });
+    if (!account || account.password !== password) {
+      return res.status(401).json({ success: false, message: "Invalid email or password" });
+    }
+    if (!account.accountStatus) {
+      return res.status(403).json({ success: false, message: "This account has been disabled." });
+    }
+
+    const token = jwt.sign({ email: account.email }, JWT_SECRET, { expiresIn: "2h" });
+
+    return res.json({
+      success: true,
+      token,
+      account: {
+        _id: account._id,
+        companyName: account.companyName,
+        email: account.email,
+        mobileNumber: account.mobileNumber,
+        paymentStatus: account.paymentStatus,
+        paymentDetails: account.paymentDetails,
+      },
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// GET /api/account (protected)
+// GET /api/account (protected)
+exports.getAccount = async (req, res) => {
+  try {
+    const account = await CompanyAccount.findOne({ email: req.user.email });
+    if (!account) return res.status(404).json({ success: false, message: "Account not found" });
+    return res.json({
+      success: true,
+      account: {
+        companyName: account.companyName,
+        email: account.email,
+        mobileNumber: account.mobileNumber,
+        paymentStatus: account.paymentStatus,
+        paymentDetails: account.paymentDetails,
+      },
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};

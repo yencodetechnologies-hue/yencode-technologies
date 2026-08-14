@@ -1,0 +1,139 @@
+const crypto = require("crypto");
+const CompanyAccount = require("../models/CompanyAccount");
+const { sendPaymentSuccessEmail } = require("../utils/mailer");
+const { generateReceiptPDF } = require("../utils/receiptGenerator");
+// POST /api/payment/payu-initiate (protected)
+exports.initiatePayU = (req, res) => {
+  try {
+    const { amount, firstname, email, phone } = req.body || {};
+
+    const parsedAmount = parseFloat(String(amount).replace(/[^0-9.]/g, "")) || 0;
+    if (parsedAmount <= 0) {
+      return res.status(400).json({ success: false, message: "Amount must be greater than 0" });
+    }
+    const formattedAmount = parsedAmount.toFixed(2);
+    const productinfo = "Yencode Technologies Payment";
+    const fname = (firstname || "").trim() || "Customer";
+    const mail = (email || "").trim().toLowerCase();
+
+    // Falls back to PayU's public test credentials if .env is missing them —
+    // this is what stops the "PayU credentials missing" error.
+    const key = process.env.PAYU_KEY || "gtKFFx";
+    const salt = process.env.PAYU_SALT || "4R38IvwiV57FwVpsgOvTXBdLE4tHUXFW";
+
+    const txnid = `txn_${Date.now()}`;
+    const ph = (phone || "9999999999").replace(/\D/g, "").slice(0, 10) || "9999999999";
+
+    const hashString = `${key}|${txnid}|${formattedAmount}|${productinfo}|${fname}|${mail}|||||||||||${salt}`;
+    const hash = crypto.createHash("sha512").update(hashString).digest("hex");
+    console.log("[PayU] hashString:", hashString.replace(salt, "***SALT***"));
+    console.log("[PayU] txnid:", txnid, "amount:", formattedAmount);
+
+    const backendUrl = (process.env.APP_BASE_URL || "http://localhost:1524").replace(/\/$/, "");
+    const env = process.env.PAYU_ENV === "prod" ? "prod" : "test";
+    const payuUrl = env === "prod" ? "https://secure.payu.in/_payment" : "https://test.payu.in/_payment";
+
+    return res.json({
+      success: true,
+      payuUrl,
+      params: {
+        key,
+        txnid,
+        amount: formattedAmount,
+        productinfo,
+        firstname: fname,
+        email: mail,
+        phone: ph,
+        surl: `${backendUrl}/api/payment/payu-success`,
+        furl: `${backendUrl}/api/payment/payu-failure`,
+        hash,
+      },
+    });
+  } catch (err) {
+    console.error("[PayU] initiate error:", err.message);
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// POST /api/payment/payu-success
+exports.payuSuccess = async (req, res) => {
+  console.log("PayU success callback:", req.body);
+  const { email, txnid, amount, mode } = req.body || {};
+
+  if (email) {
+    try {
+      const paymentDate = new Date();
+      const account = await CompanyAccount.findOneAndUpdate(
+        { email },
+        {
+          paymentStatus: "Payment Successful",
+          paymentDetails: {
+            amount: Number(amount),
+            txnid: txnid,
+            paymentDate,
+            mode: mode || "Online",
+          },
+        },
+        { new: true }
+      );
+
+      if (account) {
+        try {
+          const pdfBuffer = await generateReceiptPDF({
+            companyName: account.companyName,
+            email: account.email,
+            mobileNumber: account.mobileNumber,
+            amount: Number(amount),
+            txnid,
+            paymentDate,
+          });
+          await sendPaymentSuccessEmail({
+            to: account.email,
+            companyName: account.companyName,
+            amount: Number(amount),
+            txnid,
+            paymentDate,
+            pdfBuffer,
+          });
+        } catch (mailErr) {
+          console.error("Error sending receipt email:", mailErr.message);
+        }
+      }
+    } catch (err) {
+      console.error("Error updating payment status:", err);
+    }
+  }
+
+  res.redirect(
+    `${process.env.FRONTEND_URL || "https://yencodeweb.octosofttechnologies.in"}/payment-success`
+  );
+};
+
+// POST /api/payment/payu-failure
+exports.payuFailure = async (req, res) => {
+  console.log("PayU failure callback:", req.body);
+  const { email, txnid, amount, mode } = req.body || {};
+
+  if (email) {
+    try {
+      await CompanyAccount.findOneAndUpdate(
+        { email },
+        {
+          paymentStatus: "Payment Failed",
+          paymentDetails: {
+            amount: Number(amount) || 0,
+            txnid: txnid,
+            paymentDate: new Date(),
+            mode: mode || "Online",
+          },
+        }
+      );
+    } catch (err) {
+      console.error("Error updating failed payment status:", err);
+    }
+  }
+
+  res.redirect(
+    `${process.env.FRONTEND_URL || "https://yencodeweb.octosofttechnologies.in"}/payment-failed`
+  );
+};
