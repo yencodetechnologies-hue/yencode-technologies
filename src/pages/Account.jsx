@@ -19,6 +19,7 @@ export default function Account() {
   const [error, setError] = useState('')
   const [showReceipt, setShowReceipt] = useState(false)
 
+  const receiptTransactionId = form.paymentDetails?.payuId || form.paymentDetails?.txnid || '-'
   const isPaid = normalizePaymentStatus(form.paymentStatus) === 'Successful / Paid'
 
   useEffect(() => {
@@ -29,7 +30,8 @@ export default function Account() {
       return
     }
 
-    const justPaid = sessionStorage.getItem('yencode_payment_success') === 'true'
+    const params = new URLSearchParams(window.location.search)
+    const justPaid = sessionStorage.getItem('yencode_payment_success') === 'true' || params.get('paid') === '1'
 
     const applyCachedPaidState = () => {
       const savedAccount = JSON.parse(localStorage.getItem('yencode_account') || '{}')
@@ -45,6 +47,9 @@ export default function Account() {
       setForm(nextForm)
       setAmount(nextForm.paymentDetails?.amount || '')
       sessionStorage.removeItem('yencode_payment_success')
+      if (params.get('paid') === '1') {
+        window.history.replaceState({}, '', window.location.pathname)
+      }
     }
 
     if (justPaid) {
@@ -225,7 +230,7 @@ async function handlePay() {
           <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
             <h2 style={styles.modalHeading}>Payment Receipt</h2>
             <div style={styles.receiptRow}>
-              <strong>Transaction ID:</strong> <span>{form.paymentDetails.txnid || '-'}</span>
+              <strong>Transaction ID:</strong> <span>{receiptTransactionId}</span>
             </div>
             <div style={styles.receiptRow}>
               <strong>Date:</strong> <span>{form.paymentDetails.paymentDate ? new Date(form.paymentDetails.paymentDate).toLocaleString() : '-'}</span>

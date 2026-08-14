@@ -57,7 +57,7 @@ exports.initiatePayU = (req, res) => {
 // POST /api/payment/payu-success
 exports.payuSuccess = async (req, res) => {
   console.log("PayU success callback:", req.body);
-  const { email, txnid, amount, mode } = req.body || {};
+  const { email, txnid, amount, mode, mihpayid } = req.body || {};
 
   if (email) {
     try {
@@ -68,6 +68,7 @@ exports.payuSuccess = async (req, res) => {
     paymentDetails: {
       amount: Number(amount) || 0,
       txnid: txnid,
+      payuId: mihpayid || txnid,
       paymentDate: new Date(),
       mode: mode || "Online",
     },
@@ -86,7 +87,7 @@ exports.payuSuccess = async (req, res) => {
 // POST /api/payment/payu-failure
 exports.payuFailure = async (req, res) => {
   console.log("PayU failure callback:", req.body);
-  const { email, txnid, amount, mode } = req.body || {};
+  const { email, txnid, amount, mode, mihpayid } = req.body || {};
 
   if (email) {
     try {
@@ -97,6 +98,7 @@ await CompanyAccount.findOneAndUpdate(
     paymentDetails: {
       amount: Number(amount) || 0,
       txnid: txnid,
+      payuId: mihpayid || txnid,
       paymentDate: new Date(),
       mode: mode || "Online",
     },

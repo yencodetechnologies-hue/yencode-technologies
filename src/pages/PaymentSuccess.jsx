@@ -19,7 +19,7 @@ export default function PaymentSuccess() {
     sessionStorage.setItem('yencode_payment_success', 'true')
 
     const timer = setTimeout(() => {
-      navigate('/account', { replace: true })
+      navigate('/account?paid=1', { replace: true })
     }, 2000)
 
     return () => clearTimeout(timer)

@@ -22,6 +22,7 @@ const companyAccountSchema = new mongoose.Schema(
     paymentDetails: {
       amount: Number,
       txnid: String,
+      payuId: String,
       paymentDate: Date,
       mode: String,
     },
