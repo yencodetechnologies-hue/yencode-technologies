@@ -184,6 +184,7 @@ async function handlePay() {
                 <th style={styles.th}>Mobile Number</th>
                 <th style={styles.th}>Email</th>
                 <th style={styles.th}>Amount</th>
+                <th style={styles.th}>Added Date</th>
                 <th style={styles.th}>Action</th>
                 <th style={styles.th}>Receipt</th>
               </tr>
@@ -197,18 +198,25 @@ async function handlePay() {
                 <td style={styles.td}>
                   ₹{amount || 0}
                 </td>
-      <td style={styles.td}>
-{isPaid ? (
-  <span style={styles.paidBtn}>Paid</span>
-) : (
-  <button
-    onClick={handlePay}
-    disabled={paying}
-    style={styles.payBtn}
-  >
-    {paying ? '...' : 'Pay'}
-  </button>
-)}
+                <td style={styles.td}>
+                  {form.createdAt ? new Date(form.createdAt).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                  }) : '-'}
+                </td>
+                <td style={styles.td}>
+                  {isPaid ? (
+                    <span style={styles.paidBtn}>Paid</span>
+                  ) : (
+                    <button
+                      onClick={handlePay}
+                      disabled={paying}
+                      style={styles.payBtn}
+                    >
+                      {paying ? '...' : 'Pay'}
+                    </button>
+                  )}
                 </td>
                 <td style={styles.td}>
                   {isPaid ? (

@@ -150,6 +150,7 @@ exports.loginCompany = async (req, res) => {
         mobileNumber: account.mobileNumber,
         paymentStatus: normalizePaymentStatus(account.paymentStatus),
         paymentDetails: account.paymentDetails,
+        createdAt: account.createdAt,
       },
     });
   } catch (err) {
@@ -171,6 +172,7 @@ exports.getAccount = async (req, res) => {
         mobileNumber: account.mobileNumber,
         paymentStatus: normalizePaymentStatus(account.paymentStatus),
         paymentDetails: account.paymentDetails,
+        createdAt: account.createdAt,
       },
     });
   } catch (err) {
