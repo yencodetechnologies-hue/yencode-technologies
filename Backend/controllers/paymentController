@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const CompanyAccount = require("../models/CompanyAccount.js");
+const CompanyAccount = require("../models/CompanyAccount");
 
 // POST /api/payment/payu-initiate (protected)
 exports.initiatePayU = (req, res) => {
