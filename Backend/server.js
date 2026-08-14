@@ -13,7 +13,9 @@ const app = express();
 const PORT = process.env.PORT || 1524;
 
 app.use(cors(corsOptions));
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(companyRoutes);
 app.use(paymentRoutes);
