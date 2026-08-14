@@ -23,6 +23,8 @@ export default function List() {
   const navigate = useNavigate()
   const [showModal, setShowModal] = useState(false)
 const [form, setForm] = useState({ companyName: '', mobileNumber: '', email: '', password: '', amount: '' })
+const [showReceipt, setShowReceipt] = useState(false)
+const [selectedEntry, setSelectedEntry] = useState(null)
   const [entries, setEntries] = useState([])
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
@@ -243,6 +245,7 @@ async function toggleAccountStatus(entry) {
             <th style={styles.th}>Date</th>
             <th style={styles.th}>Payment Status</th>
             <th style={styles.th}>Account Status</th>
+            <th style={styles.th}>Receipt</th>
             <th style={styles.th}>Actions</th>
                 </tr>
               </thead>
@@ -292,6 +295,22 @@ async function toggleAccountStatus(entry) {
                     </td>
 
                     <td style={styles.td}>
+                      {normalizePaymentStatus(entry.paymentStatus) === 'Successful / Paid' ? (
+                        <button
+                          onClick={() => {
+                            setSelectedEntry(entry)
+                            setShowReceipt(true)
+                          }}
+                          style={styles.receiptBtn}
+                        >
+                          View Receipt
+                        </button>
+                      ) : (
+                        <span style={{ color: '#9ca3af', fontSize: 13 }}>-</span>
+                      )}
+                    </td>
+
+                    <td style={styles.td}>
                       <button style={styles.editBtn} onClick={() => openEditModal(entry)}>Edit</button>
                       <button style={styles.deleteBtn} onClick={() => handleDelete(entry)}>Delete</button>
                     </td>
@@ -302,6 +321,36 @@ async function toggleAccountStatus(entry) {
           </div>
         )}
       </div>
+      
+      {showReceipt && selectedEntry && (
+        <div style={styles.overlay} onClick={() => setShowReceipt(false)}>
+          <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <h2 style={styles.modalHeading}>Payment Receipt</h2>
+            <div style={styles.receiptRow}>
+              <strong>Transaction ID:</strong> <span>{selectedEntry.paymentDetails?.payuId || selectedEntry.paymentDetails?.mihpayid || selectedEntry.paymentDetails?.txnid || '-'}</span>
+            </div>
+            <div style={styles.receiptRow}>
+              <strong>Date:</strong> <span>{selectedEntry.paymentDetails?.paymentDate ? new Date(selectedEntry.paymentDetails.paymentDate).toLocaleString() : '-'}</span>
+            </div>
+            <div style={styles.receiptRow}>
+              <strong>Company:</strong> <span>{selectedEntry.companyName}</span>
+            </div>
+            <div style={styles.receiptRow}>
+              <strong>Email:</strong> <span>{selectedEntry.email}</span>
+            </div>
+            <div style={styles.receiptRow}>
+              <strong>Mobile:</strong> <span>{selectedEntry.mobileNumber}</span>
+            </div>
+            <div style={styles.receiptRow}>
+              <strong>Status:</strong> <span style={{ color: '#16a34a', fontWeight: 'bold' }}>Success</span>
+            </div>
+            <div style={{ ...styles.receiptRow, borderTop: '2px dashed #e5e7eb', marginTop: 15, paddingTop: 15 }}>
+              <strong>Amount Paid:</strong> <span style={{ fontSize: 18, fontWeight: 'bold' }}>₹{selectedEntry.paymentDetails?.amount || selectedEntry.amount || '-'}</span>
+            </div>
+            <button onClick={() => setShowReceipt(false)} style={styles.closeBtn}>Close</button>
+          </div>
+        </div>
+      )}
 
       {showModal && (
         <div
@@ -645,4 +694,7 @@ const styles = {
     fontWeight: 600,
     cursor: 'pointer',
   },
+  receiptBtn: { background: '#fff', color: '#2563eb', border: '1px solid #bfdbfe', padding: '8px 12px', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  receiptRow: { display: 'flex', justifyContent: 'space-between', marginBottom: 12, fontSize: 14, color: '#374151' },
+  closeBtn: { width: '100%', marginTop: 20, padding: 10, background: '#f3f4f6', color: '#111827', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }
 }
