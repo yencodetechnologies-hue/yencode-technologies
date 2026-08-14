@@ -240,7 +240,7 @@ async function toggleAccountStatus(entry) {
             <th style={styles.th}>Email</th>
             <th style={styles.th}>Password</th>
             <th style={styles.th}>Amount</th>
-            <th style={styles.th}>Added Date</th>
+            <th style={styles.th}>Date</th>
             <th style={styles.th}>Payment Status</th>
             <th style={styles.th}>Account Status</th>
             <th style={styles.th}>Actions</th>

@@ -184,7 +184,7 @@ async function handlePay() {
                 <th style={styles.th}>Mobile Number</th>
                 <th style={styles.th}>Email</th>
                 <th style={styles.th}>Amount</th>
-                <th style={styles.th}>Added Date</th>
+                <th style={styles.th}>Date</th>
                 <th style={styles.th}>Action</th>
                 <th style={styles.th}>Receipt</th>
               </tr>
