@@ -12,32 +12,57 @@ const [amount, setAmount] = useState('')
   const [error, setError] = useState('')
   const [showReceipt, setShowReceipt] = useState(false)
 
-  useEffect(() => {
-    const token = localStorage.getItem('yencode_token')
-    if (!token) { navigate('/login'); return }
+useEffect(() => {
+  const token = localStorage.getItem('yencode_token')
 
-    const cached = localStorage.getItem('yencode_account')
-    if (cached) {
-      const cachedAccount = JSON.parse(cached)
-      setForm(cachedAccount)
-      setAmount(cachedAccount?.paymentDetails?.amount || '')
+  if (!token) {
+    navigate('/login')
+    return
+  }
+
+  async function loadAccount() {
+    try {
+      setLoading(true)
+
+      const res = await fetch(`${API_BASE_URL}/api/account`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (res.status === 401) {
+        localStorage.clear()
+        navigate('/login')
+        return
+      }
+
+      const data = await res.json()
+
+      if (data?.success && data.account) {
+        // Always use fresh database data
+        setForm(data.account)
+
+        setAmount(
+          data.account.paymentDetails?.amount ||
+          data.account.amount ||
+          ''
+        )
+
+        localStorage.setItem(
+          'yencode_account',
+          JSON.stringify(data.account)
+        )
+      }
+    } catch (err) {
+      console.error('Account loading error:', err)
+      setError('Could not load account details.')
+    } finally {
+      setLoading(false)
     }
+  }
 
-    fetch(`${API_BASE_URL}/api/account`, { headers: { Authorization: `Bearer ${token}` } })
-      .then((res) => {
-        if (res.status === 401) { localStorage.clear(); navigate('/login'); return null }
-        return res.json()
-      })
-      .then((data) => {
-        if (data?.success) {
-          localStorage.setItem('yencode_account', JSON.stringify(data.account))
-          setForm(data.account)
-          setAmount(data.account?.paymentDetails?.amount || '')
-        }
-        setLoading(false)
-      })
-      .catch(() => setLoading(false))
-  }, [navigate])
+  loadAccount()
+}, [navigate])
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -119,9 +144,7 @@ async function handlePay() {
                 <th style={styles.th}>Email</th>
                 <th style={styles.th}>Amount</th>
                 <th style={styles.th}>Action</th>
-                {form.paymentStatus === 'Payment Successful' && (
-                  <th style={styles.th}>Receipt</th>
-                )}
+                <th style={styles.th}>Receipt</th>
               </tr>
             </thead>
             <tbody>
@@ -134,21 +157,25 @@ async function handlePay() {
                   ₹{amount || 0}
                 </td>
       <td style={styles.td}>
-                  {form.paymentStatus === 'Payment Successful' ? (
-                    <button disabled style={styles.paidBtn}>Paid</button>
-                  ) : (
-                    <button onClick={handlePay} disabled={paying} style={styles.payBtn}>
-                      {paying ? '...' : 'Pay'}
-                    </button>
-                  )}
+{form.paymentStatus === 'Payment Successful' ? null : (
+  <button
+    onClick={handlePay}
+    disabled={paying}
+    style={styles.payBtn}
+  >
+    {paying ? '...' : 'Pay'}
+  </button>
+)}
                 </td>
-                {form.paymentStatus === 'Payment Successful' && (
-                  <td style={styles.td}>
+                <td style={styles.td}>
+                  {form.paymentStatus === 'Payment Successful' ? (
                     <button onClick={() => setShowReceipt(true)} style={styles.receiptBtn}>
                       View Receipt
                     </button>
-                  </td>
-                )}
+                  ) : (
+                    <span style={{ color: '#9ca3af', fontSize: 13 }}>-</span>
+                  )}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -189,8 +216,8 @@ async function handlePay() {
 }
 
 const styles = {
-  wrapper: { minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, fontFamily: "'Inter', sans-serif" },
-  card: { width: '100%', maxWidth: 1100, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 16, padding: 32, boxShadow: '0 20px 60px rgba(0,0,0,0.08)' },
+ wrapper: { minHeight: '80vh', padding: 20, fontFamily: "'Inter', sans-serif" },
+card: { width: '100%', maxWidth: '100%', background: '#fff', border: '1px solid #e5e7eb', borderRadius: 16, padding: 32, boxShadow: '0 20px 60px rgba(0,0,0,0.08)' },
   topRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
   heading: { fontFamily: "'Poppins', sans-serif", fontSize: 22, margin: 0 },
   logoutBtn: { background: 'none', border: '1px solid #d1d5db', color: '#6b7280', padding: '6px 14px', borderRadius: 8, fontSize: 13, cursor: 'pointer' },

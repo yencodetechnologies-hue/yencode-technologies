@@ -402,16 +402,13 @@ async function toggleAccountStatus(entry) {
 const styles = {
   wrapper: {
     minHeight: '80vh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
     padding: 20,
     fontFamily: "'Inter', sans-serif",
   },
 
   card: {
     width: '100%',
-    maxWidth: 1100,
+  maxWidth: '100%',
     background: '#fff',
     border: '1px solid #e5e7eb',
     borderRadius: 16,
