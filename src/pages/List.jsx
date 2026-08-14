@@ -258,7 +258,9 @@ async function toggleAccountStatus(entry) {
 
                     <td style={styles.td}>
                       <span style={styles.statusBadge(entry.paymentStatus)}>
-                        {entry.paymentStatus || 'Pending'}
+                        {entry.paymentStatus === 'Payment Failed'
+                          ? 'Payment Unsuccessful'
+                          : (entry.paymentStatus || 'Pending')}
                       </span>
                     </td>
 

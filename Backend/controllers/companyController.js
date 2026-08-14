@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const CompanyAccount = require("../models/CompanyAccount");
+const CompanyAccount = require("../models/CompanyAccount.js");
 const { JWT_SECRET } = require("../middleware/requireAuth");
 
 // POST /api/companies

@@ -133,10 +133,14 @@ async function handlePay() {
                 <td style={styles.td}>
                   ₹{amount || 0}
                 </td>
-                <td style={styles.td}>
-                  <button onClick={handlePay} disabled={paying} style={styles.payBtn}>
-                    {paying ? '...' : 'Pay'}
-                  </button>
+      <td style={styles.td}>
+                  {form.paymentStatus === 'Payment Successful' ? (
+                    <button disabled style={styles.paidBtn}>Paid</button>
+                  ) : (
+                    <button onClick={handlePay} disabled={paying} style={styles.payBtn}>
+                      {paying ? '...' : 'Pay'}
+                    </button>
+                  )}
                 </td>
                 {form.paymentStatus === 'Payment Successful' && (
                   <td style={styles.td}>
@@ -196,6 +200,7 @@ const styles = {
   td: { padding: '14px 12px', borderBottom: '1px solid #f3f4f6', fontSize: 14, color: '#111827', verticalAlign: 'middle' },
   amountInput: { width: 120, padding: '8px 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 14 },
   payBtn: { background: '#111827', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  paidBtn: { background: '#dcfce7', color: '#16a34a', border: '1px solid #86efac', padding: '8px 16px', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'not-allowed' },
   receiptBtn: { background: '#fff', color: '#2563eb', border: '1px solid #bfdbfe', padding: '8px 12px', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
   error: { color: '#ef4444', fontSize: 13, marginTop: 12, textAlign: 'center' },
   overlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 },

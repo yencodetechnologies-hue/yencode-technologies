@@ -12,11 +12,10 @@ import { useRevealOnScroll } from '../hooks/useRevealOnScroll'
 
 export default function Home() {
   useRevealOnScroll()
-
   return (
     <>
-      <Hero />
-      <ServiceStrip />
+      <Hero/>
+      <ServiceStrip/>
       <About />
       <Services />
       <Stats />
