@@ -103,7 +103,7 @@ export default function Login() {
               <div style={styles.field}>
                 <div style={styles.labelRow}>
                   <label style={styles.label} htmlFor="password">Password</label>
-                  <a href="#" style={styles.forgotLink}>Forgot password?</a>
+                
                 </div>
                 <div style={styles.passwordWrapper}>
                   <input
