@@ -61,19 +61,19 @@ exports.payuSuccess = async (req, res) => {
 
   if (email) {
     try {
-      await CompanyAccount.findOneAndUpdate(
-        { email },
-        {
-          paymentStatus: "Payment Successful",
-          paymentDetails: {
-            amount: Number(amount),
-            txnid: txnid,
-            paymentDate: new Date(),
-            mode: mode || "Online",
-          },
-        }
-      );
-    } catch (err) {
+    await CompanyAccount.findOneAndUpdate(
+  { email: email.trim().toLowerCase() },
+  {
+    paymentStatus: "Successful / Paid",
+    paymentDetails: {
+      amount: Number(amount) || 0,
+      txnid: txnid,
+      paymentDate: new Date(),
+      mode: mode || "Online",
+    },
+  },
+  { new: true, runValidators: true }
+);  } catch (err) {
       console.error("Error updating payment status:", err);
     }
   }
@@ -90,18 +90,19 @@ exports.payuFailure = async (req, res) => {
 
   if (email) {
     try {
-      await CompanyAccount.findOneAndUpdate(
-        { email },
-        {
-          paymentStatus: "Payment Unsuccessful",
-          paymentDetails: {
-            amount: Number(amount) || 0,
-            txnid: txnid,
-            paymentDate: new Date(),
-            mode: mode || "Online",
-          },
-        }
-      );
+await CompanyAccount.findOneAndUpdate(
+  { email: email.trim().toLowerCase() },
+  {
+    paymentStatus: "Unsuccessful / Payment Failed",
+    paymentDetails: {
+      amount: Number(amount) || 0,
+      txnid: txnid,
+      paymentDate: new Date(),
+      mode: mode || "Online",
+    },
+  },
+  { new: true, runValidators: true }
+);
     } catch (err) {
       console.error("Error updating failed payment status:", err);
     }

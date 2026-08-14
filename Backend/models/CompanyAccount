@@ -9,7 +9,14 @@ const companyAccountSchema = new mongoose.Schema(
     accountStatus: { type: Boolean, default: true },
     paymentStatus: {
       type: String,
-      enum: ["Pending", "Payment Successful", "Payment Failed"],
+      enum: [
+        "Pending",
+        "Paid",
+        "Payment Successful",
+        "Payment Failed",
+        "Successful / Paid",
+        "Unsuccessful / Payment Failed",
+      ],
       default: "Pending",
     },
     paymentDetails: {

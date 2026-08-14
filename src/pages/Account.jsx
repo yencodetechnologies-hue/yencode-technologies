@@ -5,64 +5,87 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ||   'https://yencodeweb.
 
 export default function Account() {
   const navigate = useNavigate()
-  const [form, setForm] = useState({ companyName: '', email: '', mobileNumber: '' })
-const [amount, setAmount] = useState('')
+  const [form, setForm] = useState({ companyName: '', email: '', mobileNumber: '', paymentStatus: 'Pending' })
+  const [amount, setAmount] = useState('')
   const [loading, setLoading] = useState(true)
   const [paying, setPaying] = useState(false)
   const [error, setError] = useState('')
   const [showReceipt, setShowReceipt] = useState(false)
 
-useEffect(() => {
-  const token = localStorage.getItem('yencode_token')
+  const isPaid = form.paymentStatus === 'Paid' || form.paymentStatus === 'Payment Successful' || form.paymentStatus === 'Successful / Paid'
 
-  if (!token) {
-    navigate('/login')
-    return
-  }
+  useEffect(() => {
+    const token = localStorage.getItem('yencode_token')
 
-  async function loadAccount() {
-    try {
-      setLoading(true)
-
-      const res = await fetch(`${API_BASE_URL}/api/account`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      if (res.status === 401) {
-        localStorage.clear()
-        navigate('/login')
-        return
-      }
-
-      const data = await res.json()
-
-      if (data?.success && data.account) {
-        // Always use fresh database data
-        setForm(data.account)
-
-        setAmount(
-          data.account.paymentDetails?.amount ||
-          data.account.amount ||
-          ''
-        )
-
-        localStorage.setItem(
-          'yencode_account',
-          JSON.stringify(data.account)
-        )
-      }
-    } catch (err) {
-      console.error('Account loading error:', err)
-      setError('Could not load account details.')
-    } finally {
-      setLoading(false)
+    if (!token) {
+      navigate('/login')
+      return
     }
-  }
 
-  loadAccount()
-}, [navigate])
+    async function loadAccount() {
+      try {
+        setLoading(true)
+
+        const res = await fetch(`${API_BASE_URL}/api/account`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        if (res.status === 401) {
+          localStorage.clear()
+          navigate('/login')
+          return
+        }
+
+        const data = await res.json()
+
+        if (data?.success && data.account) {
+          const normalizedAccount = {
+            ...data.account,
+            paymentStatus: data.account.paymentStatus === 'Payment Successful' ? 'Paid' : data.account.paymentStatus,
+          }
+
+          setForm(normalizedAccount)
+
+          setAmount(
+            normalizedAccount.paymentDetails?.amount ||
+            normalizedAccount.amount ||
+            ''
+          )
+
+          localStorage.setItem(
+            'yencode_account',
+            JSON.stringify(normalizedAccount)
+          )
+        }
+      } catch (err) {
+        console.error('Account loading error:', err)
+        setError('Could not load account details.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    const justPaid = sessionStorage.getItem('yencode_payment_success') === 'true'
+    if (justPaid) {
+      const savedAccount = JSON.parse(localStorage.getItem('yencode_account') || '{}')
+      const nextForm = {
+        ...savedAccount,
+        paymentStatus: 'Paid',
+        paymentDetails: {
+          ...(savedAccount.paymentDetails || {}),
+          amount: savedAccount.paymentDetails?.amount || amount || 0,
+        },
+      }
+
+      setForm(nextForm)
+      setAmount(nextForm.paymentDetails?.amount || '')
+      sessionStorage.removeItem('yencode_payment_success')
+    }
+
+    loadAccount()
+  }, [navigate, amount])
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -157,7 +180,7 @@ async function handlePay() {
                   ₹{amount || 0}
                 </td>
       <td style={styles.td}>
-{form.paymentStatus === 'Payment Successful' ? (
+{isPaid ? (
   <span style={styles.paidBtn}>Paid</span>
 ) : (
   <button
@@ -170,7 +193,7 @@ async function handlePay() {
 )}
                 </td>
                 <td style={styles.td}>
-                  {form.paymentStatus === 'Payment Successful' ? (
+                  {isPaid ? (
                     <button onClick={() => setShowReceipt(true)} style={styles.receiptBtn}>
                       View Receipt
                     </button>

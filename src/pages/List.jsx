@@ -233,6 +233,7 @@ async function toggleAccountStatus(entry) {
             <th style={styles.th}>Email</th>
             <th style={styles.th}>Password</th>
             <th style={styles.th}>Amount</th>
+            <th style={styles.th}>Added Date</th>
             <th style={styles.th}>Payment Status</th>
             <th style={styles.th}>Account Status</th>
             <th style={styles.th}>Actions</th>
@@ -257,10 +258,18 @@ async function toggleAccountStatus(entry) {
                     </td>
 
                     <td style={styles.td}>
+                      {entry.createdAt ? new Date(entry.createdAt).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                      }) : '-'}
+                    </td>
+
+                    <td style={styles.td}>
                       <span style={styles.statusBadge(entry.paymentStatus)}>
-                        {entry.paymentStatus === 'Payment Failed'
-                          ? 'Payment Unsuccessful'
-                          : (entry.paymentStatus || 'Pending')}
+                        {entry.paymentStatus === 'Unsuccessful / Payment Failed' || entry.paymentStatus === 'Payment Failed'
+                          ? 'Unsuccessful / Payment Failed'
+                          : (entry.paymentStatus === 'Successful / Paid' || entry.paymentStatus === 'Payment Successful' || entry.paymentStatus === 'Paid' ? 'Successful / Paid' : (entry.paymentStatus || 'Pending'))}
                       </span>
                     </td>
 
@@ -561,9 +570,9 @@ const styles = {
     fontSize: 12,
     fontWeight: 600,
     background:
-      status === 'Payment Successful' ? '#dcfce7' : status === 'Payment Failed' ? '#fee2e2' : '#fef9c3',
+      status === 'Successful / Paid' || status === 'Payment Successful' || status === 'Paid' ? '#dcfce7' : status === 'Unsuccessful / Payment Failed' || status === 'Payment Failed' ? '#fee2e2' : '#fef9c3',
     color:
-      status === 'Payment Successful' ? '#16a34a' : status === 'Payment Failed' ? '#dc2626' : '#a16207',
+      status === 'Successful / Paid' || status === 'Payment Successful' || status === 'Paid' ? '#16a34a' : status === 'Unsuccessful / Payment Failed' || status === 'Payment Failed' ? '#dc2626' : '#a16207',
   }),
 
   switchTrack: (isOn) => ({

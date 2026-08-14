@@ -5,8 +5,13 @@ export default function PaymentSuccess() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    localStorage.removeItem('yencode_account') // force fresh fetch on Account page
-    const timer = setTimeout(() => navigate('/account'), 2500)
+    sessionStorage.setItem('yencode_payment_success', 'true')
+    localStorage.removeItem('yencode_account')
+
+    const timer = setTimeout(() => {
+      navigate('/account', { replace: true })
+    }, 2000)
+
     return () => clearTimeout(timer)
   }, [navigate])
 
