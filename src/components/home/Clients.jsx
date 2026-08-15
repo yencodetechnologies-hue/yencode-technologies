@@ -1,8 +1,6 @@
 import { clients } from '../../data/testimonials'
-
 export default function Clients() {
   const track = [...clients, ...clients]
-
   return (
     <div className="clients-section">
       <div className="container">
