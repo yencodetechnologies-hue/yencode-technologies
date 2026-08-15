@@ -134,9 +134,6 @@ exports.loginCompany = async (req, res) => {
     if (!account || account.password !== password) {
       return res.status(401).json({ success: false, message: "Invalid email or password" });
     }
-    if (!account.accountStatus) {
-      return res.status(403).json({ success: false, message: "This account has been disabled." });
-    }
 
     const token = jwt.sign({ email: account.email }, JWT_SECRET, { expiresIn: "2h" });
 
