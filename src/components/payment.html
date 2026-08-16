@@ -110,11 +110,7 @@
         body: JSON.stringify({ purpose, amount }),
       });
 
-      if (res.status === 401) {
-        clearToken();
-        window.location.href = '/yencodetechnologies/login';
-        return;
-      }
+      if (handleAuthResponse(res)) return;
 
       const data = await res.json();
       if (!data.success) {

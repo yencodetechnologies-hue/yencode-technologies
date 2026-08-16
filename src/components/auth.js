@@ -35,3 +35,23 @@ function requireAuthOrRedirect() {
   }
   return true;
 }
+
+function handleAuthResponse(res) {
+  if (!res) return false;
+  if (res.status === 401 || res.status === 403) {
+    clearToken();
+    window.location.href = '/yencodetechnologies/login';
+    return true;
+  }
+  return false;
+}
+
+// make available globally for static pages
+window.getToken = getToken;
+window.setToken = setToken;
+window.clearToken = clearToken;
+window.getAccount = getAccount;
+window.setAccount = setAccount;
+window.logout = logout;
+window.requireAuthOrRedirect = requireAuthOrRedirect;
+window.handleAuthResponse = handleAuthResponse;
