@@ -135,6 +135,10 @@ exports.loginCompany = async (req, res) => {
       return res.status(401).json({ success: false, message: "Invalid email or password" });
     }
 
+    if (!account.accountStatus) {
+      return res.status(403).json({ success: false, message: "Account is deactivated" });
+    }
+
     const token = jwt.sign({ email: account.email }, JWT_SECRET, { expiresIn: "2h" });
 
     return res.json({

@@ -75,9 +75,9 @@ export default function Account() {
           return
         }
         if (res.status === 403) {
-          // Account has been disabled server-side. Keep local session but show message.
-          setError('This account has been disabled. Contact admin for access.')
-          setLoading(false)
+          // Account has been disabled server-side. Force logout so user cannot use the portal.
+          localStorage.clear()
+          navigate('/login')
           return
         }
 
