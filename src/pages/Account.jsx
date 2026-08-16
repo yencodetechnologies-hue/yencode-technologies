@@ -109,6 +109,25 @@ export default function Account() {
     }
 
     loadAccount()
+
+    // Poll account status periodically to detect server-side deactivation
+    const interval = setInterval(async () => {
+      try {
+        const token = localStorage.getItem('yencode_token')
+        if (!token) return
+        const res = await fetch(`${API_BASE_URL}/api/account`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        if (res.status === 401 || res.status === 403) {
+          localStorage.clear()
+          navigate('/login')
+        }
+      } catch (err) {
+        // network errors ignored for polling
+      }
+    }, 10000)
+
+    return () => clearInterval(interval)
   }, [navigate])
 
   function handleChange(e) {

@@ -132,6 +132,20 @@
       payBtn.textContent = 'Pay Now';
     }
   });
+
+  // Poll to detect server-side deactivation and force logout
+  const pollAuth = setInterval(async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/account`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      })
+      if (handleAuthResponse(res)) clearInterval(pollAuth)
+    } catch (e) {
+      // ignore
+    }
+  }, 10000)
+
+  window.addEventListener('beforeunload', () => clearInterval(pollAuth))
 </script>
 </body>
 </html>

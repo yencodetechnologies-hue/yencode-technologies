@@ -13,7 +13,6 @@ function normalizePaymentStatus(status) {
 exports.createCompany = async (req, res) => {
   try {
     const { companyName, mobileNumber, email, password, amount } = req.body || {};
-
     if (!companyName?.trim() || !mobileNumber?.trim() || !email?.trim() || !password) {
       return res.status(400).json({ success: false, message: "All fields are required" });
     }

@@ -177,6 +177,23 @@
           'Could not load account. Please check your connection and refresh.';
       }
     }
+
+    // Poll periodically to detect server-side deactivation
+    const poll = setInterval(async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/account`, {
+          headers: { Authorization: `Bearer ${getToken()}` },
+        })
+        if (handleAuthResponse(res)) {
+          clearInterval(poll)
+        }
+      } catch (e) {
+        // ignore network errors for polling
+      }
+    }, 10000)
+
+    // stop polling when page unloads
+    window.addEventListener('beforeunload', () => clearInterval(poll))
   })();
 
   function renderAccount(account) {
