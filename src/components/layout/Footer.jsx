@@ -129,8 +129,8 @@ export default function Footer() {
             </ul>
           </div>  
              </div>
-      <div className="footer-bottom" style={{ textAlign: 'center' }}>
-  <p>
+   <div className="footer-bottom" style={{ textAlign: 'center', width: '100%' }}>
+  <p style={{ textAlign: 'center' }}>
     © {new Date().getFullYear()} <Link to="/">Yencode Technologies</Link>. All Rights Reserved.
   </p>
 </div>
