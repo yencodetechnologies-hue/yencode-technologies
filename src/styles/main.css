@@ -1490,11 +1490,12 @@
     .footer-bottom {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       padding: 18px 0;
       flex-wrap: wrap;
       gap: 10px;
       font-size: 12.5px;
+      text-align: center;
     }
 
     .footer-bottom p a {
