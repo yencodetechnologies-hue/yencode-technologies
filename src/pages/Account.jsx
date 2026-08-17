@@ -243,15 +243,25 @@ async function handlePay() {
                     </button>
                   )}
                 </td>
-                <td style={styles.td}>
-                  {isPaid ? (
-                    <button onClick={() => setShowReceipt(true)} style={styles.receiptBtn}>
-                      View Receipt
-                    </button>
-                  ) : (
-                    <span style={{ color: '#9ca3af', fontSize: 13 }}>-</span>
-                  )}
-                </td>
+              <td style={styles.td}>
+                      {isPaid ? (
+                        <button
+                          onClick={() => setShowReceipt(true)}
+                          style={styles.receiptBtn}
+                          title="View Receipt"
+                          aria-label="View Receipt"
+                        >
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <path d="M14 2v6h6" />
+                            <circle cx="12" cy="15.5" r="2.2" />
+                            <path d="M8.5 15.5c.9-1.6 2-2.4 3.5-2.4s2.6.8 3.5 2.4c-.9 1.6-2 2.4-3.5 2.4s-2.6-.8-3.5-2.4z" />
+                          </svg>
+                        </button>
+                      ) : (
+                        <span style={{ color: '#9ca3af', fontSize: 13 }}>-</span>
+                      )}
+                    </td>
               </tr>
             </tbody>
           </table>
