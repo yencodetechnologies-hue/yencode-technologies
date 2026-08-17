@@ -54,11 +54,23 @@ export default function Login() {
         {/* Brand panel */}
         <div style={styles.brandPanel}>
           <div style={styles.glow} aria-hidden="true" />
+          <div style={styles.diagonal} aria-hidden="true" />
+          <div style={styles.cornerLine} aria-hidden="true" />
+          <div style={styles.cornerLine2} aria-hidden="true" />
 
           <div style={styles.brandContent}>
-            <div style={styles.badge}>
+            <div style={styles.brandBadge}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={CYAN_LIGHT} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2L12 16.4l-6.3 4.6 2.3-7.2-6-4.6h7.6z" />
+              </svg>
+              <span>Premium Suite</span>
             </div>
             <div>
+              <div style={styles.hexGrid} aria-hidden="true">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <span key={i} style={styles.hexDot} />
+                ))}
+              </div>
               <h2 style={styles.brandHeadline}>Your work,<br />organized.</h2>
               <p style={styles.brandBody}>
                 One dashboard for projects, invoices, and client
@@ -179,13 +191,42 @@ const styles = {
 
  brandPanel: {
     position: 'relative',
-    background: NAVY,
+    background: `radial-gradient(circle at 15% 15%, ${NAVY2} 0%, ${NAVY} 55%)`,
     padding: '48px 42px',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
     overflow: 'hidden',
     minHeight: 400,
+  },
+  brandBadge: {
+    position: 'relative',
+    zIndex: 1,
+    alignSelf: 'flex-start',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 7,
+    padding: '5px 12px 5px 10px',
+    borderRadius: 8,
+    background: `linear-gradient(135deg, rgba(55,242,248,0.14), rgba(0,189,212,0.05))`,
+    border: `1px solid rgba(55,242,248,0.3)`,
+    color: '#eafeff',
+    fontSize: 10.5,
+    fontWeight: 700,
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+  },
+  hexGrid: {
+    display: 'flex',
+    gap: 6,
+    marginBottom: 16,
+  },
+  hexDot: {
+    width: 5,
+    height: 5,
+    borderRadius: 1,
+    background: 'rgba(55,242,248,0.4)',
+    transform: 'rotate(45deg)',
   },
   diagonal: {
     position: 'absolute',
@@ -260,18 +301,18 @@ const styles = {
   },
   brandHeadline: {
     fontFamily: "'Poppins', sans-serif",
-    fontSize: 40,
+    fontSize: 32,
     fontWeight: 800,
     color: '#fff',
-    marginBottom: 18,
-    lineHeight: 1.15,
-    letterSpacing: -0.5,
+    marginBottom: 16,
+    lineHeight: 1.2,
+    letterSpacing: -0.4,
   },
   brandBody: {
-    fontSize: 14,
-    lineHeight: 1.8,
+    fontSize: 13,
+    lineHeight: 1.75,
     color: 'rgba(255,255,255,0.5)',
-    maxWidth: 280,
+    maxWidth: 260,
     borderLeft: `2px solid ${CYAN}`,
     paddingLeft: 16,
   },
