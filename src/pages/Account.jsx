@@ -239,7 +239,7 @@ async function handlePay() {
                       disabled={paying}
                       style={styles.payBtn}
                     >
-                      {paying ? '...' : 'Pay'}
+                      Pay
                     </button>
                   )}
                 </td>
