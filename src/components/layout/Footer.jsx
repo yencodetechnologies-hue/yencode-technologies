@@ -3,16 +3,15 @@ import { socialLinks } from '../../data/content'
 
 export default function Footer() {
   return (
-    <footer id="contact">
-      <div className="container">
+    <footer id="contact" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+      <div className="container" style={{ margin: '0 auto' }}>
         <div className="footer-grid">
           <div className="footer-about">
             <Link to="/" className="logo" style={{ display: 'inline-flex' }}>
               <img src="/images/lg.png" alt="Yencode Technologies" className="logo-img" />
             </Link>
             <p>
-              We are a Chennai-based IT software company delivering end-to-end web, mobile, and enterprise solutions to
-              clients across the globe. Quality, integrity, and innovation — at every step.
+             We are a global IT software company delivering end-to-end web, mobile, and enterprise solutions to clients worldwide. Driven by quality, integrity, and innovation, we transform ideas into scalable digital solutions that create lasting business value.
             </p>
             <div className="footer-social">
               {socialLinks.map((s) => (
@@ -111,18 +110,30 @@ export default function Footer() {
                   www.yencodetechnologies.com
                 </a>
               </li>
-              <li>
+            <li>
                 <i className="fas fa-clock" />
                 <span>Mon–Sat: 9am–6pm IST</span>
               </li>
+              <li>
+                <i className="fas fa-map-marker-alt" />
+                <span>15/3 Lancaster Street, Ingleburn NSW 2565</span>
+              </li>
+                <li>
+                <i className="fas fa-phone-alt" />
+                <a href="tel:+61481399977">0481 399 977</a>
+              </li>
+              <li>
+                <i className="fas fa-envelope" />
+                <a href="mailto:info@safeticks.com">info@safeticks.com</a>
+              </li>
             </ul>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <p>
-            © {new Date().getFullYear()} <Link to="/">Yencode Technologies</Link>. All Rights Reserved.
-          </p>
-        </div>
+          </div>  
+             </div>
+      <div className="footer-bottom" style={{ textAlign: 'center' }}>
+  <p>
+    © {new Date().getFullYear()} <Link to="/">Yencode Technologies</Link>. All Rights Reserved.
+  </p>
+</div>
       </div>
     </footer>
   )
