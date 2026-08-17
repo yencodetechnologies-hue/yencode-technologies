@@ -20,6 +20,16 @@ export default function Footer() {
                 </a>
               ))}
             </div>
+            <a href="/contact" className="footer-cta-box" style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 20, padding: '14px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, textDecoration: 'none', maxWidth: 320 }}>
+              <span style={{ width: 40, height: 40, minWidth: 40, borderRadius: '50%', background: '#2f6fed', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <i className="fas fa-rocket" style={{ color: '#fff' }} />
+              </span>
+              <span style={{ flex: 1 }}>
+                <strong style={{ display: 'block', color: '#fff', fontSize: 14 }}>Let's Build Something Great</strong>
+                <span style={{ display: 'block', color: '#9aa4b2', fontSize: 12.5 }}>Have an idea? We're ready to turn it into reality.</span>
+              </span>
+              <i className="fas fa-arrow-right" style={{ color: '#9aa4b2' }} />
+            </a>
           </div>
           <div className="footer-col">
             <h4>Quick Links</h4>
@@ -129,9 +139,32 @@ export default function Footer() {
             </ul>
           </div>  
              </div>
+        <div className="footer-features" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 20, border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '24px 28px', margin: '30px 0' }}>
+          {[
+            { icon: 'fa-gem', color: '#4f6df5', title: 'Quality First', text: 'We deliver solutions with the highest quality standards.' },
+            { icon: 'fa-shield-alt', color: '#22c55e', title: 'Trusted Partner', text: 'We build long-term relationships based on trust and transparency.' },
+            { icon: 'fa-lightbulb', color: '#c94fed', title: 'Innovative Solutions', text: 'We leverage the latest technologies to drive innovation.' },
+            { icon: 'fa-headset', color: '#f5a623', title: '24/7 Support', text: "We're here to support your business, anytime, anywhere." },
+          ].map((f) => (
+            <div key={f.title} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, flex: '1 1 220px', textAlign: 'left' }}>
+              <span style={{ width: 44, height: 44, minWidth: 44, borderRadius: '50%', background: f.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <i className={`fas ${f.icon}`} style={{ color: '#fff' }} />
+              </span>
+              <span>
+                <strong style={{ display: 'block', color: '#fff', fontSize: 14.5 }}>{f.title}</strong>
+                <span style={{ display: 'block', color: '#9aa4b2', fontSize: 12.5 }}>{f.text}</span>
+              </span>
+            </div>
+          ))}
+        </div>
    <div className="footer-bottom" style={{ textAlign: 'center', width: '100%' }}>
-  <p style={{ textAlign: 'center' }}>
+  <p style={{ textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, flexWrap: 'wrap' }}>
+    <i className="fas fa-heart" style={{ color: '#2fd4c4' }} />
     © {new Date().getFullYear()} <Link to="/">Yencode Technologies</Link>. All Rights Reserved.
+    <span>|</span>
+    <Link to="/privacy-policy">Privacy Policy</Link>
+    <span>|</span>
+    <Link to="/terms-and-conditions">Terms & Conditions</Link>
   </p>
 </div>
       </div>
