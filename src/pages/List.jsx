@@ -338,8 +338,15 @@ function printReceipt(entry) {
                             setShowReceipt(true)
                           }}
                           style={styles.receiptBtn}
+                          title="View Receipt"
+                          aria-label="View Receipt"
                         >
-                          View Receipt
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <path d="M14 2v6h6" />
+                            <circle cx="12" cy="15.5" r="2.2" />
+                            <path d="M8.5 15.5c.9-1.6 2-2.4 3.5-2.4s2.6.8 3.5 2.4c-.9 1.6-2 2.4-3.5 2.4s-2.6-.8-3.5-2.4z" />
+                          </svg>
                         </button>
                       ) : (
                         <span style={{ color: '#9ca3af', fontSize: 13 }}>-</span>
@@ -347,8 +354,20 @@ function printReceipt(entry) {
                     </td>
 
                     <td style={styles.td}>
-                      <button style={styles.editBtn} onClick={() => openEditModal(entry)}>Edit</button>
-                      <button style={styles.deleteBtn} onClick={() => handleDelete(entry)}>Delete</button>
+                      <button style={styles.editBtn} onClick={() => openEditModal(entry)} title="Edit" aria-label="Edit">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 20h9" />
+                          <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                        </svg>
+                      </button>
+                      <button style={styles.deleteBtn} onClick={() => handleDelete(entry)} title="Delete" aria-label="Delete">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M3 6h18" />
+                          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                          <path d="M10 11v6M14 11v6" />
+                        </svg>
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -748,25 +767,29 @@ const styles = {
     background: '#fff',
     border: '1px solid #d1d5db',
     color: '#111827',
-    padding: '6px 12px',
+    width: 30,
+    height: 30,
     borderRadius: 8,
-    fontSize: 12,
-    fontWeight: 600,
     cursor: 'pointer',
     marginRight: 6,
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   deleteBtn: {
     background: '#fef2f2',
     border: '1px solid #fecaca',
     color: '#dc2626',
-    padding: '6px 12px',
+    width: 30,
+    height: 30,
     borderRadius: 8,
-    fontSize: 12,
-    fontWeight: 600,
     cursor: 'pointer',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  receiptBtn: { background: '#fff', color: '#2563eb', border: '1px solid #bfdbfe', padding: '8px 12px', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  receiptBtn: { background: 'linear-gradient(135deg,#eff6ff,#e0f2fe)', color: '#1d4ed8', border: '1px solid #93c5fd', width: 34, height: 34, borderRadius: 8, cursor: 'pointer', boxShadow: '0 2px 6px rgba(37,99,235,0.15)', transition: 'transform 0.15s ease, box-shadow 0.15s ease', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' },
   receiptRow: { display: 'flex', justifyContent: 'space-between', marginBottom: 12, fontSize: 14, color: '#374151' },
   closeBtn: { width: '100%', marginTop: 20, padding: 10, background: '#f3f4f6', color: '#111827', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' },
 

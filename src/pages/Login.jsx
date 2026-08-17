@@ -59,11 +59,10 @@ export default function Login() {
           <div style={styles.cornerLine2} aria-hidden="true" />
 
           <div style={styles.brandContent}>
-            <div style={styles.brandBadge}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={CYAN_LIGHT} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <div style={styles.brandIconMark}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={CYAN_LIGHT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2L12 16.4l-6.3 4.6 2.3-7.2-6-4.6h7.6z" />
               </svg>
-              <span>Premium Suite</span>
             </div>
             <div>
               <div style={styles.hexGrid} aria-hidden="true">
@@ -199,22 +198,19 @@ const styles = {
     overflow: 'hidden',
     minHeight: 400,
   },
-  brandBadge: {
+  brandIconMark: {
     position: 'relative',
     zIndex: 1,
     alignSelf: 'flex-start',
+    width: 40,
+    height: 40,
     display: 'inline-flex',
     alignItems: 'center',
-    gap: 7,
-    padding: '5px 12px 5px 10px',
-    borderRadius: 8,
+    justifyContent: 'center',
+    borderRadius: 10,
     background: `linear-gradient(135deg, rgba(55,242,248,0.14), rgba(0,189,212,0.05))`,
     border: `1px solid rgba(55,242,248,0.3)`,
-    color: '#eafeff',
-    fontSize: 10.5,
-    fontWeight: 700,
-    letterSpacing: 1.5,
-    textTransform: 'uppercase',
+    boxShadow: `0 0 16px rgba(55,242,248,0.15)`,
   },
   hexGrid: {
     display: 'flex',

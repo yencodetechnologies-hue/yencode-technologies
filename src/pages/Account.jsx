@@ -338,7 +338,7 @@ card: { width: '100%', maxWidth: '100%', background: '#fff', border: '1px solid 
   amountInput: { width: 120, padding: '8px 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 14 },
   payBtn: { background: '#111827', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
   paidBtn: { background: '#dcfce7', color: '#16a34a', border: '1px solid #86efac', padding: '8px 16px', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'not-allowed' },
-  receiptBtn: { background: '#fff', color: '#2563eb', border: '1px solid #bfdbfe', padding: '8px 12px', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  receiptBtn: { background: 'linear-gradient(135deg,#eff6ff,#e0f2fe)', color: '#1d4ed8', border: '1px solid #93c5fd', padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 700, letterSpacing: 0.2, cursor: 'pointer', boxShadow: '0 2px 6px rgba(37,99,235,0.15)', transition: 'transform 0.15s ease, box-shadow 0.15s ease' },
   error: { color: '#ef4444', fontSize: 13, marginTop: 12, textAlign: 'center' },
   overlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 },
   modal: { background: '#fff', borderRadius: 12, padding: 28, width: '90%', maxWidth: 400, boxShadow: '0 20px 60px rgba(0,0,0,0.2)' },
