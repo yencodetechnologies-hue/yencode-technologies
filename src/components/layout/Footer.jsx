@@ -3,7 +3,7 @@ import { socialLinks } from '../../data/content'
 
 export default function Footer() {
   return (
-    <footer id="contact" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+    <footer id="contact">
       <div className="container" style={{ margin: '0 auto' }}>
         <div className="footer-grid">
           <div className="footer-about">
