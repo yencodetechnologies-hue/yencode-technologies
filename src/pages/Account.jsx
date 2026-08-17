@@ -260,30 +260,64 @@ async function handlePay() {
 
       {showReceipt && form.paymentDetails && (
         <div style={styles.overlay} onClick={() => setShowReceipt(false)}>
-          <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <h2 style={styles.modalHeading}>Payment Receipt</h2>
-            <div style={styles.receiptRow}>
-              <strong>Transaction ID:</strong> <span>{receiptTransactionId}</span>
+          <div style={styles.receiptCard} onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setShowReceipt(false)} style={styles.receiptCloseX} aria-label="Close">✕</button>
+
+            <div style={styles.receiptHeader}>
+              <div style={styles.receiptIconCircle}>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h2 style={styles.receiptTitle}>Payment Successful</h2>
+              <p style={styles.receiptSubtitle}>Thank you, your payment has been received</p>
             </div>
-            <div style={styles.receiptRow}>
-              <strong>Date:</strong> <span>{form.paymentDetails.paymentDate ? new Date(form.paymentDetails.paymentDate).toLocaleString() : '-'}</span>
+
+            <div style={styles.receiptAmountBox}>
+              <span style={styles.receiptAmountLabel}>Amount Paid</span>
+              <span style={styles.receiptAmountValue}>
+                ₹{Number(form.paymentDetails.amount || 0).toLocaleString('en-IN')}
+              </span>
             </div>
-            <div style={styles.receiptRow}>
-              <strong>Company:</strong> <span>{form.companyName}</span>
+
+            <div style={styles.receiptDetails}>
+              <div style={styles.receiptDetailRow}>
+                <span style={styles.receiptLabel}>Transaction ID</span>
+                <span style={styles.receiptValueMono}>{receiptTransactionId}</span>
+              </div>
+              <div style={styles.receiptDetailRow}>
+                <span style={styles.receiptLabel}>Date & Time</span>
+                <span style={styles.receiptValue}>
+                  {form.paymentDetails.paymentDate ? new Date(form.paymentDetails.paymentDate).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : '-'}
+                </span>
+              </div>
+              <div style={styles.receiptDetailRow}>
+                <span style={styles.receiptLabel}>Company</span>
+                <span style={styles.receiptValue}>{form.companyName}</span>
+              </div>
+              <div style={styles.receiptDetailRow}>
+                <span style={styles.receiptLabel}>Email</span>
+                <span style={styles.receiptValue}>{form.email}</span>
+              </div>
+              <div style={styles.receiptDetailRow}>
+                <span style={styles.receiptLabel}>Mobile</span>
+                <span style={styles.receiptValue}>{form.mobileNumber}</span>
+              </div>
+              <div style={{ ...styles.receiptDetailRow, marginBottom: 0 }}>
+                <span style={styles.receiptLabel}>Status</span>
+                <span style={styles.receiptStatusPill}>● Success</span>
+              </div>
             </div>
-            <div style={styles.receiptRow}>
-              <strong>Email:</strong> <span>{form.email}</span>
+
+            <div style={styles.receiptPerforation}>
+              {Array.from({ length: 24 }).map((_, i) => (
+                <span key={i} style={styles.receiptDot} />
+              ))}
             </div>
-            <div style={styles.receiptRow}>
-              <strong>Mobile:</strong> <span>{form.mobileNumber}</span>
+
+            <div style={styles.receiptFooterRow}>
+              <button onClick={() => setShowReceipt(false)} style={styles.receiptCloseBtnFancy}>Close</button>
             </div>
-            <div style={styles.receiptRow}>
-              <strong>Status:</strong> <span style={{ color: '#16a34a', fontWeight: 'bold' }}>Success</span>
-            </div>
-            <div style={{ ...styles.receiptRow, borderTop: '2px dashed #e5e7eb', marginTop: 15, paddingTop: 15 }}>
-              <strong>Amount Paid:</strong> <span style={{ fontSize: 18, fontWeight: 'bold' }}>₹{form.paymentDetails.amount}</span>
-            </div>
-            <button onClick={() => setShowReceipt(false)} style={styles.closeBtn}>Close</button>
           </div>
         </div>
       )}
@@ -296,7 +330,7 @@ const styles = {
 card: { width: '100%', maxWidth: '100%', background: '#fff', border: '1px solid #e5e7eb', borderRadius: 16, padding: 32, boxShadow: '0 20px 60px rgba(0,0,0,0.08)' },
   topRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
   heading: { fontFamily: "'Poppins', sans-serif", fontSize: 22, margin: 0 },
-  logoutBtn: { background: 'none', border: '1px solid #d1d5db', color: '#6b7280', padding: '6px 14px', borderRadius: 8, fontSize: 13, cursor: 'pointer' },
+  logoutBtn: { background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '9px 20px', borderRadius: 10, fontSize: 13, fontWeight: 700, letterSpacing: 0.3, cursor: 'pointer', boxShadow: '0 2px 8px rgba(220,38,38,0.12)', transition: 'transform 0.15s ease, box-shadow 0.15s ease' },
   tableWrapper: { width: '100%', overflowX: 'auto' },
   table: { width: '100%', borderCollapse: 'collapse', marginTop: 20 },
   th: { textAlign: 'left', padding: '14px 12px', background: '#f9fafb', borderBottom: '1px solid #e5e7eb', fontSize: 13, color: '#374151' },
@@ -310,5 +344,148 @@ card: { width: '100%', maxWidth: '100%', background: '#fff', border: '1px solid 
   modal: { background: '#fff', borderRadius: 12, padding: 28, width: '90%', maxWidth: 400, boxShadow: '0 20px 60px rgba(0,0,0,0.2)' },
   modalHeading: { fontFamily: "'Poppins', sans-serif", fontSize: 18, marginBottom: 20, textAlign: 'center', borderBottom: '1px solid #e5e7eb', paddingBottom: 15 },
   receiptRow: { display: 'flex', justifyContent: 'space-between', marginBottom: 12, fontSize: 14, color: '#374151' },
-  closeBtn: { width: '100%', marginTop: 20, padding: 10, background: '#f3f4f6', color: '#111827', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }
+  closeBtn: { width: '100%', marginTop: 20, padding: 10, background: '#f3f4f6', color: '#111827', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' },
+
+  receiptCard: {
+    position: 'relative',
+    background: '#fff',
+    borderRadius: 20,
+    width: '92%',
+    maxWidth: 380,
+    boxShadow: '0 25px 70px rgba(0,0,0,0.25)',
+    overflow: 'hidden',
+    fontFamily: "'Inter', sans-serif",
+  },
+  receiptCloseX: {
+    position: 'absolute',
+    top: 14,
+    right: 14,
+    background: 'rgba(255,255,255,0.2)',
+    border: 'none',
+    color: '#fff',
+    width: 28,
+    height: 28,
+    borderRadius: '50%',
+    cursor: 'pointer',
+    fontSize: 14,
+    lineHeight: '28px',
+    zIndex: 2,
+  },
+  receiptHeader: {
+    background: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
+    padding: '32px 24px 26px',
+    textAlign: 'center',
+    color: '#fff',
+  },
+  receiptIconCircle: {
+    width: 56,
+    height: 56,
+    borderRadius: '50%',
+    background: 'rgba(255,255,255,0.2)',
+    border: '2px solid rgba(255,255,255,0.6)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: '0 auto 14px',
+  },
+  receiptTitle: {
+    fontFamily: "'Poppins', sans-serif",
+    fontSize: 20,
+    fontWeight: 700,
+    margin: 0,
+  },
+  receiptSubtitle: {
+    fontSize: 13,
+    opacity: 0.9,
+    margin: '6px 0 0',
+  },
+  receiptAmountBox: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '22px 24px 18px',
+    borderBottom: '1px solid #f3f4f6',
+  },
+  receiptAmountLabel: {
+    fontSize: 12,
+    color: '#6b7280',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: 6,
+  },
+  receiptAmountValue: {
+    fontFamily: "'Poppins', sans-serif",
+    fontSize: 32,
+    fontWeight: 700,
+    color: '#111827',
+  },
+  receiptDetails: {
+    padding: '20px 24px 4px',
+  },
+  receiptDetailRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 14,
+    gap: 12,
+  },
+  receiptLabel: {
+    fontSize: 13,
+    color: '#6b7280',
+    flexShrink: 0,
+  },
+  receiptValue: {
+    fontSize: 13,
+    color: '#111827',
+    fontWeight: 600,
+    textAlign: 'right',
+  },
+  receiptValueMono: {
+    fontSize: 12,
+    color: '#111827',
+    fontWeight: 600,
+    fontFamily: "'Courier New', monospace",
+    textAlign: 'right',
+    wordBreak: 'break-all',
+  },
+  receiptStatusPill: {
+    background: '#dcfce7',
+    color: '#16a34a',
+    fontSize: 12,
+    fontWeight: 700,
+    padding: '4px 12px',
+    borderRadius: 999,
+  },
+  receiptPerforation: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '0 8px',
+    margin: '4px 0 0',
+  },
+  receiptDot: {
+    width: 6,
+    height: 6,
+    borderRadius: '50%',
+    background: '#f3f4f6',
+    flexShrink: 0,
+  },
+  receiptFooterRow: {
+    display: 'flex',
+    gap: 10,
+    padding: '18px 24px 24px',
+  },
+  receiptCloseBtnFancy: {
+    flex: 1,
+    background: '#111827',
+    color: '#fff',
+    border: 'none',
+    padding: '13px 0',
+    borderRadius: 12,
+    fontSize: 14,
+    fontWeight: 700,
+    letterSpacing: 0.3,
+    cursor: 'pointer',
+    boxShadow: '0 6px 16px rgba(17,24,39,0.25)',
+    transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+  },
 }
