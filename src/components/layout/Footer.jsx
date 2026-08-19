@@ -99,17 +99,10 @@ export default function Footer() {
               ))}
             </ul>
           </div>
-          <div className="footer-col">
+          <div className="footer-col footer-contact-col">
             <h4>Contact Us</h4>
-            <ul className="footer-contact-list">
-              <li>
-                <i className="fas fa-map-marker-alt" />
-                <span>Chennai, Tamil Nadu, India — Serving clients globally</span>
-              </li>
-              <li>
-                <i className="fas fa-phone-alt" />
-                <a href="tel:+918925033533">+91 89250 33533</a>
-              </li>
+
+            <ul className="footer-contact-list footer-contact-global">
               <li>
                 <i className="fas fa-envelope" />
                 <a href="mailto:info@yencodetechnologies.com">info@yencodetechnologies.com</a>
@@ -120,19 +113,63 @@ export default function Footer() {
                   www.yencodetechnologies.com
                 </a>
               </li>
-            <li>
+              <li>
                 <i className="fas fa-clock" />
                 <span>Mon–Sat: 9am–6pm IST</span>
               </li>
-              <li>
-                <i className="fas fa-map-marker-alt" />
-                <span>15/3 Lancaster Street, Ingleburn NSW 2565</span>
-              </li>
-                <li>
-                <i className="fas fa-phone-alt" />
-                <a href="tel:+61481399977">0481 399 977</a>
-              </li>
             </ul>
+
+            <div className="footer-office-cards">
+              <div className="footer-office-card footer-office-card--india">
+                <div className="footer-office-head">
+                  <span className="footer-office-flag" aria-hidden="true">
+                    🇮🇳
+                  </span>
+                  <div>
+                    <strong>India Office</strong>
+                    <span>Headquarters · Chennai</span>
+                  </div>
+                </div>
+                <ul className="footer-office-details">
+                  <li>
+                    <i className="fas fa-map-marker-alt" />
+                    <span>
+                      Chennai, Tamil Nadu, India
+                      <em>Serving clients globally</em>
+                    </span>
+                  </li>
+                  <li>
+                    <i className="fas fa-phone-alt" />
+                    <a href="tel:+918925033533">+91 89250 33533</a>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="footer-office-card footer-office-card--australia">
+                <div className="footer-office-head">
+                  <span className="footer-office-flag" aria-hidden="true">
+                    🇦🇺
+                  </span>
+                  <div>
+                    <strong>Australia Office</strong>
+                    <span>Ingleburn · New South Wales</span>
+                  </div>
+                </div>
+                <ul className="footer-office-details">
+                  <li>
+                    <i className="fas fa-map-marker-alt" />
+                    <span>
+                      15/3 Lancaster Street
+                      <em>Ingleburn NSW 2565, Australia</em>
+                    </span>
+                  </li>
+                  <li>
+                    <i className="fas fa-phone-alt" />
+                    <a href="tel:+61481399977">0481 399 977</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>  
              </div>
         <div className="footer-features" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 20, border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '24px 28px', margin: '30px 0' }}>
