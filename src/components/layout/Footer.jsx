@@ -117,7 +117,7 @@ export default function Footer() {
               <div className="footer-office-card footer-office-card--india">
                 <div className="footer-office-head">
                   <span className="footer-office-flag" aria-hidden="true">
-                    IN
+                    <i className="fas fa-rocket" />
                   </span>
                   <div>
                     <strong>India Office</strong>
@@ -142,7 +142,7 @@ export default function Footer() {
               <div className="footer-office-card footer-office-card--australia">
                 <div className="footer-office-head">
                   <span className="footer-office-flag" aria-hidden="true">
-                    AU
+                    <i className="fas fa-rocket" />
                   </span>
                   <div>
                     <strong>Australia Office</strong>
