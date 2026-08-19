@@ -108,12 +108,6 @@ export default function Footer() {
                 <a href="mailto:info@yencodetechnologies.com">info@yencodetechnologies.com</a>
               </li>
               <li>
-                <i className="fas fa-globe" />
-                <a href="https://www.yencodetechnologies.com" target="_blank" rel="noopener noreferrer">
-                  www.yencodetechnologies.com
-                </a>
-              </li>
-              <li>
                 <i className="fas fa-clock" />
                 <span>Mon–Sat: 9am–6pm IST</span>
               </li>
