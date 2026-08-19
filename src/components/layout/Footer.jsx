@@ -132,10 +132,6 @@ export default function Footer() {
                 <i className="fas fa-phone-alt" />
                 <a href="tel:+61481399977">0481 399 977</a>
               </li>
-              <li>
-                <i className="fas fa-envelope" />
-                <a href="mailto:info@safeticks.com">info@safeticks.com</a>
-              </li>
             </ul>
           </div>  
              </div>
